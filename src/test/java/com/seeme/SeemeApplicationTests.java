@@ -1,4 +1,4 @@
-package com.example.seeme;
+package com.seeme;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
