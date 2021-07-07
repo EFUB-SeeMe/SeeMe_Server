@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class TempResponseDto {
+public class TempResDto {
 	String time;
 	String temperature;
 	String icon;

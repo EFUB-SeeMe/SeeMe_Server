@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping(value = "/weather")
+@RequestMapping("weather")
 public class WeatherController {
 
 	private final WeatherService weatherService;
