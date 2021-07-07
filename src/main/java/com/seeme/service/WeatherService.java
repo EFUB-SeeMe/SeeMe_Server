@@ -1,6 +1,7 @@
 package com.seeme.service;
 
-import com.seeme.domain.weather.TempResponseDto;
+import com.seeme.api.WeatherOpenApi;
+import com.seeme.domain.weather.TempResDto;
 
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
@@ -20,7 +21,7 @@ public class WeatherService {
 	private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 	private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH");
 
-	public List<TempResponseDto> getTemperature(String nx, String ny) throws IOException, ParseException {
+	public List<TempResDto> getTemperature(String nx, String ny) throws IOException, ParseException {
 
 		Calendar cal = Calendar.getInstance();
 		String time = TIME_FORMAT.format(cal.getTime());
@@ -29,7 +30,7 @@ public class WeatherService {
 		List<JSONObject> temps = weatherOpenApi.getTempFromOpenApi(date, nx, ny);
 
 		int order = 0;
-		List<TempResponseDto> resultList = new ArrayList<>();
+		List<TempResDto> resultList = new ArrayList<>();
 		for (Object temp: temps) {
 			String resultTime;
 			String resultIcon = "https://seeme.png";
@@ -45,7 +46,7 @@ public class WeatherService {
 			if (order == 8 || order == 9 || order == 11 ||
 				order == 12 || order == 14 || order == 15)
 				continue;
-			resultList.add(TempResponseDto.builder()
+			resultList.add(TempResDto.builder()
 				.time(resultTime)
 				.temperature(jsonObject.get("fcstValue") + "°")
 				.icon(resultIcon).build());
