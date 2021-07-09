@@ -11,25 +11,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 @RequestMapping("covid")
 public class CovidController {
-    public final CovidService covidService;
 
-    @GetMapping("/main")
-    public ResponseEntity<Object> getMain() {
-        try {
-            return ResponseEntity.ok().body(covidService.getMain());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("에러");
-        }
-    }
+	public final CovidService covidService;
 
-    @GetMapping("/national")
-    public ResponseEntity<Object> getNational() {
-        return ResponseEntity.ok().body("전국");
-    }
+	@GetMapping("/main")
+	public ResponseEntity<Object> getMain() {
+		try {
+			return ResponseEntity.ok().body(covidService.getMain());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("서버에러");
+		}
+	}
 
-    @GetMapping("/regional")
-    public ResponseEntity<Object> getRegional() {
-        return ResponseEntity.ok().body("지역");
-    }
+	@GetMapping("/national")
+	public ResponseEntity<Object> getNational() {
+		return ResponseEntity.ok().body("전국");
+	}
+
+	@GetMapping("/regional")
+	public ResponseEntity<Object> getRegional() {
+		return ResponseEntity.ok().body("지역");
+	}
+
 }
