@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 @RequestMapping("covid")
 public class CovidController {
+
 	public final CovidService covidService;
 
 	@GetMapping("/main")
@@ -32,4 +33,5 @@ public class CovidController {
 	public ResponseEntity<Object> getRegional() {
 		return ResponseEntity.ok().body("지역");
 	}
+
 }
