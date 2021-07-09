@@ -6,3 +6,5 @@ spring:
     password:
   jpa:
     database: mysql
+covid-main-url: http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson
+covid-main-service-key:
