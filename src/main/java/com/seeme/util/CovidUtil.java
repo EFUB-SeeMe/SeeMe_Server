@@ -1,5 +1,6 @@
 package com.seeme.util;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -17,6 +18,12 @@ public class CovidUtil {
 	public static String getCovidMainCreateCreateDt() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, -2);
+		return DATE_FORMAT.format(cal.getTime());
+	}
+
+	public static String getCovidRegionalCreateCreateDt() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -5);
 		return DATE_FORMAT.format(cal.getTime());
 	}
 }
