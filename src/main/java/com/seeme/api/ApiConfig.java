@@ -5,10 +5,13 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Setter @Getter
+@Setter
+@Getter
 @Component
 @ConfigurationProperties
 public class ApiConfig {
-	private String covidMainServiceKey;
+	private String covidMainKey;
 	private String covidMainUrl;
+	private String locationUrl;
+	private String locationKey;
 }
