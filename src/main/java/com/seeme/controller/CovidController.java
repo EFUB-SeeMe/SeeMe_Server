@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @AllArgsConstructor
@@ -30,8 +31,17 @@ public class CovidController {
 	}
 
 	@GetMapping("/regional")
-	public ResponseEntity<Object> getRegional() {
-		return ResponseEntity.ok().body("지역");
+	public ResponseEntity<Object> getRegional()(
+	@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		try {
+			if (lat == null || lon == null)
+				return ResponseEntity.ok().body(covidService.getRegonal("서울"));
+			else
+				return ResponseEntity.ok()
+					.body(covidService.getRegional(covidService.getLocation(lat, lon)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
 	}
-
 }
