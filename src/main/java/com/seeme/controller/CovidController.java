@@ -16,12 +16,17 @@ public class CovidController {
 	public final CovidService covidService;
 
 	@GetMapping("/main")
-	public ResponseEntity<Object> getMain() {
+	public ResponseEntity<Object> getMain(
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
-			return ResponseEntity.ok().body(covidService.getMain());
+			if (lat == null || lon == null)
+				return ResponseEntity.ok().body(covidService.getMain("서울"));
+			else
+				return ResponseEntity.ok()
+					.body(covidService.getMain(covidService.getLocation(lat, lon)));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body("서버에러");
+			return ResponseEntity.internalServerError().body("internal server error");
 		}
 	}
 
