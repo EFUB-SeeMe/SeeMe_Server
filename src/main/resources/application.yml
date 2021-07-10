@@ -1,4 +1,4 @@
-spring: 
+spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url:
@@ -7,4 +7,6 @@ spring:
   jpa:
     database: mysql
 covid-main-url: http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson
-covid-main-service-key:
+covid-main-key:
+location-url: https://maps.googleapis.com/maps/api/geocode/json
+location-key:

@@ -1,12 +1,10 @@
 package com.seeme.service;
 
-
-import com.seeme.domain.CovidNationalResDto;
-
 import com.seeme.api.CovidOpenApi;
+import com.seeme.api.LocationApi;
 import com.seeme.domain.covid.CovidDto;
 import com.seeme.domain.covid.CovidResDto;
-
+import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -14,34 +12,16 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-import java.text.SimpleDateFormat;
-
 @Service
 @AllArgsConstructor
 public class CovidService {
-
-    public CovidNationalResDto getMain() throws ParserConfigurationException, SAXException, IOException {
-        String location = getMainLocation();
-
-        return CovidNationalResDto.builder()
-                .location(location)
-    }
-
-    private String getMainLocation() {
-        return "남양주";
-    }
-
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-    private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH");
-
+	private final LocationApi locationApi;
 	private final CovidOpenApi covidOpenApi;
 
-	public CovidResDto getMain() throws ParserConfigurationException, SAXException, IOException {
-
-		String location = getMainLocation();
+	public CovidResDto getMain(String location) throws ParserConfigurationException, SAXException, IOException {
 		int compRegion = 0, compTotal = 0, coronicRegion = 0,
 			coronicTotal = 0, isIncRegion = 0, isIncTotal = 0;
-		boolean isTotalRecentValueBinding = false, isRegionRecentValueBinding = false;;
+		boolean isTotalRecentValueBinding = false, isRegionRecentValueBinding = false;
 
 		for (CovidDto covid : covidOpenApi.getMainApi()) {
 			if (covid.getGubun().equals("합계")) {
@@ -77,7 +57,7 @@ public class CovidService {
 			.build();
 	}
 
-	private String getMainLocation() {
-		return "인천";
+	public String getLocation(Double longitude, Double latitude) throws Exception {
+		return LocationUtil.getLocation(locationApi.covertGpsToAddress(longitude, latitude));
 	}
 }
