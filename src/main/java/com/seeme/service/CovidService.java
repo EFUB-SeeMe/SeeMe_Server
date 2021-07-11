@@ -87,4 +87,29 @@ public class CovidService {
 			.build();
 	}
 
+	public CovidRegionalResDto getNational() throws ParserConfigurationException, SAXException, IOException {
+		List<Coronic> coronicList = new ArrayList<>();
+
+		int newCoronic = 0, totalCoronic = 0;
+
+		for (CovidRegionalDto regionCovid : covidOpenApi.getRegionalApi()) {
+			if (regionCovid.getGubun().equals("합계")) {
+				coronicList.add(Coronic.builder()
+						.day(regionCovid.getStdDay())
+						.coronicByDay(Integer.parseInt(regionCovid.getLocalOccCnt()))
+						.build());
+				if (totalCoronic < Integer.parseInt(regionCovid.getDefCnt())) {
+					newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt());
+					totalCoronic = Integer.parseInt(regionCovid.getDefCnt());
+				}
+			}
+		}
+
+		return CovidRegionalResDto.builder()
+				.newCoronic(newCoronic)
+				.totalCoronic(totalCoronic)
+				.coronicList(coronicList)
+				.build();
+	}
+
 }
