@@ -76,7 +76,7 @@ public class CovidOpenApi {
 
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getCovidMainUrl())
-			.queryParam(CovidUtil.SERVICE_KEY, apiConfig.getCovidMainServiceKey())
+			.queryParam(CovidUtil.SERVICE_KEY, apiConfig.getCovidMainKey())
 			.queryParam(CovidUtil.START_CREATE_DT, startCreateDt)
 			.queryParam(CovidUtil.END_CREATE_DT, endCreateDt);
 		URL url = new URL(uriComponentsBuilder.build().toUriString());
