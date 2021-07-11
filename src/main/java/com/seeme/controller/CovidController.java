@@ -32,7 +32,13 @@ public class CovidController {
 
 	@GetMapping("/national")
 	public ResponseEntity<Object> getNational() {
-		return ResponseEntity.ok().body("전국");
+		try{
+			return ResponseEntity.ok().body(covidService.getNational());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
+
 	}
 
 	@GetMapping("/regional")
