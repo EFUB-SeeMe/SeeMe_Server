@@ -4,13 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @Builder
+@AllArgsConstructor
 public class CovidRegionalResDto {
-	private final Integer newCoronic;
-	private final Integer totalCoronic;
-	private final List<Coronic> coronicList;
 }
-

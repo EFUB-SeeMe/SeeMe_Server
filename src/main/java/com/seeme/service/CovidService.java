@@ -2,7 +2,8 @@ package com.seeme.service;
 
 import com.seeme.api.CovidOpenApi;
 import com.seeme.api.LocationApi;
-import com.seeme.domain.covid.*;
+import com.seeme.domain.covid.CovidDto;
+import com.seeme.domain.covid.CovidResDto;
 import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -61,30 +60,4 @@ public class CovidService {
 	public String getLocation(Double longitude, Double latitude) throws Exception {
 		return LocationUtil.getLocation(locationApi.covertGpsToAddress(longitude, latitude));
 	}
-
-	public CovidRegionalResDto getRegional(String location) throws IOException, ParserConfigurationException, SAXException {
-		List<Coronic> coronicList = new ArrayList<>();
-
-		int newCoronic = 0, totalCoronic = 0, coronicByDay = 0;
-		String day = "";
-
-		for (CovidRegionalDto RegionCovid : covidOpenApi.getRegionalApi()) {
-			if (RegionCovid.getGubun().equals(location)) {
-				day = RegionCovid.getStdDay();
-				coronicByDay = Integer.parseInt(RegionCovid.getLocalOccCnt());
-				coronicList.add(Coronic.builder().day(day).coronicByDay(coronicByDay).build());
-				if (totalCoronic < Integer.parseInt(RegionCovid.getDefCnt())) {
-					newCoronic = Integer.parseInt(RegionCovid.getLocalOccCnt());
-					totalCoronic = Integer.parseInt(RegionCovid.getDefCnt());
-				}
-			}
-		}
-
-		return CovidRegionalResDto.builder()
-			.newCoronic(newCoronic)
-			.totalCoronic(totalCoronic)
-			.coronicList(coronicList)
-			.build();
-	}
-
 }
