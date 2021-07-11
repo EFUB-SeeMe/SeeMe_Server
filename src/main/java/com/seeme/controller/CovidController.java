@@ -36,8 +36,17 @@ public class CovidController {
 	}
 
 	@GetMapping("/regional")
-	public ResponseEntity<Object> getRegional() {
-		return ResponseEntity.ok().body("지역");
+	public ResponseEntity<Object> getRegional(
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+			try {
+				if (lat == null || lon == null)
+					return ResponseEntity.ok().body(covidService.getRegional("서울"));
+				else
+					return ResponseEntity.ok()
+						.body(covidService.getRegional(covidService.getLocation(lat, lon)));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return ResponseEntity.internalServerError().body("internal server error");
+			}
 	}
-
 }
