@@ -1,12 +1,10 @@
 package com.seeme.domain.covid;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-@AllArgsConstructor
 public class CovidResDto {
 	private final String location;
 	private final Integer coronicTotal;
