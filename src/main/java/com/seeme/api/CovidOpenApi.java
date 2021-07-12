@@ -1,6 +1,7 @@
 package com.seeme.api;
 
 import com.seeme.domain.covid.CovidDto;
+import com.seeme.domain.covid.CovidRegionalDto;
 import com.seeme.util.CovidUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -67,5 +68,42 @@ public class CovidOpenApi {
 		if (nValue == null)
 			return null;
 		return nValue.getNodeValue();
+	}
+
+	public List<CovidRegionalDto> getRegionalApi() throws IOException, ParserConfigurationException, SAXException{
+		String endCreateDt = CovidUtil.getCovidMainEndCreateDt();
+		String startCreateDt = CovidUtil.getCovidRegionalCreateCreateDt();
+
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getCovidMainUrl())
+			.queryParam(CovidUtil.SERVICE_KEY, apiConfig.getCovidMainKey())
+			.queryParam(CovidUtil.START_CREATE_DT, startCreateDt)
+			.queryParam(CovidUtil.END_CREATE_DT, endCreateDt);
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(String.valueOf(url));
+
+		doc.getDocumentElement().normalize();
+		NodeList nList = doc.getElementsByTagName("item");
+
+		List<CovidRegionalDto> covidRegionList = new ArrayList<>();
+
+		for (int temp = 0; temp < 114; temp++) {
+			Node nNode = nList.item(temp);
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) nNode;
+				covidRegionList.add(
+					CovidRegionalDto.builder()
+						.stdDay(getTagValue("stdDay", eElement))
+						.gubun(getTagValue("gubun", eElement))
+						.localOccCnt(getTagValue("localOccCnt", eElement))
+						.defCnt(getTagValue("defCnt", eElement))
+						.build()
+				);
+			}
+		}
+		return covidRegionList;
 	}
 }
