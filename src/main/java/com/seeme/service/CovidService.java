@@ -65,14 +65,14 @@ public class CovidService {
 	public CovidRegionalResDto getRegional(String location) throws IOException, ParserConfigurationException, SAXException {
 		List<Coronic> coronicList = new ArrayList<>();
 
-		int newCoronic = 0, totalCoronic = 0, coronicByDay = 0;
-		String day = "";
+		int newCoronic = 0, totalCoronic = 0;
 
 		for (CovidRegionalDto RegionCovid : covidOpenApi.getRegionalApi()) {
 			if (RegionCovid.getGubun().equals(location)) {
-				day = RegionCovid.getStdDay();
-				coronicByDay = Integer.parseInt(RegionCovid.getLocalOccCnt());
-				coronicList.add(Coronic.builder().day(day).coronicByDay(coronicByDay).build());
+				coronicList.add(Coronic.builder()
+						.day(RegionCovid.getStdDay())
+						.coronicByDay(Integer.parseInt(RegionCovid.getLocalOccCnt()))
+						.build());
 				if (totalCoronic < Integer.parseInt(RegionCovid.getDefCnt())) {
 					newCoronic = Integer.parseInt(RegionCovid.getLocalOccCnt());
 					totalCoronic = Integer.parseInt(RegionCovid.getDefCnt());
