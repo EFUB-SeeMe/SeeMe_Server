@@ -1,5 +1,8 @@
 package com.seeme.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class MicrodustUtil {
 	public static final String SERVICE_KEY = "serviceKey";
 	public static final String NUM_OF_ROWS = "numOfRows";
@@ -10,6 +13,7 @@ public class MicrodustUtil {
 	public static final String RETURN_TYPE = "returnType";
 	public static final String GRADE_ICON =
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
+	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh시");
 
 	public static int getGrade(String pm10Grade, String pm25Grade) {
 		return Math.max(Integer.parseInt(pm10Grade), Integer.parseInt(pm25Grade));
@@ -43,5 +47,11 @@ public class MicrodustUtil {
 			default:
 				return "error";
 		}
+	}
+
+	public static String getDataTime() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR_OF_DAY, 20);
+		return TIME_FORMAT.format(cal.getTime());
 	}
 }
