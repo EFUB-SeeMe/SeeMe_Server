@@ -32,20 +32,20 @@ public class LocationApi {
 		return (String) jsonObject.get("formatted_address");
 	}
 
-	public String covertGpsToSpecificAddress(Double latitude, Double longitude) throws Exception {
+	public String covertGpsToSpecificAddress(Double lat, Double lon) throws Exception {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getLocationUrl())
-			.queryParam(LocationUtil.LATITUDE_LONGITUDE, LocationUtil.getLatLonValue(latitude, longitude))
-			.queryParam(LocationUtil.LANGUAGE, LocationUtil.LANGUAGE_VALUE)
-			.queryParam(LocationUtil.KEY, apiConfig.getLocationKey());
+			.fromUriString(apiConfig.getSpecificAddressUrl())
+			.queryParam(LocationUtil.X, lon)
+			.queryParam(LocationUtil.Y, lat);
 		System.out.println(uriComponentsBuilder.build());
 
-		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		StringBuilder sb = JSONParsingUtil.convertJSONToSBWithAuth(
+			uriComponentsBuilder, apiConfig.getSpecificAddressKey());
 
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
-		JSONArray jsonArray = (JSONArray) jsonObject.get("results");
+		JSONArray jsonArray = (JSONArray) jsonObject.get("documents");
 		jsonObject = (JSONObject) jsonArray.get(0);
-		return (String) jsonObject.get("formatted_address");
+		return (String) jsonObject.get("address_name");
 	}
 
 	public String covertWGS84ToTM(Double lat, Double lon) throws IOException {

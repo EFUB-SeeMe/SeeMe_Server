@@ -16,6 +16,8 @@ public class LocationUtil {
 	public static final String GRS80_CODE = "5179";
 	public static final String POS_X = "posX";
 	public static final String POS_Y = "posY";
+	public static final String X = "x";
+	public static final String Y = "y";
 
 	public static String getLatLonValue(Double latitude, Double longitude) {
 		return latitude.toString() + "," + longitude.toString();

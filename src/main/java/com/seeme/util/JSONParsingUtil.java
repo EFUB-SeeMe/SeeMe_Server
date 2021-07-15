@@ -37,7 +37,8 @@ public class JSONParsingUtil {
 		return sb;
 	}
 
-	public static StringBuilder convertJSONToSBWithAuth(URL url, String key) throws IOException {
+	public static StringBuilder convertJSONToSBWithAuth(UriComponentsBuilder uriCB, String key) throws IOException {
+		URL url = new URL(uriCB.build().toUriString());
 		HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 		String auth ="KakaoAK " + key;
 		conn.setRequestMethod("GET");
