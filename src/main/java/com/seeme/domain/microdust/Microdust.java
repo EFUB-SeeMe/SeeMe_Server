@@ -9,7 +9,6 @@ import lombok.ToString;
 @ToString
 public class Microdust {
 	private final String stationName;
-	private final String address;
 	private final int pm10Value;
 	private final int pm25Value;
 	private final int pmGrade;

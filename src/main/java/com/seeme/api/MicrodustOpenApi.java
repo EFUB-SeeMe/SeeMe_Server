@@ -23,7 +23,6 @@ public class MicrodustOpenApi {
 	private final LocationApi locationApi;
 
 	public Microdust getMainApi(String measuringStation) throws IOException, ParseException {
-
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getMicrodustMainUrl())
 			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustMainKey())
@@ -33,6 +32,8 @@ public class MicrodustOpenApi {
 			.queryParam(MicrodustUtil.STATION_NAME, URLEncoder.encode(measuringStation, StandardCharsets.UTF_8))
 			.queryParam(MicrodustUtil.DATA_TERM, "DAILY")
 			.queryParam(MicrodustUtil.VERSION, 1.0);
+		System.out.println(uriComponentsBuilder.build());
+
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
 
 		JSONParser jsonParser = new JSONParser();
@@ -43,7 +44,6 @@ public class MicrodustOpenApi {
 		JSONObject itemObject = (JSONObject) itemsObjects.get(0);
 
 		return Microdust.builder()
-			.address(measuringStation)
 			.stationName(measuringStation)
 			.pm10Value(Integer.parseInt(itemObject.get("pm10Value").toString()))
 			.pm25Value(Integer.parseInt(itemObject.get("pm25Value").toString()))
@@ -53,13 +53,14 @@ public class MicrodustOpenApi {
 	}
 
 	public String getMeasuringStation(Double lat, Double lon) throws IOException, ParseException {
-		System.out.println(locationApi.covertWGS84ToTM(lat, lon));
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getMicrodustStationUrl())
 			.query(locationApi.covertWGS84ToTM(lat, lon))
 			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustMainKey())
-			.queryParam(MicrodustUtil.RETURN_TYPE, "json");
+			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
+			.queryParam(MicrodustUtil.VERSION, "1.0");
 		System.out.println(uriComponentsBuilder.build());
+
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
 
 		JSONParser jsonParser = new JSONParser();
@@ -68,7 +69,7 @@ public class MicrodustOpenApi {
 		JSONObject bodyObject = (JSONObject) responseObject.get("body");
 		JSONArray itemsObject = (JSONArray) bodyObject.get("items");
 		JSONObject itemObject = (JSONObject) itemsObject.get(0);
-		System.out.println("addr: " + itemObject.get("addr") + ", stationName: " + itemObject.get("stationName"));
+		System.out.println("측정소의 주소: " + itemObject.get("addr") + ", stationName: " + itemObject.get("stationName"));
 		return itemObject.get("stationName").toString();
 	}
 }
