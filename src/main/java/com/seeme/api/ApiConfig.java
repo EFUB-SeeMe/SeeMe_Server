@@ -14,4 +14,9 @@ public class ApiConfig {
 	private String covidMainUrl;
 	private String locationUrl;
 	private String locationKey;
+	private String convertWGS84ToTMUrl;
+	private String convertWGS84ToTMKey;
+	private String microdustStationUrl;
+	private String microdustMainUrl;
+	private String microdustMainKey;
 }
