@@ -17,3 +17,5 @@ convert-WGS84-to-TM-url: https://sgisapi.kostat.go.kr/OpenAPI3/transformation/tr
 microdust-main-url: http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty
 microdust-main-key:
 microdust-station-url: http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList
+specific-address-url: https://dapi.kakao.com/v2/local/geo/coord2regioncode.json
+specific-address-key:

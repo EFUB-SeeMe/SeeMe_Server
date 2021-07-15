@@ -21,4 +21,6 @@ public class ApiConfig {
 	private String microdustStationUrl;
 	private String microdustMainUrl;
 	private String microdustMainKey;
+	private String specificAddressUrl;
+	private String specificAddressKey;
 }
