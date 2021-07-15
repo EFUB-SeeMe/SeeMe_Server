@@ -10,14 +10,10 @@ import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.seeme.util.MicrodustUtil.getDataTime;
 
 @Service
 @AllArgsConstructor
@@ -39,18 +35,16 @@ public class MicrodustService {
 			.build();
 	}
 
-	public List<MicrodustTimeResDto> getTime(String measuringStation) throws IOException, ParseException, ParserConfigurationException, SAXException {
+	public List<MicrodustTimeResDto> getTime(String measuringStation) throws IOException, ParseException {
 		List<MicrodustTimeResDto> microdustTimeResDtoList = new ArrayList<>();
-		int pm10 = 12, pm25 = 10;
 
 		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getTimeApi(measuringStation)) {
-			if (microdustTimeDto.getStationName().equals(measuringStation)) {
-				microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
+			microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
 						.time(microdustTimeDto.getTime())
-						.pm10(Integer.parseInt(microdustTimeDto.getPm10Value()))
-						.pm25(Integer.parseInt(microdustTimeDto.getPm25Value()))
+						.pm10(microdustTimeDto.getPm10Value24())
+						.pm25(microdustTimeDto.getPm25Value24())
 						.build());
-			}
+
 		}
 
 		return microdustTimeResDtoList;
