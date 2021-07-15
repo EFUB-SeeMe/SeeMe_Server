@@ -6,6 +6,19 @@ public class LocationUtil {
 	public static final String LATITUDE_LONGITUDE = "latlng";
 	public static final Object LANGUAGE_VALUE = "ko";
 
+	public static final String CONSUMER_ID = "consumer_key";
+	public static final String CONSUMER_KEY = "consumer_secret";
+
+	public static final String ACCESS_TOKEN = "accessToken";
+	public static final String SRC = "src";
+	public static final String WGS84_CODE = "4326";
+	public static final String DST = "dst";
+	public static final String GRS80_CODE = "5179";
+	public static final String POS_X = "posX";
+	public static final String POS_Y = "posY";
+	public static final String X = "x";
+	public static final String Y = "y";
+
 	public static String getLatLonValue(Double latitude, Double longitude) {
 		return latitude.toString() + "," + longitude.toString();
 	}

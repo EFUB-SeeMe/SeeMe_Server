@@ -16,10 +16,12 @@ public class CovidController {
 	public final CovidService covidService;
 
 	@GetMapping("/main")
-	public ResponseEntity<Object> getMain(
+	public ResponseEntity<Object> getMain(@RequestParam(required = false) String location,
 		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
-			if (lat == null || lon == null)
+			if (location != null)
+				return ResponseEntity.ok().body(covidService.getMain(location));
+			else if (lat == null || lon == null)
 				return ResponseEntity.ok().body(covidService.getMain("서울"));
 			else
 				return ResponseEntity.ok()
@@ -32,7 +34,7 @@ public class CovidController {
 
 	@GetMapping("/national")
 	public ResponseEntity<Object> getNational() {
-		try{
+		try {
 			return ResponseEntity.ok().body(covidService.getNational());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,17 +44,19 @@ public class CovidController {
 	}
 
 	@GetMapping("/regional")
-	public ResponseEntity<Object> getRegional(
+	public ResponseEntity<Object> getRegional(@RequestParam(required = false) String location,
 		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
-			try {
-				if (lat == null || lon == null)
-					return ResponseEntity.ok().body(covidService.getRegional("서울"));
-				else
-					return ResponseEntity.ok()
-						.body(covidService.getRegional(covidService.getLocation(lat, lon)));
-			} catch (Exception e) {
-				e.printStackTrace();
-				return ResponseEntity.internalServerError().body("internal server error");
-			}
+		try {
+			if (location != null)
+				return ResponseEntity.ok().body(covidService.getRegional(location));
+			if (lat == null || lon == null)
+				return ResponseEntity.ok().body(covidService.getRegional("서울"));
+			else
+				return ResponseEntity.ok()
+					.body(covidService.getRegional(covidService.getLocation(lat, lon)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
 	}
 }
