@@ -5,6 +5,9 @@ public class LocationUtil {
 	public static final String LANGUAGE = "language";
 	public static final String LATITUDE_LONGITUDE = "latlng";
 	public static final Object LANGUAGE_VALUE = "ko";
+	public static final String X = "x";
+	public static final String Y = "y";
+	public static final String OUTPUT_COORD = "output_coord";
 
 	public static String getLatLonValue(Double latitude, Double longitude) {
 		return latitude.toString() + "," + longitude.toString();

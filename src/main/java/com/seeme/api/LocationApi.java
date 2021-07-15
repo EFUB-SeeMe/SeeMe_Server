@@ -1,5 +1,6 @@
 package com.seeme.api;
 
+import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -43,4 +45,22 @@ public class LocationApi {
 		return (String) jsonObject.get("formatted_address");
 	}
 
+	public String covertWGS84ToTM(Double lat, Double lon) throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getConvertWGS84ToTMUrl())
+			.queryParam(LocationUtil.X, lon)
+			.queryParam(LocationUtil.Y, lat)
+			.queryParam(LocationUtil.OUTPUT_COORD, "TM");
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+		StringBuilder sb = JSONParsingUtil.convertJSONToSBWithAuth(
+			url, apiConfig.getConvertWGS84ToTMKey());
+
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		JSONArray jsonArray = (JSONArray) jsonObject.get("documents");
+		jsonObject = (JSONObject) jsonArray.get(0);
+		return "tmX=" + jsonObject.get("y").toString() +
+			"&tmY=" + jsonObject.get("x").toString();
+	}
+
 }
+
