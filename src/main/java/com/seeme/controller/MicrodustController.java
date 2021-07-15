@@ -20,10 +20,12 @@ public class MicrodustController {
 		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (lat == null || lon == null)
-				return ResponseEntity.ok().body(microdustService.getMain("삼산"));
+				return ResponseEntity.ok().body(
+					microdustService.getMain("중구", "중구 서소문동"));
 			else
-				return ResponseEntity.ok()
-					.body(microdustService.getMain(microdustService.getMeasuringStation(lat, lon)));
+				return ResponseEntity.ok().body(
+					microdustService.getMain(microdustService.getMeasuringStation(lat, lon),
+						microdustService.getAddress(lat, lon)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
