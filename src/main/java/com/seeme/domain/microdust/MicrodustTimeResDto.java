@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class MicrodustTimeResDto {
 	private final String time;
-	private final Integer dust;
-	private final Integer microdust;
+	private final Integer pm10;
+	private final Integer pm25;
 }
