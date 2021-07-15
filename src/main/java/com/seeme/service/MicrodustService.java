@@ -23,7 +23,7 @@ public class MicrodustService {
 			.pm10(microdust.getPm10Value())
 			.pm25(microdust.getPm25Value())
 			.grade(MicrodustUtil.getGrade(microdust.getPmGrade()))
-			.gradeIcon(MicrodustUtil.getGradeIcon(microdust.getPmGrade()))
+			.gradeIcon(MicrodustUtil.GRADE_ICON)
 			.desc(MicrodustUtil.getDesc(microdust.getPmGrade()))
 			.build();
 	}

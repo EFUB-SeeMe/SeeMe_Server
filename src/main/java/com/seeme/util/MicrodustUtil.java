@@ -8,10 +8,13 @@ public class MicrodustUtil {
 	public static final String DATA_TERM = "dataTerm";
 	public static final String VERSION = "ver";
 	public static final String RETURN_TYPE = "returnType";
+	public static final String GRADE_ICON =
+		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
 
 	public static int getGrade(String pm10Grade, String pm25Grade) {
 		return Math.max(Integer.parseInt(pm10Grade), Integer.parseInt(pm25Grade));
 	}
+
 	public static String getGrade(int pm10Grade1h) {
 		switch (pm10Grade1h) {
 			case 1:
@@ -22,21 +25,6 @@ public class MicrodustUtil {
 				return "나쁨";
 			case 4:
 				return "매우나쁨";
-			default:
-				return "error";
-		}
-	}
-
-	public static String getGradeIcon(int pm10Grade1h) {
-		switch (pm10Grade1h) {
-			case 1:
-				return "좋음 icon URL";
-			case 2:
-				return "보통 icon URL";
-			case 3:
-				return "나쁨 icon URL";
-			case 4:
-				return "매우나쁨 icon URL";
 			default:
 				return "error";
 		}
