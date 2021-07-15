@@ -10,3 +10,8 @@ covid-main-url: http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid1
 covid-main-key:
 location-url: https://maps.googleapis.com/maps/api/geocode/json
 location-key:
+convert-WGS84-to-TM-url: https://dapi.kakao.com/v2/local/geo/transcoord.json
+convert-WGS84-to-TM-key:
+microdust-main-url: http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty
+microdust-main-key:
+microdust-station-url: http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList
