@@ -72,4 +72,20 @@ public class MicrodustService {
 	public String getAddress(Double lat, Double lon) throws Exception {
 		return locationApi.covertGpsToSpecificAddress(lat, lon);
 	}
+
+	public MicrodustDayResDto getDay(Double lat, Double lon) throws ParserConfigurationException, SAXException, IOException {
+
+		int dust_am = 0, dust_pm = 0, microdust_am = 0, microdust_pm = 0;
+		String date="";
+
+		return MicrodustDayResDto.builder()
+			.dust_am(dust_am)
+			.dust_pm(dust_pm)
+			.microdust_am(microdust_am)
+			.microdust_pm(microdust_pm)
+			.date(date)
+			.build();
+	}
+
+
 }
