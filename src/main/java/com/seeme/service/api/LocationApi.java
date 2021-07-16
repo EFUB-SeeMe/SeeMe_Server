@@ -1,7 +1,10 @@
-package com.seeme.api;
+package com.seeme.service.api;
 
+import com.google.gson.Gson;
+import com.seeme.domain.location.TMAddress;
 import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.LocationUtil;
+import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -80,5 +83,23 @@ public class LocationApi {
 		return jsonObject.get("accessToken").toString();
 	}
 
+	public TMAddress getTMAddress(String location) throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getTMAddressUrl())
+			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getTMAddressKey())
+			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
+			.queryParam(MicrodustUtil.NUM_OF_ROWS, 1)
+			.queryParam(LocationUtil.UMD_NAME, location);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		jsonObject = (JSONObject) jsonObject.get("response");
+		jsonObject = (JSONObject) jsonObject.get("body");
+		JSONArray jsonArray = (JSONArray) jsonObject.get("items");
+		jsonObject = (JSONObject) jsonArray.get(0);
+
+		return new Gson().fromJson(jsonObject.toString(), TMAddress.class);
+	}
 }
 
