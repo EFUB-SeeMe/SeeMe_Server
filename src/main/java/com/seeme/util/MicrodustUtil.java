@@ -16,6 +16,9 @@ public class MicrodustUtil {
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh시");
 	public static final String TM_X = "tmX";
 	public static final String TM_Y = "tmY";
+	public static final String APP_ID = "appid";
+	public static final String LAT = "lat";
+	public static final String LON = "lon";
 
 	public static String getGrade(int pm10Grade1h) {
 		switch (pm10Grade1h) {
