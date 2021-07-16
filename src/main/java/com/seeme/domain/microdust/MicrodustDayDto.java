@@ -8,5 +8,5 @@ import lombok.Getter;
 public class MicrodustDayDto {
 	private final Integer pm25;
 	private final Integer pm10;
-	private final Integer dt;
+	private final Long dt;
 }
