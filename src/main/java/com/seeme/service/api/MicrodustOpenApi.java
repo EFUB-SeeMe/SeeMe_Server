@@ -1,6 +1,8 @@
 package com.seeme.service.api;
 
 import com.seeme.domain.microdust.Microdust;
+import com.seeme.domain.microdust.MicrodustDayDto;
+import com.seeme.domain.microdust.MicrodustDayResDto;
 import com.seeme.domain.microdust.MicrodustTimeDto;
 import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.MicrodustUtil;
@@ -17,7 +19,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -162,5 +167,55 @@ public class MicrodustOpenApi {
 		if (nValue == null)
 			return null;
 		return nValue.getNodeValue();
+	}
+
+	// day API 처리
+	public List<MicrodustDayDto> getDayApi(Double lat, Double lon) throws IOException, ParseException, NullPointerException {
+		String result = "";
+
+		// url 연결
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getMicrodustDayUrl())
+			.queryParam(MicrodustUtil.LAT, lat)
+			.queryParam(MicrodustUtil.LON, lon)
+			.queryParam(MicrodustUtil.APP_ID, apiConfig.getMicrodustDayKey());
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+		System.out.println(url);
+
+		// 제공되는 원본 데이터 가져오기 -> Buffered Reader 이용
+		BufferedReader bf;
+		bf = new BufferedReader(new InputStreamReader(url.openStream()));
+		result = bf.readLine(); // 아직 string
+		System.out.println(result);
+
+		// jsonparser -> string 값을 json 객체로 만들어준다
+		// 이 때 만들어진 json 객체는 jsonObject 클래스를 사용하여 저장
+		// 만들어진 jsonObject에서 key가 00인 value를 추출하기 위해 get 사용
+		List<MicrodustDayDto> microdustDayDtoList = new ArrayList<>();
+
+		for (int temp=0; temp<120; temp++){
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+			JSONArray listObjects = (JSONArray) jsonObject.get("list");
+			JSONObject listObject = (JSONObject) listObjects.get(temp);
+			JSONObject componentObject = (JSONObject) listObject.get(1);
+			int pm25 = Integer.parseInt(componentObject.get("pm2_5").toString());
+			int pm10 = Integer.parseInt(componentObject.get("pm10").toString());
+			int dt = Integer.parseInt(listObject.get("dt").toString());
+			System.out.print(temp+"의 값은: ");
+			System.out.print("pm25 : "+pm25+" ");
+			System.out.print("pm10 : "+pm10+" ");
+			System.out.print("dt : "+dt);
+			System.out.println();
+
+			microdustDayDtoList.add(MicrodustDayDto.builder()
+				.pm25(Integer.parseInt(componentObject.get("pm2_5").toString()))
+				.pm10(Integer.parseInt(componentObject.get("pm10").toString()))
+				.dt(Integer.parseInt(listObject.get("dt").toString()))
+				.build()
+			);
+
+		}
+		return microdustDayDtoList;
 	}
 }
