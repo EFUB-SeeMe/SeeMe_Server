@@ -1,10 +1,10 @@
-package com.seeme.api;
+package com.seeme.service.api;
 
 import com.seeme.domain.covid.CovidDto;
 import com.seeme.domain.covid.CovidRegionalDto;
 import com.seeme.util.CovidUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor
 public class CovidOpenApi {
 

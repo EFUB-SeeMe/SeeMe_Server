@@ -1,6 +1,6 @@
 package com.seeme.service;
 
-import com.seeme.api.WeatherOpenApi;
+import com.seeme.service.api.WeatherOpenApi;
 import com.seeme.domain.weather.TempResDto;
 
 import lombok.AllArgsConstructor;
