@@ -1,7 +1,7 @@
 package com.seeme.service;
 
-import com.seeme.api.CovidOpenApi;
-import com.seeme.api.LocationApi;
+import com.seeme.service.api.CovidOpenApi;
+import com.seeme.service.api.LocationApi;
 import com.seeme.domain.covid.*;
 import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;

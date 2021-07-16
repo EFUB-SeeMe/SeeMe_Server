@@ -13,10 +13,9 @@ public class MicrodustUtil {
 	public static final String RETURN_TYPE = "returnType";
 	public static final String GRADE_ICON =
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
-
-	public static int getGrade(String pm10Grade, String pm25Grade) {
-		return Math.max(Integer.parseInt(pm10Grade), Integer.parseInt(pm25Grade));
-	}
+	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh시");
+	public static final String TM_X = "tmX";
+	public static final String TM_Y = "tmY";
 
 	public static String getGrade(int pm10Grade1h) {
 		switch (pm10Grade1h) {
