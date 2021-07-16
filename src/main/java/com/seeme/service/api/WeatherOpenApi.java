@@ -2,12 +2,12 @@ package com.seeme.service.api;
 
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor
 public class WeatherOpenApi {
 
