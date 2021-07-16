@@ -1,4 +1,4 @@
-package com.seeme.api;
+package com.seeme.service.api;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +23,6 @@ public class ApiConfig {
 	private String microdustMainKey;
 	private String specificAddressUrl;
 	private String specificAddressKey;
+	private String TMAddressUrl;
+	private String TMAddressKey;
 }

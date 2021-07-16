@@ -1,4 +1,4 @@
-package com.seeme.api;
+package com.seeme.service.api;
 
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;

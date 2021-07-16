@@ -1,4 +1,4 @@
-package com.seeme.api;
+package com.seeme.service.api;
 
 import com.seeme.domain.covid.CovidDto;
 import com.seeme.domain.covid.CovidRegionalDto;
