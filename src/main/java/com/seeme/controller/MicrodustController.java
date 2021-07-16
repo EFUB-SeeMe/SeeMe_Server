@@ -45,11 +45,11 @@ public class MicrodustController {
 		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (lat == null || lon == null)
-				return ResponseEntity.ok().body(microdustService.getTime(
-					Arrays.asList("중구", "한강대로", "청계천로")));
+				return ResponseEntity.ok().body(microdustService.getTime("중구"));
+//					Arrays.asList("중구", "한강대로", "청계천로")));
 			else
-				return ResponseEntity.ok().body(microdustService.getTime(
-					microdustService.getStationList(lat, lon)));
+				return ResponseEntity.ok().body(microdustService.getTime("중구"));
+//					microdustService.getStationList(lat, lon)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");

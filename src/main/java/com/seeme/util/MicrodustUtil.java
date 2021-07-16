@@ -48,8 +48,8 @@ public class MicrodustUtil {
 	}
 
 	public static String getDataTime() {
+		SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh");
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR_OF_DAY, 20);
 		return TIME_FORMAT.format(cal.getTime());
 	}
 }

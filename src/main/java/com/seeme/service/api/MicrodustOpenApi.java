@@ -33,10 +33,10 @@ public class MicrodustOpenApi {
 	public Microdust getMainApi(List<String> stationList) throws IOException, ParseException {
 		int index = 0, pm10 = -1, pm25 = -1, pmGrade = -1;
 		boolean pm10Flag = false, pm25Flag = false;
-		while (index++ < 3) {
+		while (index < 3) {
 			if (pm10Flag && pm25Flag)
 				break;
-			JSONObject microdust = getMicrodust(stationList, index);
+			JSONObject microdust = getMicrodust(stationList, index++);
 			if (!pm10Flag && !microdust.get("pm10Value").equals("-")) {
 				pm10Flag = true;
 				pm10 = Integer.parseInt(microdust.get("pm10Value").toString());
@@ -78,19 +78,6 @@ public class MicrodustOpenApi {
 		return (JSONObject) itemsObjects.get(0);
 	}
 
-	public List<MicrodustTimeDto> getTimeApi(List<String> measuringStation) throws IOException, ParserConfigurationException, SAXException {
-		List<MicrodustTimeDto> microdustTimeDtoList = new ArrayList<>();
-		return microdustTimeDtoList;
-	}
-
-	private String getTagValue(String tag, Element eElement) {
-		NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
-		Node nValue = nlList.item(0);
-		if (nValue == null)
-			return null;
-		return nValue.getNodeValue();
-	}
-
 	public List<String> getStationList(Double lat, Double lon) throws IOException, ParseException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getMicrodustStationUrl())
@@ -101,23 +88,7 @@ public class MicrodustOpenApi {
 		System.out.println(uriComponentsBuilder.build());
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(sb.toString());
-		JSONObject responseObject = (JSONObject) jsonObject.get("response");
-		JSONObject bodyObject = (JSONObject) responseObject.get("body");
-		JSONArray itemsObject = (JSONArray) bodyObject.get("items");
-
-		int total = 3;
-		List<String> stationList = new ArrayList<>();
-		System.out.print("stationName: "); // remove
-		while (total-- > 0) {
-			JSONObject itemObject = (JSONObject) itemsObject.get(0);
-			stationList.add(itemObject.get("stationName").toString());
-			System.out.print(itemObject.get("stationName").toString() + " "); // remove
-		}
-		System.out.println(); // remove
-		return stationList;
+		return getStationListByJSON(sb);
 	}
 
 	public List<String> getStationListByTM(String tmX, String tmY) throws IOException, ParseException {
@@ -131,22 +102,65 @@ public class MicrodustOpenApi {
 		System.out.println(uriComponentsBuilder.build());
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		return getStationListByJSON(sb);
+	}
 
+	public List<String> getStationListByJSON(StringBuilder sb) throws ParseException {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(sb.toString());
 		JSONObject responseObject = (JSONObject) jsonObject.get("response");
 		JSONObject bodyObject = (JSONObject) responseObject.get("body");
+		int totalCount = Integer.parseInt(bodyObject.get("totalCount").toString());
 		JSONArray itemsObject = (JSONArray) bodyObject.get("items");
 
 		int index = 0;
 		List<String> stationList = new ArrayList<>();
-		System.out.print("stationName: "); // remove
-		while (index++ < 3) {
-			JSONObject itemObject = (JSONObject) itemsObject.get(index);
+		while (index < totalCount) {
+			JSONObject itemObject = (JSONObject) itemsObject.get(index++);
 			stationList.add(itemObject.get("stationName").toString());
-			System.out.print(itemObject.get("stationName").toString() + " "); // remove
 		}
-		System.out.println(); // remove
+		System.out.println("stationName: " + stationList.toString()); // remove
 		return stationList;
+	}
+
+	public List<MicrodustTimeDto> getTimeApi(String measuringStation) throws IOException, ParseException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getMicrodustMainUrl())
+			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustMainKey())
+			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
+			.queryParam(MicrodustUtil.NUM_OF_ROWS, 20)
+			.queryParam(MicrodustUtil.PAGE_NO, 1)
+			.queryParam(MicrodustUtil.STATION_NAME, URLEncoder.encode(measuringStation, StandardCharsets.UTF_8))
+			.queryParam(MicrodustUtil.DATA_TERM, "DAILY")
+			.queryParam(MicrodustUtil.VERSION, 1.1);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+
+		List<MicrodustTimeDto> microdustTimeDtoList = new ArrayList<>();
+
+		for (int temp = 0; temp < 20; temp++) {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(sb.toString());
+			JSONObject responseObject = (JSONObject) jsonObject.get("response");
+			JSONObject bodyObject = (JSONObject) responseObject.get("body");
+			JSONArray itemsObjects = (JSONArray) bodyObject.get("items");
+			JSONObject itemObject = (JSONObject) itemsObjects.get(temp);
+			microdustTimeDtoList.add(MicrodustTimeDto.builder()
+				.stationName(measuringStation)
+				.time((Integer.parseInt(MicrodustUtil.getDataTime()) + temp) + "시")
+				.pm10Value24(Integer.parseInt(itemObject.get("pm10Value24").toString()))
+				.pm25Value24(Integer.parseInt(itemObject.get("pm25Value24").toString()))
+				.build()
+			);
+		}
+		return microdustTimeDtoList;
+	}
+
+	public String getTagValue(String tag, Element eElement) {
+		NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
+		Node nValue = nlList.item(0);
+		if (nValue == null)
+			return null;
+		return nValue.getNodeValue();
 	}
 }

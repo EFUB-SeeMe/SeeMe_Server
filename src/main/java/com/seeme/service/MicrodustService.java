@@ -11,9 +11,7 @@ import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +25,7 @@ public class MicrodustService {
 
 	public MicrodustResDto getMain(List<String> measuringStationList, String address) throws IOException, ParseException {
 		Microdust microdust = microdustOpenApi.getMainApi(measuringStationList);
-		System.out.println(microdust.toString()); // after dev, remove
+		System.out.println(microdust.toString()); // remove
 		return MicrodustResDto.builder()
 			.address(address)
 			.pm10(microdust.getPm10Value())
@@ -38,21 +36,15 @@ public class MicrodustService {
 			.build();
 	}
 
-	public TMAddress getTMAddress(String location) throws IOException {
-		return locationApi.getTMAddress(location);
-	}
-
-	public List<MicrodustTimeResDto> getTime(List<String> stationList) throws IOException, ParserConfigurationException, SAXException {
+	public List<MicrodustTimeResDto> getTime(String measuringStation) throws IOException, ParseException {
 		List<MicrodustTimeResDto> microdustTimeResDtoList = new ArrayList<>();
 
-		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getTimeApi(stationList)) {
-			if (microdustTimeDto.getStationName().equals(stationList)) {
-				microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
-						.time(microdustTimeDto.getTime())
-						.pm10(Integer.parseInt(microdustTimeDto.getPm10Value()))
-						.pm25(Integer.parseInt(microdustTimeDto.getPm25Value()))
-						.build());
-			}
+		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getTimeApi(measuringStation)) {
+			microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
+				.time(microdustTimeDto.getTime())
+				.pm10(microdustTimeDto.getPm10Value24())
+				.pm25(microdustTimeDto.getPm25Value24())
+				.build());
 		}
 
 		return microdustTimeResDtoList;
@@ -73,5 +65,8 @@ public class MicrodustService {
 	public List<String> getStationListByTM(String tmX, String tmY) throws IOException, ParseException {
 		return microdustOpenApi.getStationListByTM(tmX, tmY);
 	}
-}
 
+	public TMAddress getTMAddress(String location) throws IOException {
+		return locationApi.getTMAddress(location);
+	}
+}
