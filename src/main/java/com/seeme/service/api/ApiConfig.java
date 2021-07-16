@@ -25,6 +25,4 @@ public class ApiConfig {
 	private String specificAddressKey;
 	private String TMAddressUrl;
 	private String TMAddressKey;
-	private String microdustDayUrl;
-	private String microdustDayKey;
 }
