@@ -37,9 +37,9 @@ public class MicrodustController {
 			@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (lat == null || lon == null)
-				return ResponseEntity.ok().body(microdustService.getTime("삼산"));
+				return ResponseEntity.ok().body(microdustService.getTime("중구"));
 			else
-				return ResponseEntity.ok().body(microdustService.getTime(microdustService.getMeasuringStation(lat, lon)));
+				return ResponseEntity.ok().body(microdustService.getMeasuringStation(lat, lon));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
