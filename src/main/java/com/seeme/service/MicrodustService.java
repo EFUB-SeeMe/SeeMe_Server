@@ -52,10 +52,10 @@ public class MicrodustService {
 
 		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(lat, lon)){
 			microdustDayResDtoList.add(MicrodustDayResDto.builder()
-				.dust_am(10)
-				.dust_pm(10)
-				.microdust_am(10)
-				.microdust_pm(10)
+				.dustAm(10)
+				.dustPm(10)
+				.microdustAm(10)
+				.microdustPm(10)
 				.date("07-16")
 				.build());
 		}
