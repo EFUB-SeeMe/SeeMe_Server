@@ -1,6 +1,8 @@
 package com.seeme.service.api;
 
 import com.seeme.domain.microdust.Microdust;
+import com.seeme.domain.microdust.MicrodustDayDto;
+import com.seeme.domain.microdust.MicrodustDayResDto;
 import com.seeme.domain.microdust.MicrodustTimeDto;
 import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.MicrodustUtil;
@@ -17,7 +19,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -162,5 +167,41 @@ public class MicrodustOpenApi {
 		if (nValue == null)
 			return null;
 		return nValue.getNodeValue();
+	}
+
+	public List<MicrodustDayDto> getDayApi(Double lat, Double lon) throws IOException, ParseException, NullPointerException {
+		String result = "";
+
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getMicrodustDayUrl())
+			.queryParam(MicrodustUtil.LAT, lat)
+			.queryParam(MicrodustUtil.LON, lon)
+			.queryParam(MicrodustUtil.APP_ID, apiConfig.getMicrodustDayKey());
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+
+		BufferedReader bf;
+		bf = new BufferedReader(new InputStreamReader(url.openStream()));
+		result = bf.readLine();
+
+		List<MicrodustDayDto> microdustDayDtoList = new ArrayList<>();
+
+		for (int temp=0; temp<120; temp++){
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+			JSONArray listObjects = (JSONArray) jsonObject.get("list");
+			JSONObject listObject = (JSONObject) listObjects.get(temp);
+			JSONObject componentObject = (JSONObject) listObject.get("components");
+			int pm25 = (int)(Float.parseFloat(componentObject.get("pm2_5").toString()));
+			int pm10 = (int)(Float.parseFloat(componentObject.get("pm10").toString()));
+			long dt = Long.parseLong(listObject.get("dt").toString());
+
+			microdustDayDtoList.add(MicrodustDayDto.builder()
+				.pm25(pm25)
+				.pm10(pm10)
+				.dt(dt)
+				.build()
+			);
+		}
+		return microdustDayDtoList;
 	}
 }

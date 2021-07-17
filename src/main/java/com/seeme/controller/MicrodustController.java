@@ -55,4 +55,19 @@ public class MicrodustController {
 			return ResponseEntity.internalServerError().body("internal server error");
 		}
 	}
+
+	@GetMapping("/day")
+	public ResponseEntity<Object> getDay(
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		try {
+			if (lat == null || lon == null)
+				return ResponseEntity.ok().body(microdustService.getDay(37.56197784552834, 126.9468124393769));
+			else
+				return ResponseEntity.ok().body(microdustService.getDay(lat, lon));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
+	}
+
 }

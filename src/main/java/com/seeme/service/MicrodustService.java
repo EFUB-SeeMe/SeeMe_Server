@@ -1,12 +1,9 @@
 package com.seeme.service;
 
+import com.seeme.domain.microdust.*;
 import com.seeme.service.api.LocationApi;
 import com.seeme.service.api.MicrodustOpenApi;
 import com.seeme.domain.location.TMAddress;
-import com.seeme.domain.microdust.Microdust;
-import com.seeme.domain.microdust.MicrodustResDto;
-import com.seeme.domain.microdust.MicrodustTimeDto;
-import com.seeme.domain.microdust.MicrodustTimeResDto;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -48,6 +45,22 @@ public class MicrodustService {
 		}
 
 		return microdustTimeResDtoList;
+	}
+
+	public List<MicrodustDayResDto> getDay(double lat, double lon) throws IOException, ParseException {
+		List<MicrodustDayResDto> microdustDayResDtoList = new ArrayList<>();
+
+		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(lat, lon)){
+			microdustDayResDtoList.add(MicrodustDayResDto.builder()
+				.dustAm(10)
+				.dustPm(10)
+				.microdustAm(10)
+				.microdustPm(10)
+				.date("07-16")
+				.build());
+		}
+
+		return microdustDayResDtoList;
 	}
 
 	public List<String> getStationList(Double lat, Double lon) throws IOException, ParseException {
