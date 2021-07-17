@@ -169,39 +169,111 @@ public class MicrodustOpenApi {
 		return nValue.getNodeValue();
 	}
 
-	public List<MicrodustDayDto> getDayApi(Double lat, Double lon) throws IOException, ParseException, NullPointerException {
+	public List<MicrodustDayDto> getDayApi(String geo) throws IOException, ParseException, NullPointerException {
 		String result = "";
 
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getMicrodustDayUrl())
-			.queryParam(MicrodustUtil.LAT, lat)
-			.queryParam(MicrodustUtil.LON, lon)
-			.queryParam(MicrodustUtil.APP_ID, apiConfig.getMicrodustDayKey());
+			.fromUriString(apiConfig.getMicrodustDayUrl()+"/geo:"+geo+"/")
+			.queryParam(MicrodustUtil.TOKEN, apiConfig.getMicrodustDayKey());
 		URL url = new URL(uriComponentsBuilder.build().toUriString());
 
 		BufferedReader bf;
 		bf = new BufferedReader(new InputStreamReader(url.openStream()));
 		result = bf.readLine();
-
 		List<MicrodustDayDto> microdustDayDtoList = new ArrayList<>();
 
-		for (int temp=0; temp<120; temp++){
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-			JSONArray listObjects = (JSONArray) jsonObject.get("list");
-			JSONObject listObject = (JSONObject) listObjects.get(temp);
-			JSONObject componentObject = (JSONObject) listObject.get("components");
-			int pm25 = (int)(Float.parseFloat(componentObject.get("pm2_5").toString()));
-			int pm10 = (int)(Float.parseFloat(componentObject.get("pm10").toString()));
-			long dt = Long.parseLong(listObject.get("dt").toString());
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+		JSONObject dataObject = (JSONObject) jsonObject.get("data");
+		JSONObject forecastObject = (JSONObject) dataObject.get("forecast");
+		JSONObject dailyObject = (JSONObject) forecastObject.get("daily");
+		JSONArray pm10Objects = (JSONArray) dailyObject.get("pm10");
+		JSONArray pm25Objects = (JSONArray) dailyObject.get("pm25");
+
+		for (int temp = 1; temp < 6; temp++) {
+			JSONObject pm10Object = (JSONObject) pm10Objects.get(temp);
+			JSONObject pm25Object = (JSONObject) pm25Objects.get(temp);
+
+			int pm10 = AQItoPM10(Integer.parseInt(pm10Object.get("avg").toString()));
+			int pm25 = AQItoPM25(Integer.parseInt(pm25Object.get("avg").toString()));
+			String day = (pm25Object.get("day").toString());
 
 			microdustDayDtoList.add(MicrodustDayDto.builder()
-				.pm25(pm25)
 				.pm10(pm10)
-				.dt(dt)
+				.pm25(pm25)
+				.day(day)
 				.build()
 			);
 		}
 		return microdustDayDtoList;
 	}
+
+	public int AQItoPM25(int avg){
+		double conMax = 0, conMin = 0;
+		int aqiMax = 0, aqiMin = 0;
+		if (avg <= 50){
+			conMax = 12.0; conMin = 0.0;
+			aqiMax = 50; aqiMin = 0;
+		}
+		else if (avg <= 100){
+			conMax = 35.4; conMin = 12.1;
+			aqiMax = 100; aqiMin = 51;
+		}
+		else if (avg <= 150){
+			conMax = 55.4; conMin = 35.5;
+			aqiMax = 150; aqiMin = 101;
+		}
+		else if (avg <= 200){
+			conMax = 150.4; conMin = 55.5;
+			aqiMax = 200; aqiMin = 151;
+		}
+		else if (avg <= 300){
+			conMax = 250.4; conMin = 150.5;
+			aqiMax = 300; aqiMin = 201;
+		}
+		else if (avg <= 400){
+			conMax = 350.4; conMin = 250.5;
+			aqiMax = 400; aqiMin = 301;
+		}
+		else if (avg <= 500){
+			conMax = 500.4; conMin = 350.5;
+			aqiMax = 500; aqiMin = 401;
+		}
+		return (int) Math.round((avg-aqiMin)*(conMax-conMin)/(aqiMax-aqiMin)+conMin);
+	}
+
+	public int AQItoPM10(int avg){
+		double conMax = 0, conMin = 0;
+		int aqiMax = 0, aqiMin = 0;
+		if (avg <= 50){
+			conMax = 54.0; conMin = 0.0;
+			aqiMax = 50; aqiMin = 0;
+		}
+		else if (avg <= 100){
+			conMax = 154.0; conMin = 55.0;
+			aqiMax = 100; aqiMin = 51;
+		}
+		else if (avg <= 150){
+			conMax = 254.0; conMin = 155.0;
+			aqiMax = 150; aqiMin = 101;
+		}
+		else if (avg <= 200){
+			conMax = 354.0; conMin = 255.0;
+			aqiMax = 200; aqiMin = 151;
+		}
+		else if (avg <= 300){
+			conMax = 424.0; conMin = 355.0;
+			aqiMax = 300; aqiMin = 201;
+		}
+		else if (avg <= 400){
+			conMax = 504.0; conMin = 425.0;
+			aqiMax = 400; aqiMin = 301;
+		}
+		else if (avg <= 500){
+			conMax = 604.0; conMin = 505.0;
+			aqiMax = 500; aqiMin = 401;
+		}
+		return (int) Math.round((avg-aqiMin)*(conMax-conMin)/(aqiMax-aqiMin)+conMin);
+	}
+
 }
