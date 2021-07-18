@@ -22,7 +22,7 @@ public class MicrodustController {
 
 	@GetMapping("/main")
 	public ResponseEntity<Object> getMain(@RequestParam(required = false) String location,
-										  @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+								  @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (location != null) {
 				TMAddress tmAddress = microdustService.getTMAddress(location);
@@ -31,11 +31,11 @@ public class MicrodustController {
 						microdustService.getAddressByTM(tmAddress)));
 			} else if (lat != null && lon != null)
 				return ResponseEntity.ok().body(microdustService.getMain(
-						microdustService.getStationList(lat, lon),
-						microdustService.getAddress(lat, lon)));
+					microdustService.getStationList(lat, lon),
+					microdustService.getAddress(lat, lon)));
 			else
 				return ResponseEntity.ok().body(microdustService.getMain(
-						Arrays.asList("중구", "한강대로", "청계천로"), "서울특별시 중구 서소문동"));
+					Arrays.asList("중구", "한강대로", "청계천로"), "서울특별시 중구 서소문동"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
