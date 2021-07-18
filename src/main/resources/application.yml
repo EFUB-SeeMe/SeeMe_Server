@@ -21,3 +21,5 @@ specific-address-url: https://dapi.kakao.com/v2/local/geo/coord2regioncode.json
 specific-address-key:
 microdust-day-url: http://api.openweathermap.org/data/2.5/air_pollution/forecast
 microdust-day-key:
+microdust-time-url: https://api.tomorrow.io/v4/timelines
+microdust-time-key:
