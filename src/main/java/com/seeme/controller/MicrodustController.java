@@ -44,16 +44,15 @@ public class MicrodustController {
 
 	@GetMapping("/time")
 	public ResponseEntity<Object> getTime(
-			@RequestParam(required = false)  Double lat, Double lon) {
-		String location = lat+","+lon;
+			@RequestParam(required = false) Double lat, Double lon) {
+		String location = lat + "," + lon;
 		try {
 			if (lat == null || lon == null) {
 				MicrodustTimeResDto microdustTimeResDto = microdustService.getFirstTime(microdustService.getStationList(37.56197784552834, 126.9468124393769));
 				List<MicrodustTimeResDto> microdustTimeResDtoList = microdustService.getOtherTime("37.56197784552834,126.9468124393769");
 				microdustTimeResDtoList.add(0, microdustTimeResDto);
 				return ResponseEntity.ok().body(microdustService.getOtherTime("37.56197784552834,126.9468124393769"));
-			}
-			else {
+			} else {
 				MicrodustTimeResDto microdustTimeResDto = microdustService.getFirstTime(microdustService.getStationList(lat, lon));
 				microdustService.getOtherTime(location).add(0, microdustTimeResDto);
 				return ResponseEntity.ok().body(microdustService.getOtherTime(location));
@@ -67,7 +66,7 @@ public class MicrodustController {
 
 	@GetMapping("/day")
 	public ResponseEntity<Object> getDay(
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+			@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (lat == null || lon == null)
 				return ResponseEntity.ok().body(microdustService.getDay(37.56197784552834, 126.9468124393769));

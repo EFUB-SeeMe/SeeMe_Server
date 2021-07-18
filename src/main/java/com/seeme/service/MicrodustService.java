@@ -24,13 +24,13 @@ public class MicrodustService {
 		Microdust microdust = microdustOpenApi.getMainApi(measuringStationList);
 		System.out.println(microdust.toString()); // remove
 		return MicrodustResDto.builder()
-			.address(address)
-			.pm10(microdust.getPm10Value())
-			.pm25(microdust.getPm25Value())
-			.grade(MicrodustUtil.getGrade(microdust.getPmGrade()))
-			.gradeIcon(MicrodustUtil.GRADE_ICON)
-			.desc(MicrodustUtil.getDesc(microdust.getPmGrade()))
-			.build();
+				.address(address)
+				.pm10(microdust.getPm10Value())
+				.pm25(microdust.getPm25Value())
+				.grade(MicrodustUtil.getGrade(microdust.getPmGrade()))
+				.gradeIcon(MicrodustUtil.GRADE_ICON)
+				.desc(MicrodustUtil.getDesc(microdust.getPmGrade()))
+				.build();
 	}
 
 	public MicrodustTimeResDto getFirstTime(List<String> measuringStationList) throws IOException, ParseException {
@@ -44,7 +44,7 @@ public class MicrodustService {
 
 	public List<MicrodustTimeResDto> getOtherTime(String location) throws IOException, ParseException {
 		List<MicrodustTimeResDto> microdustTimeResDtoList = new ArrayList<>();
-		for(MicrodustTimeDto microdustTimeDto : microdustOpenApi.getOtherTimeApi(location)) {
+		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getOtherTimeApi(location)) {
 			microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
 					.time(microdustTimeDto.getStartTime())
 					.pm10(microdustTimeDto.getPm10Value())
@@ -58,14 +58,14 @@ public class MicrodustService {
 	public List<MicrodustDayResDto> getDay(double lat, double lon) throws IOException, ParseException {
 		List<MicrodustDayResDto> microdustDayResDtoList = new ArrayList<>();
 
-		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(lat, lon)){
+		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(lat, lon)) {
 			microdustDayResDtoList.add(MicrodustDayResDto.builder()
-				.dustAm(10)
-				.dustPm(10)
-				.microdustAm(10)
-				.microdustPm(10)
-				.date("07-16")
-				.build());
+					.dustAm(10)
+					.dustPm(10)
+					.microdustAm(10)
+					.microdustPm(10)
+					.date("07-16")
+					.build());
 		}
 
 		return microdustDayResDtoList;

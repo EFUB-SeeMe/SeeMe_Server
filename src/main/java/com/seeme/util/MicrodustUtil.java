@@ -9,7 +9,7 @@ public class MicrodustUtil {
 	public static final String VERSION = "ver";
 	public static final String RETURN_TYPE = "returnType";
 	public static final String GRADE_ICON =
-		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
+			"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
 	public static final String TM_X = "tmX";
 	public static final String TM_Y = "tmY";
 	public static final String APP_ID = "appid";
@@ -53,12 +53,12 @@ public class MicrodustUtil {
 	}
 
 	public static String getTime(String utc) {
-		int kst = Integer.parseInt(utc)+9;
-		if (kst<24)
+		int kst = Integer.parseInt(utc) + 9;
+		if (kst < 24)
 			return Integer.toString(kst);
 		else if (kst == 24)
 			return "0";
 		else
-			return Integer.toString(kst%24);
+			return Integer.toString(kst % 24);
 	}
 }
