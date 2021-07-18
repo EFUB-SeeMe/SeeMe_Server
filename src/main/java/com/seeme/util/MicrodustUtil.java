@@ -1,8 +1,5 @@
 package com.seeme.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 public class MicrodustUtil {
 	public static final String SERVICE_KEY = "serviceKey";
 	public static final String NUM_OF_ROWS = "numOfRows";
@@ -13,12 +10,17 @@ public class MicrodustUtil {
 	public static final String RETURN_TYPE = "returnType";
 	public static final String GRADE_ICON =
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
-	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh시");
 	public static final String TM_X = "tmX";
 	public static final String TM_Y = "tmY";
 	public static final String APP_ID = "appid";
 	public static final String LAT = "lat";
 	public static final String LON = "lon";
+	public static final String FIELDS = "fields";
+	public static final String LOCATION = "location";
+	public static final String TIME_STEPS = "timesteps";
+	public static final String UNITS = "units";
+	public static final String API_KEY = "apikey";
+
 
 	public static String getGrade(int pm10Grade1h) {
 		switch (pm10Grade1h) {
@@ -50,9 +52,13 @@ public class MicrodustUtil {
 		}
 	}
 
-	public static String getDataTime() {
-		SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh");
-		Calendar cal = Calendar.getInstance();
-		return TIME_FORMAT.format(cal.getTime());
+	public static String getTime(String utc) {
+		int kst = Integer.parseInt(utc)+9;
+		if (kst<24)
+			return Integer.toString(kst);
+		else if (kst == 24)
+			return "0";
+		else
+			return Integer.toString(kst%24);
 	}
 }
