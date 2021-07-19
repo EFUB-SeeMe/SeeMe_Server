@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @AllArgsConstructor
@@ -89,7 +91,7 @@ public class LocationApi {
 			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getTMAddressKey())
 			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
 			.queryParam(MicrodustUtil.NUM_OF_ROWS, 1)
-			.queryParam(LocationUtil.UMD_NAME, location);
+			.queryParam(LocationUtil.UMD_NAME, URLEncoder.encode(location, StandardCharsets.UTF_8));
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
 

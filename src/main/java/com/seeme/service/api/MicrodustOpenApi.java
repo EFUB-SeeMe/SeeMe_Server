@@ -107,8 +107,7 @@ public class MicrodustOpenApi {
 			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustMainKey())
 			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
 			.queryParam(MicrodustUtil.TM_X, tmX)
-			.queryParam(MicrodustUtil.TM_Y, tmY)
-			.queryParam(MicrodustUtil.VERSION, "1.0");
+			.queryParam(MicrodustUtil.TM_Y, tmY);
 		System.out.println(uriComponentsBuilder.build());
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
