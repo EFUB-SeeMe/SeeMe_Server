@@ -36,17 +36,25 @@ public class MicrodustService {
 			.build();
 	}
 
-	public List<MicrodustTimeResDto> getTime(String measuringStation) throws IOException, ParseException {
+	public MicrodustTimeResDto getFirstTime(List<String> measuringStationList) throws IOException, ParseException {
+		MicrodustTimeDto microdust = microdustOpenApi.getFirstTimeApi(measuringStationList);
+		return MicrodustTimeResDto.builder()
+			.time(microdust.getStartTime())
+			.pm10(microdust.getPm10Value())
+			.pm25(microdust.getPm25Value())
+			.build();
+	}
+
+	public List<MicrodustTimeResDto> getOtherTime(String location) throws IOException, ParseException {
 		List<MicrodustTimeResDto> microdustTimeResDtoList = new ArrayList<>();
-
-		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getTimeApi(measuringStation)) {
+		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getOtherTimeApi(location)) {
 			microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
-				.time(microdustTimeDto.getTime())
-				.pm10(microdustTimeDto.getPm10Value24())
-				.pm25(microdustTimeDto.getPm25Value24())
-				.build());
+				.time(microdustTimeDto.getStartTime())
+				.pm10(microdustTimeDto.getPm10Value())
+				.pm25(microdustTimeDto.getPm25Value())
+				.build()
+			);
 		}
-
 		return microdustTimeResDtoList;
 	}
 
