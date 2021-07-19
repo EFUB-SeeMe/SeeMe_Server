@@ -42,11 +42,9 @@ public class LocationApi {
 			.fromUriString(apiConfig.getSpecificAddressUrl())
 			.queryParam(LocationUtil.X, lon)
 			.queryParam(LocationUtil.Y, lat);
-		System.out.println(uriComponentsBuilder.build());
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSBWithAuth(
 			uriComponentsBuilder, apiConfig.getSpecificAddressKey());
-
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 		JSONArray jsonArray = (JSONArray) jsonObject.get("documents");
 		jsonObject = (JSONObject) jsonArray.get(0);
