@@ -19,9 +19,10 @@ public class MicrodustUtil {
 	public static final String APP_ID = "appid";
 	public static final String LAT = "lat";
 	public static final String LON = "lon";
+	public static final String SIDO_NAME = "sidoName";
 
-	public static String getGrade(int pm10Grade1h) {
-		switch (pm10Grade1h) {
+	public static String getGrade(String pm10Grade1h) {
+		switch (Integer.parseInt(pm10Grade1h)) {
 			case 1:
 				return "좋음";
 			case 2:
@@ -35,8 +36,8 @@ public class MicrodustUtil {
 		}
 	}
 
-	public static String getDesc(int pm10Grade1h) {
-		switch (pm10Grade1h) {
+	public static String getDesc(String pm10Grade1h) {
+		switch (Integer.parseInt(pm10Grade1h)) {
 			case 1:
 				return "야외 활동을 즐겨보세요 !";
 			case 2:
