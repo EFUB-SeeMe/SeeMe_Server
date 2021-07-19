@@ -201,6 +201,7 @@ public class MicrodustOpenApi {
 			int pm10 = AQItoPM10(Integer.parseInt(pm10Object.get("avg").toString()));
 			int pm25 = AQItoPM25(Integer.parseInt(pm25Object.get("avg").toString()));
 			String day = (pm25Object.get("day").toString());
+			day = day.substring(5, 7)+"."+day.substring(8,10);
 
 			microdustDayDtoList.add(MicrodustDayDto.builder()
 				.pm10(pm10)
