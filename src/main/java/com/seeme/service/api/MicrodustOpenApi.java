@@ -154,7 +154,7 @@ public class MicrodustOpenApi {
 		}
 
 		return microdustTimeDto.builder()
-			.startTime("í˜„ìž¬")
+			.startTime("현재")
 			.pm10Value(pm10)
 			.pm25Value(pm25)
 			.build();
@@ -191,7 +191,7 @@ public class MicrodustOpenApi {
 			int pm25 = (int) Math.round(Double.parseDouble(pmObject.get("particulateMatter25").toString()));
 			String startTime = listObject.get("startTime").toString().substring(11, 18);
 			String[] clock = startTime.split(":");
-			String time = MicrodustUtil.getTime(clock[0]) + "ì‹œ";
+			String time = MicrodustUtil.getTime(clock[0]) + "시";
 
 			microdustTimeDtoList.add(MicrodustTimeDto.builder()
 				.startTime(time)
@@ -250,7 +250,7 @@ public class MicrodustOpenApi {
 			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
 			.queryParam(MicrodustUtil.NUM_OF_ROWS, "600")
 			.queryParam(MicrodustUtil.PAGE_NO, "1")
-			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("? „êµ?", StandardCharsets.UTF_8))
+			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("전국", StandardCharsets.UTF_8))
 			.queryParam(MicrodustUtil.VERSION, "1.0");
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
