@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class MicrodustTimeDto {
 	private final String stationName;
-	private final int pm10Value24;
-	private final int pm25Value24;
+	private final Integer pm10Value24;
+	private final Integer pm25Value24;
 	private final String time;
 }

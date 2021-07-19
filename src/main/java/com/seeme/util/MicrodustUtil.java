@@ -16,9 +16,7 @@ public class MicrodustUtil {
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh시");
 	public static final String TM_X = "tmX";
 	public static final String TM_Y = "tmY";
-	public static final String APP_ID = "appid";
-	public static final String LAT = "lat";
-	public static final String LON = "lon";
+	public static final String TOKEN = "token";
 	public static final String SIDO_NAME = "sidoName";
 
 	public static String getGrade(String pm10Grade1h) {
@@ -56,4 +54,89 @@ public class MicrodustUtil {
 		Calendar cal = Calendar.getInstance();
 		return TIME_FORMAT.format(cal.getTime());
 	}
+
+	public static int AQItoPM25(int avg) {
+		double conMax = 0, conMin = 0;
+		int aqiMax = 0, aqiMin = 0;
+		if (avg <= 50) {
+			conMax = 12.0;
+			conMin = 0.0;
+			aqiMax = 50;
+			aqiMin = 0;
+		} else if (avg <= 100) {
+			conMax = 35.4;
+			conMin = 12.1;
+			aqiMax = 100;
+			aqiMin = 51;
+		} else if (avg <= 150) {
+			conMax = 55.4;
+			conMin = 35.5;
+			aqiMax = 150;
+			aqiMin = 101;
+		} else if (avg <= 200) {
+			conMax = 150.4;
+			conMin = 55.5;
+			aqiMax = 200;
+			aqiMin = 151;
+		} else if (avg <= 300) {
+			conMax = 250.4;
+			conMin = 150.5;
+			aqiMax = 300;
+			aqiMin = 201;
+		} else if (avg <= 400) {
+			conMax = 350.4;
+			conMin = 250.5;
+			aqiMax = 400;
+			aqiMin = 301;
+		} else if (avg <= 500) {
+			conMax = 500.4;
+			conMin = 350.5;
+			aqiMax = 500;
+			aqiMin = 401;
+		}
+		return (int) Math.round((avg - aqiMin) * (conMax - conMin) / (aqiMax - aqiMin) + conMin);
+	}
+
+	public static int AQItoPM10(int avg) {
+		double conMax = 0, conMin = 0;
+		int aqiMax = 0, aqiMin = 0;
+		if (avg <= 50) {
+			conMax = 54.0;
+			conMin = 0.0;
+			aqiMax = 50;
+			aqiMin = 0;
+		} else if (avg <= 100) {
+			conMax = 154.0;
+			conMin = 55.0;
+			aqiMax = 100;
+			aqiMin = 51;
+		} else if (avg <= 150) {
+			conMax = 254.0;
+			conMin = 155.0;
+			aqiMax = 150;
+			aqiMin = 101;
+		} else if (avg <= 200) {
+			conMax = 354.0;
+			conMin = 255.0;
+			aqiMax = 200;
+			aqiMin = 151;
+		} else if (avg <= 300) {
+			conMax = 424.0;
+			conMin = 355.0;
+			aqiMax = 300;
+			aqiMin = 201;
+		} else if (avg <= 400) {
+			conMax = 504.0;
+			conMin = 425.0;
+			aqiMax = 400;
+			aqiMin = 301;
+		} else if (avg <= 500) {
+			conMax = 604.0;
+			conMin = 505.0;
+			aqiMax = 500;
+			aqiMin = 401;
+		}
+		return (int) Math.round((avg - aqiMin) * (conMax - conMin) / (aqiMax - aqiMin) + conMin);
+	}
+
 }

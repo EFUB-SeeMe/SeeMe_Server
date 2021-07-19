@@ -50,16 +50,14 @@ public class MicrodustService {
 		return microdustTimeResDtoList;
 	}
 
-	public List<MicrodustDayResDto> getDay(double lat, double lon) throws IOException, ParseException {
+	public List<MicrodustDayResDto> getDay(String geo) throws IOException, ParseException {
 		List<MicrodustDayResDto> microdustDayResDtoList = new ArrayList<>();
 
-		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(lat, lon)) {
+		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(geo)){
 			microdustDayResDtoList.add(MicrodustDayResDto.builder()
-				.dustAm(10)
-				.dustPm(10)
-				.microdustAm(10)
-				.microdustPm(10)
-				.date("07-16")
+				.dust(microdustDayDto.getPm10())
+				.microdust(microdustDayDto.getPm25())
+				.date(microdustDayDto.getDay())
 				.build());
 		}
 

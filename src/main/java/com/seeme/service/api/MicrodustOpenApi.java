@@ -2,12 +2,10 @@ package com.seeme.service.api;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.seeme.domain.location.TMAddress;
 import com.seeme.domain.microdust.Microdust;
 import com.seeme.domain.microdust.MicrodustDayDto;
 import com.seeme.domain.microdust.MicrodustTimeDto;
 import com.seeme.util.JSONParsingUtil;
-import com.seeme.util.LocationUtil;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
@@ -24,12 +22,14 @@ import org.w3c.dom.NodeList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.seeme.util.MicrodustUtil.AQItoPM10;
+import static com.seeme.util.MicrodustUtil.AQItoPM25;
 
 @Service
 @AllArgsConstructor
@@ -128,7 +128,7 @@ public class MicrodustOpenApi {
 			JSONObject itemObject = (JSONObject) itemsObject.get(index++);
 			stationList.add(itemObject.get("stationName").toString());
 		}
-		System.out.println("stationName: " + stationList.toString()); // remove
+		System.out.println("stationName: " + stationList); // remove
 		return stationList;
 	}
 
@@ -156,7 +156,7 @@ public class MicrodustOpenApi {
 			JSONObject itemObject = (JSONObject) itemsObjects.get(temp);
 			microdustTimeDtoList.add(MicrodustTimeDto.builder()
 				.stationName(measuringStation)
-				.time((Integer.parseInt(MicrodustUtil.getDataTime()) + temp) + "ì‹œ")
+				.time((Integer.parseInt(MicrodustUtil.getDataTime()) + temp) + "?‹œ")
 				.pm10Value24(Integer.parseInt(itemObject.get("pm10Value24").toString()))
 				.pm25Value24(Integer.parseInt(itemObject.get("pm25Value24").toString()))
 				.build()
@@ -173,36 +173,40 @@ public class MicrodustOpenApi {
 		return nValue.getNodeValue();
 	}
 
-	public List<MicrodustDayDto> getDayApi(Double lat, Double lon) throws IOException, ParseException, NullPointerException {
+	public List<MicrodustDayDto> getDayApi(String geo) throws IOException, ParseException, NullPointerException {
 		String result = "";
 
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getMicrodustDayUrl())
-			.queryParam(MicrodustUtil.LAT, lat)
-			.queryParam(MicrodustUtil.LON, lon)
-			.queryParam(MicrodustUtil.APP_ID, apiConfig.getMicrodustDayKey());
+			.fromUriString(apiConfig.getMicrodustDayUrl() + "/geo:" + geo + "/")
+			.queryParam(MicrodustUtil.TOKEN, apiConfig.getMicrodustDayKey());
 		URL url = new URL(uriComponentsBuilder.build().toUriString());
 
 		BufferedReader bf;
 		bf = new BufferedReader(new InputStreamReader(url.openStream()));
 		result = bf.readLine();
-
 		List<MicrodustDayDto> microdustDayDtoList = new ArrayList<>();
 
-		for (int temp = 0; temp < 120; temp++) {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-			JSONArray listObjects = (JSONArray) jsonObject.get("list");
-			JSONObject listObject = (JSONObject) listObjects.get(temp);
-			JSONObject componentObject = (JSONObject) listObject.get("components");
-			int pm25 = (int) (Float.parseFloat(componentObject.get("pm2_5").toString()));
-			int pm10 = (int) (Float.parseFloat(componentObject.get("pm10").toString()));
-			long dt = Long.parseLong(listObject.get("dt").toString());
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+		JSONObject dataObject = (JSONObject) jsonObject.get("data");
+		JSONObject forecastObject = (JSONObject) dataObject.get("forecast");
+		JSONObject dailyObject = (JSONObject) forecastObject.get("daily");
+		JSONArray pm10Objects = (JSONArray) dailyObject.get("pm10");
+		JSONArray pm25Objects = (JSONArray) dailyObject.get("pm25");
+
+		for (int temp = 0; temp < 5; temp++) {
+			JSONObject pm10Object = (JSONObject) pm10Objects.get(temp);
+			JSONObject pm25Object = (JSONObject) pm25Objects.get(temp);
+
+			int pm10 = AQItoPM10(Integer.parseInt(pm10Object.get("avg").toString()));
+			int pm25 = AQItoPM25(Integer.parseInt(pm25Object.get("avg").toString()));
+			String day = (pm25Object.get("day").toString());
+			day = day.substring(5, 7)+"."+day.substring(8,10);
 
 			microdustDayDtoList.add(MicrodustDayDto.builder()
-				.pm25(pm25)
 				.pm10(pm10)
-				.dt(dt)
+				.pm25(pm25)
+				.day(day)
 				.build()
 			);
 		}
@@ -216,7 +220,7 @@ public class MicrodustOpenApi {
 			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
 			.queryParam(MicrodustUtil.NUM_OF_ROWS, "600")
 			.queryParam(MicrodustUtil.PAGE_NO, "1")
-			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("ì „êµ­", StandardCharsets.UTF_8))
+			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("? „êµ?", StandardCharsets.UTF_8))
 			.queryParam(MicrodustUtil.VERSION, "1.0");
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
