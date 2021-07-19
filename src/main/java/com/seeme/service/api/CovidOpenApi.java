@@ -97,6 +97,7 @@ public class CovidOpenApi {
 					CovidRegionalDto.builder()
 						.stdDay(getTagValue("stdDay", eElement))
 						.gubun(getTagValue("gubun", eElement))
+						.overFlowCnt(getTagValue("overFlowCnt", eElement))
 						.localOccCnt(getTagValue("localOccCnt", eElement))
 						.defCnt(getTagValue("defCnt", eElement))
 						.build()

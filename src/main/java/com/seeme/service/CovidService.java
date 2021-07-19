@@ -71,10 +71,10 @@ public class CovidService {
 			if (RegionCovid.getGubun().equals(location)) {
 				coronicList.add(Coronic.builder()
 						.day(RegionCovid.getStdDay())
-						.coronicByDay(Integer.parseInt(RegionCovid.getLocalOccCnt()))
+						.coronicByDay(Integer.parseInt(RegionCovid.getLocalOccCnt())+Integer.parseInt(RegionCovid.getOverFlowCnt()))
 						.build());
 				if (totalCoronic < Integer.parseInt(RegionCovid.getDefCnt())) {
-					newCoronic = Integer.parseInt(RegionCovid.getLocalOccCnt());
+					newCoronic = Integer.parseInt(RegionCovid.getLocalOccCnt())+Integer.parseInt(RegionCovid.getOverFlowCnt());
 					totalCoronic = Integer.parseInt(RegionCovid.getDefCnt());
 				}
 			}
