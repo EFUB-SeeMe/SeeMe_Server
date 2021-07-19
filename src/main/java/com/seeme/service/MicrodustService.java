@@ -95,8 +95,8 @@ public class MicrodustService {
 			MicrodustStation station = map.get(microdust.getStationName());
 			microdustMapList.add(MicrodustMapResDto.builder()
 				.stationName(microdust.getStationName())
-				.lat(station.getY())
-				.lon(station.getX())
+				.lat(station.getX())
+				.lon(station.getY())
 				.pm10(microdust.getPm10Value())
 				.pm25(microdust.getPm25Value())
 				.grade(microdust.getPm10Grade())
