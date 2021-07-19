@@ -27,8 +27,8 @@ public class MicrodustController {
 			if (location != null) {
 				TMAddress tmAddress = microdustService.getTMAddress(location);
 				return ResponseEntity.ok().body(microdustService.getMain(
-						microdustService.getStationListByTM(tmAddress.getTmX(), tmAddress.getTmY()),
-						microdustService.getAddressByTM(tmAddress)));
+					microdustService.getStationListByTM(tmAddress.getTmX(), tmAddress.getTmY()),
+					microdustService.getAddressByTM(tmAddress)));
 			} else if (lat != null && lon != null)
 				return ResponseEntity.ok().body(microdustService.getMain(
 					microdustService.getStationList(lat, lon),
@@ -44,7 +44,7 @@ public class MicrodustController {
 
 	@GetMapping("/time")
 	public ResponseEntity<Object> getTime(
-			@RequestParam(required = false) Double lat, Double lon) {
+		@RequestParam(required = false) Double lat, Double lon) {
 		String location = lat + "," + lon;
 		try {
 			if (lat == null || lon == null) {
@@ -66,7 +66,7 @@ public class MicrodustController {
 
 	@GetMapping("/day")
 	public ResponseEntity<Object> getDay(
-			@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (lat == null || lon == null)
 				return ResponseEntity.ok().body(microdustService.getDay(37.56197784552834, 126.9468124393769));
