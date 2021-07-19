@@ -1,14 +1,18 @@
 package com.seeme.service.api;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.seeme.domain.location.TMAddress;
 import com.seeme.domain.microdust.Microdust;
 import com.seeme.domain.microdust.MicrodustDayDto;
-import com.seeme.domain.microdust.MicrodustDayResDto;
 import com.seeme.domain.microdust.MicrodustTimeDto;
 import com.seeme.util.JSONParsingUtil;
+import com.seeme.util.LocationUtil;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
@@ -16,12 +20,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -36,28 +39,29 @@ public class MicrodustOpenApi {
 	private final LocationApi locationApi;
 
 	public Microdust getMainApi(List<String> stationList) throws IOException, ParseException {
-		int index = 0, pm10 = -1, pm25 = -1, pmGrade = -1;
+		int index = 0, pmGrade = -1;
+		String pm10 = "-1", pm25 = "-1";
 		boolean pm10Flag = false, pm25Flag = false;
 		while (index < 3) {
 			if (pm10Flag && pm25Flag)
 				break;
-			JSONObject microdust = getMicrodust(stationList, index++);
-			if (!pm10Flag && !microdust.get("pm10Value").equals("-")) {
+			JSONObject jsonObject = getMicrodust(stationList, index++);
+			if (!pm10Flag && !jsonObject.get("pm10Value").equals("-")) {
 				pm10Flag = true;
-				pm10 = Integer.parseInt(microdust.get("pm10Value").toString());
-				pmGrade = Integer.parseInt(microdust.get("pm10Grade").toString());
+				pm10 = jsonObject.get("pm10Value").toString();
+				pmGrade = Integer.parseInt(jsonObject.get("pm10Grade").toString());
 			}
-			if (!pm25Flag && !microdust.get("pm25Value").equals("-")) {
+			if (!pm25Flag && !jsonObject.get("pm25Value").equals("-")) {
 				pm25Flag = true;
-				pm25 = Integer.parseInt(microdust.get("pm25Value").toString());
-				pmGrade = Math.max(pmGrade, Integer.parseInt(microdust.get("pm25Grade").toString()));
+				pm25 = jsonObject.get("pm25Value").toString();
+				pmGrade = Math.max(pmGrade, Integer.parseInt(jsonObject.get("pm25Grade").toString()));
 			}
 		}
 
 		return Microdust.builder()
 			.pm10Value(pm10)
 			.pm25Value(pm25)
-			.pmGrade(pmGrade)
+			.pm10Grade(String.valueOf(pmGrade))
 			.build();
 	}
 
@@ -185,14 +189,14 @@ public class MicrodustOpenApi {
 
 		List<MicrodustDayDto> microdustDayDtoList = new ArrayList<>();
 
-		for (int temp=0; temp<120; temp++){
+		for (int temp = 0; temp < 120; temp++) {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
 			JSONArray listObjects = (JSONArray) jsonObject.get("list");
 			JSONObject listObject = (JSONObject) listObjects.get(temp);
 			JSONObject componentObject = (JSONObject) listObject.get("components");
-			int pm25 = (int)(Float.parseFloat(componentObject.get("pm2_5").toString()));
-			int pm10 = (int)(Float.parseFloat(componentObject.get("pm10").toString()));
+			int pm25 = (int) (Float.parseFloat(componentObject.get("pm2_5").toString()));
+			int pm10 = (int) (Float.parseFloat(componentObject.get("pm10").toString()));
 			long dt = Long.parseLong(listObject.get("dt").toString());
 
 			microdustDayDtoList.add(MicrodustDayDto.builder()
@@ -203,5 +207,27 @@ public class MicrodustOpenApi {
 			);
 		}
 		return microdustDayDtoList;
+	}
+
+	public List<Microdust> getMap() throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getMicrodustMapUrl())
+			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustMapKey())
+			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
+			.queryParam(MicrodustUtil.NUM_OF_ROWS, "600")
+			.queryParam(MicrodustUtil.PAGE_NO, "1")
+			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("전국", StandardCharsets.UTF_8))
+			.queryParam(MicrodustUtil.VERSION, "1.0");
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		jsonObject = (JSONObject) jsonObject.get("response");
+		jsonObject = (JSONObject) jsonObject.get("body");
+		JSONArray jsonArray = (JSONArray) jsonObject.get("items");
+
+		return new Gson().fromJson(jsonArray.toString(),
+			new TypeToken<List<Microdust>>() {
+			}.getType());
 	}
 }

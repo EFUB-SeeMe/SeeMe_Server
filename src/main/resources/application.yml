@@ -19,5 +19,11 @@ microdust-main-key:
 microdust-station-url: http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList
 specific-address-url: https://dapi.kakao.com/v2/local/geo/coord2regioncode.json
 specific-address-key:
+TM-address-url: http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getTMStdrCrdnt
+TM-address-key:
 microdust-day-url: http://api.openweathermap.org/data/2.5/air_pollution/forecast
 microdust-day-key:
+microdust-time-url: https://api.tomorrow.io/v4/timelines
+microdust-time-key:
+microdust-map-url: http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty
+microdust-map-key:
