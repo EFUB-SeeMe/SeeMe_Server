@@ -184,7 +184,7 @@ public class MicrodustOpenApi {
 		JSONObject timeObject = (JSONObject) timelinesObject.get(0);
 		JSONArray intervalsObjects = (JSONArray) timeObject.get("intervals");
 
-		for (int temp = 1; temp < 48; temp++) {
+		for (int temp = 0; temp < 48; temp++) {
 			JSONObject listObject = (JSONObject) intervalsObjects.get(temp);
 			JSONObject pmObject = (JSONObject) listObject.get("values");
 			int pm10 = (int) Math.round(Double.parseDouble(pmObject.get("particulateMatter10").toString()));
