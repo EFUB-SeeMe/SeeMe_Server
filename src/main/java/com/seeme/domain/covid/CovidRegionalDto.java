@@ -8,8 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CovidRegionalDto {
-	private final String stdDay; // 기준 일시
-	private final String localOccCnt; // 지역 발생 수
-	private final String defCnt; // 지역 누적 발생 수
-	private final String gubun; // 시,도명
+	private final String stdDay;
+	private final String localOccCnt;
+	private final String defCnt;
+	private final String gubun;
 }
