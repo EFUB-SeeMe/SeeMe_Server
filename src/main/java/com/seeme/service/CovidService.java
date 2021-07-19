@@ -3,6 +3,7 @@ package com.seeme.service;
 import com.seeme.service.api.CovidOpenApi;
 import com.seeme.service.api.LocationApi;
 import com.seeme.domain.covid.*;
+import com.seeme.util.CovidUtil;
 import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,14 +39,15 @@ public class CovidService {
 			}
 		}
 
+
 		if (0 < compRegion)
-			isIncRegion = 1;
-		else if (compRegion < 0)
 			isIncRegion = -1;
+		else if (compRegion < 0)
+			isIncRegion = 1;
 		if (0 < compTotal)
-			isIncTotal = 1;
-		else if (compTotal < 0)
 			isIncTotal = -1;
+		else if (compTotal < 0)
+			isIncTotal = 1;
 
 		return CovidResDto.builder()
 			.location(location)
@@ -53,8 +55,8 @@ public class CovidService {
 			.coronicRegion(coronicRegion)
 			.compTotal(Math.abs(compTotal))
 			.compRegion(Math.abs(compRegion))
-			.isIncTotal(isIncTotal)
-			.isIncRegion(isIncRegion)
+			.isIncTotal(CovidUtil.getInc(compTotal))
+			.isIncRegion(CovidUtil.getInc(compRegion))
 			.build();
 	}
 
