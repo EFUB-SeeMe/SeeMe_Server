@@ -15,7 +15,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ public class CovidOpenApi {
 		return nValue.getNodeValue();
 	}
 
-	public List<CovidRegionalDto> getRegionalApi() throws IOException, ParserConfigurationException, SAXException{
+	public List<CovidRegionalDto> getRegionalApi() throws IOException, ParserConfigurationException, SAXException {
 		String endCreateDt = CovidUtil.getCovidMainEndCreateDt();
 		String startCreateDt = CovidUtil.getCovidRegionalCreateCreateDt();
 

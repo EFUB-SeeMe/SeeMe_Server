@@ -1,6 +1,5 @@
 package com.seeme.util;
 
-import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 

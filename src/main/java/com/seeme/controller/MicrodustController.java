@@ -22,7 +22,7 @@ public class MicrodustController {
 
 	@GetMapping("/main")
 	public ResponseEntity<Object> getMain(@RequestParam(required = false) String location,
-								  @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+										  @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
 			if (location != null) {
 				TMAddress tmAddress = microdustService.getTMAddress(location);
@@ -67,15 +67,25 @@ public class MicrodustController {
 	@GetMapping("/day")
 	public ResponseEntity<Object> getDay(
 		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		String geo = lat + ";" + lon;
 		try {
 			if (lat == null || lon == null)
-				return ResponseEntity.ok().body(microdustService.getDay(37.56197784552834, 126.9468124393769));
+				return ResponseEntity.ok().body(microdustService.getDay("37.56197784552834;126.9468124393769"));
 			else
-				return ResponseEntity.ok().body(microdustService.getDay(lat, lon));
+				return ResponseEntity.ok().body(microdustService.getDay(geo));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
 		}
 	}
 
+	@GetMapping("/map")
+	public ResponseEntity<Object> getMap() {
+		try {
+			return ResponseEntity.ok().body(microdustService.getMap());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
+	}
 }

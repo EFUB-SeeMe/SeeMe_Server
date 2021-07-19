@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -19,17 +21,18 @@ public class MicrodustService {
 
 	private final LocationApi locationApi;
 	private final MicrodustOpenApi microdustOpenApi;
+	private final MicrodustStationRepository microdustStationRepository;
 
 	public MicrodustResDto getMain(List<String> measuringStationList, String address) throws IOException, ParseException {
 		Microdust microdust = microdustOpenApi.getMainApi(measuringStationList);
 		System.out.println(microdust.toString()); // remove
 		return MicrodustResDto.builder()
 			.address(address)
-			.pm10(microdust.getPm10Value())
-			.pm25(microdust.getPm25Value())
-			.grade(MicrodustUtil.getGrade(microdust.getPmGrade()))
+			.pm10(Integer.parseInt(microdust.getPm10Value()))
+			.pm25(Integer.parseInt(microdust.getPm25Value()))
+			.grade(MicrodustUtil.getGrade(microdust.getPm10Grade()))
 			.gradeIcon(MicrodustUtil.GRADE_ICON)
-			.desc(MicrodustUtil.getDesc(microdust.getPmGrade()))
+			.desc(MicrodustUtil.getDesc(microdust.getPm10Grade()))
 			.build();
 	}
 
@@ -55,16 +58,14 @@ public class MicrodustService {
 		return microdustTimeResDtoList;
 	}
 
-	public List<MicrodustDayResDto> getDay(double lat, double lon) throws IOException, ParseException {
+	public List<MicrodustDayResDto> getDay(String geo) throws IOException, ParseException {
 		List<MicrodustDayResDto> microdustDayResDtoList = new ArrayList<>();
 
-		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(lat, lon)) {
+		for (MicrodustDayDto microdustDayDto : microdustOpenApi.getDayApi(geo)){
 			microdustDayResDtoList.add(MicrodustDayResDto.builder()
-				.dustAm(10)
-				.dustPm(10)
-				.microdustAm(10)
-				.microdustPm(10)
-				.date("07-16")
+				.dust(microdustDayDto.getPm10())
+				.microdust(microdustDayDto.getPm25())
+				.date(microdustDayDto.getDay())
 				.build());
 		}
 
@@ -89,5 +90,25 @@ public class MicrodustService {
 
 	public TMAddress getTMAddress(String location) throws IOException {
 		return locationApi.getTMAddress(location);
+	}
+
+	public List<MicrodustMapResDto> getMap() throws IOException {
+		Map<String, MicrodustStation> map = new HashMap<>();
+		microdustStationRepository.findAll().forEach(station -> map.put(station.getName(), station));
+
+		List<MicrodustMapResDto> microdustMapList = new ArrayList<>();
+		for (Microdust microdust : microdustOpenApi.getMap()) {
+			MicrodustStation station = map.get(microdust.getStationName());
+			microdustMapList.add(MicrodustMapResDto.builder()
+				.stationName(microdust.getStationName())
+				.lat(station.getX())
+				.lon(station.getY())
+				.pm10(microdust.getPm10Value())
+				.pm25(microdust.getPm25Value())
+				.grade(microdust.getPm10Grade())
+				.build());
+		}
+
+		return microdustMapList;
 	}
 }
