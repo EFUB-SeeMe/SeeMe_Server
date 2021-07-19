@@ -25,4 +25,10 @@ public class CovidUtil {
 		cal.add(Calendar.DATE, -5);
 		return DATE_FORMAT.format(cal.getTime());
 	}
+
+	public static int getInc(int compTotal) {
+		if (0 < compTotal) return -1;
+		else if (compTotal < 0) return 1;
+		else return 0;
+	}
 }

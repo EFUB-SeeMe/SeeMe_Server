@@ -134,7 +134,6 @@ public class MicrodustOpenApi {
 	}
 
 	public MicrodustTimeDto getFirstTimeApi(List<String> stationList) throws IOException, ParseException {
-		MicrodustTimeDto microdustTimeDto = null;
 		int index = 0, pm10 = -1, pm25 = -1, pmGrade = -1;
 		boolean pm10Flag = false, pm25Flag = false;
 		while (index < 3) {
@@ -153,7 +152,7 @@ public class MicrodustOpenApi {
 			}
 		}
 
-		return microdustTimeDto.builder()
+		return MicrodustTimeDto.builder()
 			.startTime("현재")
 			.pm10Value(pm10)
 			.pm25Value(pm25)
