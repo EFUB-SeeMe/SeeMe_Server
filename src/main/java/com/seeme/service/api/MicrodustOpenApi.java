@@ -156,7 +156,7 @@ public class MicrodustOpenApi {
 			JSONObject itemObject = (JSONObject) itemsObjects.get(temp);
 			microdustTimeDtoList.add(MicrodustTimeDto.builder()
 				.stationName(measuringStation)
-				.time((Integer.parseInt(MicrodustUtil.getDataTime()) + temp) + "?��")
+				.time((Integer.parseInt(MicrodustUtil.getDataTime()) + temp) + "시")
 				.pm10Value24(Integer.parseInt(itemObject.get("pm10Value24").toString()))
 				.pm25Value24(Integer.parseInt(itemObject.get("pm25Value24").toString()))
 				.build()
@@ -220,7 +220,7 @@ public class MicrodustOpenApi {
 			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
 			.queryParam(MicrodustUtil.NUM_OF_ROWS, "600")
 			.queryParam(MicrodustUtil.PAGE_NO, "1")
-			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("?���?", StandardCharsets.UTF_8))
+			.queryParam(MicrodustUtil.SIDO_NAME, URLEncoder.encode("전국", StandardCharsets.UTF_8))
 			.queryParam(MicrodustUtil.VERSION, "1.0");
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
