@@ -34,8 +34,8 @@ public class MicrodustUtil {
 		}
 	}
 
-	public static String getDesc(int pm10Grade1h) {
-		switch (pm10Grade1h) {
+	public static String getDesc(String pm10Grade1h) {
+		switch (Integer.parseInt(pm10Grade1h)) {
 			case 1:
 				return "야외 활동을 즐겨보세요 !";
 			case 2:

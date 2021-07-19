@@ -2,12 +2,10 @@ package com.seeme.service.api;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.seeme.domain.location.TMAddress;
 import com.seeme.domain.microdust.Microdust;
 import com.seeme.domain.microdust.MicrodustDayDto;
 import com.seeme.domain.microdust.MicrodustTimeDto;
 import com.seeme.util.JSONParsingUtil;
-import com.seeme.util.LocationUtil;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
@@ -24,7 +22,6 @@ import org.w3c.dom.NodeList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -128,7 +125,7 @@ public class MicrodustOpenApi {
 			JSONObject itemObject = (JSONObject) itemsObject.get(index++);
 			stationList.add(itemObject.get("stationName").toString());
 		}
-		System.out.println("stationName: " + stationList.toString()); // remove
+		System.out.println("stationName: " + stationList); // remove
 		return stationList;
 	}
 
@@ -177,7 +174,7 @@ public class MicrodustOpenApi {
 		String result = "";
 
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getMicrodustDayUrl()+"/geo:"+geo+"/")
+			.fromUriString(apiConfig.getMicrodustDayUrl() + "/geo:" + geo + "/")
 			.queryParam(MicrodustUtil.TOKEN, apiConfig.getMicrodustDayKey());
 		URL url = new URL(uriComponentsBuilder.build().toUriString());
 
@@ -194,7 +191,7 @@ public class MicrodustOpenApi {
 		JSONArray pm10Objects = (JSONArray) dailyObject.get("pm10");
 		JSONArray pm25Objects = (JSONArray) dailyObject.get("pm25");
 
-		for (int temp = 1; temp < 6; temp++) {
+		for (int temp = 0; temp < 5; temp++) {
 			JSONObject pm10Object = (JSONObject) pm10Objects.get(temp);
 			JSONObject pm25Object = (JSONObject) pm25Objects.get(temp);
 
@@ -212,72 +209,88 @@ public class MicrodustOpenApi {
 		return microdustDayDtoList;
 	}
 
-	public int AQItoPM25(int avg){
+	public int AQItoPM25(int avg) {
 		double conMax = 0, conMin = 0;
 		int aqiMax = 0, aqiMin = 0;
-		if (avg <= 50){
-			conMax = 12.0; conMin = 0.0;
-			aqiMax = 50; aqiMin = 0;
+		if (avg <= 50) {
+			conMax = 12.0;
+			conMin = 0.0;
+			aqiMax = 50;
+			aqiMin = 0;
+		} else if (avg <= 100) {
+			conMax = 35.4;
+			conMin = 12.1;
+			aqiMax = 100;
+			aqiMin = 51;
+		} else if (avg <= 150) {
+			conMax = 55.4;
+			conMin = 35.5;
+			aqiMax = 150;
+			aqiMin = 101;
+		} else if (avg <= 200) {
+			conMax = 150.4;
+			conMin = 55.5;
+			aqiMax = 200;
+			aqiMin = 151;
+		} else if (avg <= 300) {
+			conMax = 250.4;
+			conMin = 150.5;
+			aqiMax = 300;
+			aqiMin = 201;
+		} else if (avg <= 400) {
+			conMax = 350.4;
+			conMin = 250.5;
+			aqiMax = 400;
+			aqiMin = 301;
+		} else if (avg <= 500) {
+			conMax = 500.4;
+			conMin = 350.5;
+			aqiMax = 500;
+			aqiMin = 401;
 		}
-		else if (avg <= 100){
-			conMax = 35.4; conMin = 12.1;
-			aqiMax = 100; aqiMin = 51;
-		}
-		else if (avg <= 150){
-			conMax = 55.4; conMin = 35.5;
-			aqiMax = 150; aqiMin = 101;
-		}
-		else if (avg <= 200){
-			conMax = 150.4; conMin = 55.5;
-			aqiMax = 200; aqiMin = 151;
-		}
-		else if (avg <= 300){
-			conMax = 250.4; conMin = 150.5;
-			aqiMax = 300; aqiMin = 201;
-		}
-		else if (avg <= 400){
-			conMax = 350.4; conMin = 250.5;
-			aqiMax = 400; aqiMin = 301;
-		}
-		else if (avg <= 500){
-			conMax = 500.4; conMin = 350.5;
-			aqiMax = 500; aqiMin = 401;
-		}
-		return (int) Math.round((avg-aqiMin)*(conMax-conMin)/(aqiMax-aqiMin)+conMin);
+		return (int) Math.round((avg - aqiMin) * (conMax - conMin) / (aqiMax - aqiMin) + conMin);
 	}
 
-	public int AQItoPM10(int avg){
+	public int AQItoPM10(int avg) {
 		double conMax = 0, conMin = 0;
 		int aqiMax = 0, aqiMin = 0;
-		if (avg <= 50){
-			conMax = 54.0; conMin = 0.0;
-			aqiMax = 50; aqiMin = 0;
+		if (avg <= 50) {
+			conMax = 54.0;
+			conMin = 0.0;
+			aqiMax = 50;
+			aqiMin = 0;
+		} else if (avg <= 100) {
+			conMax = 154.0;
+			conMin = 55.0;
+			aqiMax = 100;
+			aqiMin = 51;
+		} else if (avg <= 150) {
+			conMax = 254.0;
+			conMin = 155.0;
+			aqiMax = 150;
+			aqiMin = 101;
+		} else if (avg <= 200) {
+			conMax = 354.0;
+			conMin = 255.0;
+			aqiMax = 200;
+			aqiMin = 151;
+		} else if (avg <= 300) {
+			conMax = 424.0;
+			conMin = 355.0;
+			aqiMax = 300;
+			aqiMin = 201;
+		} else if (avg <= 400) {
+			conMax = 504.0;
+			conMin = 425.0;
+			aqiMax = 400;
+			aqiMin = 301;
+		} else if (avg <= 500) {
+			conMax = 604.0;
+			conMin = 505.0;
+			aqiMax = 500;
+			aqiMin = 401;
 		}
-		else if (avg <= 100){
-			conMax = 154.0; conMin = 55.0;
-			aqiMax = 100; aqiMin = 51;
-		}
-		else if (avg <= 150){
-			conMax = 254.0; conMin = 155.0;
-			aqiMax = 150; aqiMin = 101;
-		}
-		else if (avg <= 200){
-			conMax = 354.0; conMin = 255.0;
-			aqiMax = 200; aqiMin = 151;
-		}
-		else if (avg <= 300){
-			conMax = 424.0; conMin = 355.0;
-			aqiMax = 300; aqiMin = 201;
-		}
-		else if (avg <= 400){
-			conMax = 504.0; conMin = 425.0;
-			aqiMax = 400; aqiMin = 301;
-		}
-		else if (avg <= 500){
-			conMax = 604.0; conMin = 505.0;
-			aqiMax = 500; aqiMin = 401;
-		}
-		return (int) Math.round((avg-aqiMin)*(conMax-conMin)/(aqiMax-aqiMin)+conMin);
+		return (int) Math.round((avg - aqiMin) * (conMax - conMin) / (aqiMax - aqiMin) + conMin);
 	}
 
 
