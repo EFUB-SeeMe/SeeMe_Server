@@ -17,9 +17,10 @@ public class MicrodustUtil {
 	public static final String TM_X = "tmX";
 	public static final String TM_Y = "tmY";
 	public static final String TOKEN = "token";
+	public static final String SIDO_NAME = "sidoName";
 
-	public static String getGrade(int pm10Grade1h) {
-		switch (pm10Grade1h) {
+	public static String getGrade(String pm10Grade1h) {
+		switch (Integer.parseInt(pm10Grade1h)) {
 			case 1:
 				return "좋음";
 			case 2:
@@ -54,9 +55,4 @@ public class MicrodustUtil {
 		return TIME_FORMAT.format(cal.getTime());
 	}
 
-	public static String getMicrodustDayCreateCreateDt() {
-		long epoch = System.currentTimeMillis()/1000;
-
-		return "돌아감";
-	}
 }

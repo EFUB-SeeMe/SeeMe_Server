@@ -71,4 +71,13 @@ public class MicrodustController {
 		}
 	}
 
+	@GetMapping("/map")
+	public ResponseEntity<Object> getMap() {
+		try {
+			return ResponseEntity.ok().body(microdustService.getMap());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
+	}
 }
