@@ -1,6 +1,7 @@
 package com.seeme.controller;
 
 import com.seeme.domain.location.TMAddress;
+import com.seeme.domain.microdust.MicrodustTimeResDto;
 import com.seeme.service.MicrodustService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -42,18 +44,24 @@ public class MicrodustController {
 
 	@GetMapping("/time")
 	public ResponseEntity<Object> getTime(
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		@RequestParam(required = false) Double lat, Double lon) {
+		String location = lat + "," + lon;
 		try {
-			if (lat == null || lon == null)
-				return ResponseEntity.ok().body(microdustService.getTime("중구"));
-//					Arrays.asList("중구", "한강대로", "청계천로")));
-			else
-				return ResponseEntity.ok().body(microdustService.getTime("중구"));
-//					microdustService.getStationList(lat, lon)));
+			if (lat == null || lon == null) {
+				MicrodustTimeResDto microdustTimeResDto = microdustService.getFirstTime(microdustService.getStationList(37.56197784552834, 126.9468124393769));
+				List<MicrodustTimeResDto> microdustTimeResDtoList = microdustService.getOtherTime("37.56197784552834,126.9468124393769");
+				microdustTimeResDtoList.add(0, microdustTimeResDto);
+				return ResponseEntity.ok().body(microdustService.getOtherTime("37.56197784552834,126.9468124393769"));
+			} else {
+				MicrodustTimeResDto microdustTimeResDto = microdustService.getFirstTime(microdustService.getStationList(lat, lon));
+				microdustService.getOtherTime(location).add(0, microdustTimeResDto);
+				return ResponseEntity.ok().body(microdustService.getOtherTime(location));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
 		}
+
 	}
 
 	@GetMapping("/day")
