@@ -12,6 +12,8 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -81,6 +83,7 @@ public class CovidService {
 				}
 			}
 		}
+		Collections.reverse(coronicList);
 
 		return CovidRegionalResDto.builder()
 			.newCoronic(newCoronic)
@@ -106,6 +109,7 @@ public class CovidService {
 				}
 			}
 		}
+		Collections.reverse(coronicList);
 
 		return CovidRegionalResDto.builder()
 				.newCoronic(newCoronic)
