@@ -21,8 +21,6 @@ public class LocationUtil {
 	public static final String X = "x";
 	public static final String Y = "y";
 
-	public static final String UMD_NAME = "umdName";
-
 	public static String getLatLonValue(Double latitude, Double longitude) {
 		return latitude.toString() + "," + longitude.toString();
 	}

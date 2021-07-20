@@ -16,7 +16,7 @@ public class LocationController {
 	public final LocationService locationService;
 
 	@GetMapping("/latLonToUmd")
-	public String getLatlonToUmd (@RequestParam Double lat, @RequestParam Double lon) {
+	public String getLatlonToUmd(@RequestParam Double lat, @RequestParam Double lon) {
 		try {
 			return locationService.getLatlonToUmd(lat, lon);
 		} catch (Exception e) {
@@ -26,7 +26,7 @@ public class LocationController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<Object> searchByUmd (@RequestParam String umd) {
+	public ResponseEntity<Object> searchByUmd(@RequestParam String umd) {
 		try {
 			return ResponseEntity.ok().body(locationService.searchByUmd(umd));
 		} catch (Exception e) {

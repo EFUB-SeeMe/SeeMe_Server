@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "address")
+@Entity
 public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,17 +19,15 @@ public class Address {
 	private Double lat;
 	private Double lon;
 
-	private String sd;
-	private String sgg;
-
+	private String sido;
+	private String sigungu;
+	private String sigunguSplit;
 	private String bjdong;
 	private String bjdongCode;
-	private String hjdong;
-	private String hjdongCode;
 
 	public AddressCode toAddressCode() {
 		return AddressCode.builder()
-			.address(sd + " " + sgg + " " + bjdong)
+			.address(sido + " " + sigungu + " " + bjdong)
 			.addressCode(bjdongCode)
 			.build();
 	}
