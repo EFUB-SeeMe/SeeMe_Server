@@ -1,13 +1,15 @@
 package com.seeme.service;
 
+import com.seeme.domain.location.Address;
+import com.seeme.domain.location.AddressRepository;
 import com.seeme.domain.microdust.*;
 import com.seeme.service.api.LocationApi;
 import com.seeme.service.api.MicrodustOpenApi;
-import com.seeme.domain.location.TMAddress;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class MicrodustService {
 
 	private final LocationApi locationApi;
 	private final MicrodustOpenApi microdustOpenApi;
+	private final AddressRepository addressRepository;
 	private final MicrodustStationRepository microdustStationRepository;
 
 	public MicrodustResDto getMain(List<String> measuringStationList, String address) throws IOException, ParseException {
@@ -80,18 +83,7 @@ public class MicrodustService {
 		return locationApi.covertGpsToSpecificAddress(lat, lon);
 	}
 
-	public String getAddressByTM(TMAddress tmAddress) {
-		return tmAddress.getSggName() + " " + tmAddress.getUmdName();
-	}
-
-	public List<String> getStationListByTM(String tmX, String tmY) throws IOException, ParseException {
-		return microdustOpenApi.getStationListByTM(tmX, tmY);
-	}
-
-	public TMAddress getTMAddress(String location) throws IOException {
-		return locationApi.getTMAddress(location);
-	}
-
+	@Transactional
 	public List<MicrodustMapResDto> getMap() throws IOException {
 		Map<String, MicrodustStation> map = new HashMap<>();
 		microdustStationRepository.findAll().forEach(station -> map.put(station.getName(), station));
@@ -110,5 +102,9 @@ public class MicrodustService {
 		}
 
 		return microdustMapList;
+	}
+
+	public Address getAddressByCode(String code) {
+		return addressRepository.findByBjdongCode(code);
 	}
 }

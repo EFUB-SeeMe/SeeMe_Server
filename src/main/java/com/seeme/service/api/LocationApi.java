@@ -1,10 +1,7 @@
 package com.seeme.service.api;
 
-import com.google.gson.Gson;
-import com.seeme.domain.location.TMAddress;
 import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.LocationUtil;
-import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Service
 @AllArgsConstructor
@@ -42,15 +37,13 @@ public class LocationApi {
 			.fromUriString(apiConfig.getSpecificAddressUrl())
 			.queryParam(LocationUtil.X, lon)
 			.queryParam(LocationUtil.Y, lat);
-		System.out.println(uriComponentsBuilder.build());
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSBWithAuth(
 			uriComponentsBuilder, apiConfig.getSpecificAddressKey());
-
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 		JSONArray jsonArray = (JSONArray) jsonObject.get("documents");
 		jsonObject = (JSONObject) jsonArray.get(0);
-		return (String) jsonObject.get("address_name");
+		return LocationUtil.getRegion2AndRegion3(jsonObject);
 	}
 
 	public String covertWGS84ToTM(Double lat, Double lon) throws IOException {
@@ -83,25 +76,6 @@ public class LocationApi {
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 		jsonObject = (JSONObject) jsonObject.get("result");
 		return jsonObject.get("accessToken").toString();
-	}
-
-	public TMAddress getTMAddress(String location) throws IOException {
-		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getTMAddressUrl())
-			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getTMAddressKey())
-			.queryParam(MicrodustUtil.RETURN_TYPE, "json")
-			.queryParam(MicrodustUtil.NUM_OF_ROWS, 1)
-			.queryParam(LocationUtil.UMD_NAME, URLEncoder.encode(location, StandardCharsets.UTF_8));
-
-		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-
-		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
-		jsonObject = (JSONObject) jsonObject.get("response");
-		jsonObject = (JSONObject) jsonObject.get("body");
-		JSONArray jsonArray = (JSONArray) jsonObject.get("items");
-		jsonObject = (JSONObject) jsonArray.get(0);
-
-		return new Gson().fromJson(jsonObject.toString(), TMAddress.class);
 	}
 }
 

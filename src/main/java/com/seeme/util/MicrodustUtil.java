@@ -1,5 +1,8 @@
 package com.seeme.util;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class MicrodustUtil {
 	public static final String SERVICE_KEY = "serviceKey";
 	public static final String NUM_OF_ROWS = "numOfRows";
@@ -22,6 +25,8 @@ public class MicrodustUtil {
 	public static final String API_KEY = "apikey";
 	public static final String TOKEN = "token";
 	public static final String SIDO_NAME = "sidoName";
+	public static final List<String> DEFAULT_STATION = Arrays.asList("중구", "한강대로", "청계천로");
+	public static final String DEFAULT_ADDRESS = "서울특별시 중구 서소문동";
 
 
 	public static String getGrade(String pm10Grade1h) {
