@@ -43,7 +43,7 @@ public class LocationApi {
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 		JSONArray jsonArray = (JSONArray) jsonObject.get("documents");
 		jsonObject = (JSONObject) jsonArray.get(0);
-		return (String) jsonObject.get("address_name");
+		return LocationUtil.getRegion2AndRegion3(jsonObject);
 	}
 
 	public String covertWGS84ToTM(Double lat, Double lon) throws IOException {

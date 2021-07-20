@@ -1,5 +1,7 @@
 package com.seeme.util;
 
+import org.json.simple.JSONObject;
+
 public class LocationUtil {
 	public static final String KEY = "key";
 	public static final String LANGUAGE = "language";
@@ -81,5 +83,10 @@ public class LocationUtil {
 				break;
 		}
 		return shortName;
+	}
+
+	public static String getRegion2AndRegion3(JSONObject jsonObject) {
+		return jsonObject.get("region_2depth_name").toString() +
+			" " + jsonObject.get("region_3depth_name").toString();
 	}
 }
