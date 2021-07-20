@@ -1,8 +1,9 @@
 package com.seeme.controller;
 
-import com.seeme.domain.location.TMAddress;
+import com.seeme.domain.location.Address;
 import com.seeme.domain.microdust.MicrodustTimeResDto;
 import com.seeme.service.MicrodustService;
+import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -21,21 +21,22 @@ public class MicrodustController {
 	public final MicrodustService microdustService;
 
 	@GetMapping("/main")
-	public ResponseEntity<Object> getMain(@RequestParam(required = false) String location,
-										  @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+	public ResponseEntity<Object> getMain(
+		@RequestParam(required = false) String code,
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
-			if (location != null) {
-				TMAddress tmAddress = microdustService.getTMAddress(location);
+			if (code != null) {
+				Address address = microdustService.getAddressByCode(code);
 				return ResponseEntity.ok().body(microdustService.getMain(
-					microdustService.getStationListByTM(tmAddress.getTmX(), tmAddress.getTmY()),
-					microdustService.getAddressByTM(tmAddress)));
+					microdustService.getStationList(address.getLat(), address.getLon()),
+					microdustService.getAddress(address.getLat(), address.getLon())));
 			} else if (lat != null && lon != null)
 				return ResponseEntity.ok().body(microdustService.getMain(
 					microdustService.getStationList(lat, lon),
 					microdustService.getAddress(lat, lon)));
 			else
 				return ResponseEntity.ok().body(microdustService.getMain(
-					Arrays.asList("중구", "한강대로", "청계천로"), "서울특별시 중구 서소문동"));
+					MicrodustUtil.DEFAULT_STATION, MicrodustUtil.DEFAULT_ADDRESS));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
