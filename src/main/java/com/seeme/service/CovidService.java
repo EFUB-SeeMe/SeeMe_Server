@@ -97,15 +97,15 @@ public class CovidService {
 
 		int newCoronic = 0, totalCoronic = 0;
 
-		for (CovidRegionalDto regionCovid : covidOpenApi.getRegionalApi()) {
-			if (regionCovid.getGubun().equals("합계")) {
+		for (CovidRegionalDto RegionCovid : covidOpenApi.getRegionalApi()) {
+			if (RegionCovid.getGubun().equals("합계")) {
 				coronicList.add(Coronic.builder()
-						.day(regionCovid.getStdDay())
-						.coronicByDay(Integer.parseInt(regionCovid.getLocalOccCnt()))
+						.day(RegionCovid.getStdDay())
+						.coronicByDay(Integer.parseInt(RegionCovid.getLocalOccCnt())+Integer.parseInt(RegionCovid.getOverFlowCnt()))
 						.build());
-				if (totalCoronic < Integer.parseInt(regionCovid.getDefCnt())) {
-					newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt());
-					totalCoronic = Integer.parseInt(regionCovid.getDefCnt());
+				if (totalCoronic < Integer.parseInt(RegionCovid.getDefCnt())) {
+					newCoronic = Integer.parseInt(RegionCovid.getLocalOccCnt())+Integer.parseInt(RegionCovid.getOverFlowCnt());
+					totalCoronic = Integer.parseInt(RegionCovid.getDefCnt());
 				}
 			}
 		}
