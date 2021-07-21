@@ -1,6 +1,5 @@
 package com.seeme.service;
 
-import com.seeme.common.ApiException;
 import com.seeme.domain.ResDto;
 import com.seeme.domain.location.Address;
 import com.seeme.domain.location.AddressRepository;
@@ -117,8 +116,7 @@ public class MicrodustService {
 	}
 
 	private ResDto getRecResDto(ResDto microdustResDto, ResDto otherResDto) {
-		double cai = getCai((MicrodustResDto) microdustResDto.getDocument(),
-			(MicrodustOtherResDto) otherResDto.getDocument());
+		double cai = getCai((MicrodustOtherResDto) otherResDto.getDocument());
 		boolean caiFlag = MicrodustUtil.getCaiFlag(cai);
 
 		return ResDto.builder()
@@ -133,7 +131,7 @@ public class MicrodustService {
 			.build();
 	}
 
-	private double getCai(MicrodustResDto microdust, MicrodustOtherResDto other) {
+	private double getCai(MicrodustOtherResDto other) {
 		// TODO: add logic;
 		// 계산할 수 없을 때 -1을 return
 		return 40.193423;
