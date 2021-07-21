@@ -12,7 +12,7 @@ public class MicrodustUtil {
 	public static final String VERSION = "ver";
 	public static final String RETURN_TYPE = "returnType";
 	public static final String GRADE_ICON =
-			"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
+		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/microdust.png";
 	public static final String TM_X = "tmX";
 	public static final String TM_Y = "tmY";
 	public static final String APP_ID = "appid";
@@ -26,8 +26,11 @@ public class MicrodustUtil {
 	public static final String TOKEN = "token";
 	public static final String SIDO_NAME = "sidoName";
 	public static final List<String> DEFAULT_STATION = Arrays.asList("중구", "한강대로", "청계천로");
-	public static final String DEFAULT_ADDRESS = "서울특별시 중구 서소문동";
+	public static final String DEFAULT_GEO = "37.56197784552834;126.9468124393769";
 
+	public static final String MASK_DENTAL = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/mask/dental.png";
+	public static final String MASK_KF80 = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/mask/kf80.png";
+	public static final String MASK_KF94 = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/mask/kf94.png";
 
 	public static String getGrade(String pm10Grade1h) {
 		switch (Integer.parseInt(pm10Grade1h)) {
@@ -44,8 +47,8 @@ public class MicrodustUtil {
 		}
 	}
 
-	public static String getDesc(String pm10Grade1h) {
-		switch (Integer.parseInt(pm10Grade1h)) {
+	public static String getDesc(int pm10Grade1h) {
+		switch (pm10Grade1h) {
 			case 1:
 				return "야외 활동을 즐겨보세요 !";
 			case 2:
@@ -153,4 +156,7 @@ public class MicrodustUtil {
 		return (int) Math.round((avg - aqiMin) * (conMax - conMin) / (aqiMax - aqiMin) + conMin);
 	}
 
+	public static boolean getCaiFlag(double cai) {
+		return cai != -1;
+	}
 }

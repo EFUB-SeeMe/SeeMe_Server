@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class MicrodustTimeDto {
+public class MicrodustTime {
 	private final int pm10Value;
 	private final int pm25Value;
 	private final String startTime;

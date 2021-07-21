@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MicrodustDayDto {
+public class MicrodustDay {
 	private final Integer pm10;
 	private final Integer pm25;
 	private final String day;
