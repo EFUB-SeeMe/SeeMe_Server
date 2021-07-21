@@ -28,21 +28,39 @@ public class MicrodustController {
 			if (code != null) {
 				Address address = microdustService.getAddressByCode(code);
 				return ResponseEntity.ok().body(microdustService.getMain(
-					microdustService.getStationList(address.getLat(), address.getLon()),
-					microdustService.getAddress(address.getLat(), address.getLon())));
+					microdustService.getStationList(address.getLat(), address.getLon())));
 			} else if (lat != null && lon != null)
 				return ResponseEntity.ok().body(microdustService.getMain(
-					microdustService.getStationList(lat, lon),
-					microdustService.getAddress(lat, lon)));
+					microdustService.getStationList(lat, lon)));
 			else
 				return ResponseEntity.ok().body(microdustService.getMain(
-					MicrodustUtil.DEFAULT_STATION, MicrodustUtil.DEFAULT_ADDRESS));
+					MicrodustUtil.DEFAULT_STATION));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
 		}
 	}
 
+	@GetMapping("/day")
+	public ResponseEntity<Object> getDay(
+		@RequestParam(required = false) String code,
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		try {
+			if (code != null) {
+				Address address = microdustService.getAddressByCode(code);
+				return ResponseEntity.ok().body(microdustService.getDay(
+					address.getLat() + ";" + address.getLon()));
+			} else if (lat != null && lon != null)
+				return ResponseEntity.ok().body(microdustService.getDay(lat + ";" + lon));
+			else
+				return ResponseEntity.ok().body(microdustService.getDay(MicrodustUtil.DEFAULT_GEO));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("internal server error");
+		}
+	}
+
+	/*
 	@GetMapping("/time")
 	public ResponseEntity<Object> getTime(
 		@RequestParam(required = false) Double lat, Double lon) {
@@ -62,22 +80,6 @@ public class MicrodustController {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body("internal server error");
 		}
-
-	}
-
-	@GetMapping("/day")
-	public ResponseEntity<Object> getDay(
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
-		String geo = lat + ";" + lon;
-		try {
-			if (lat == null || lon == null)
-				return ResponseEntity.ok().body(microdustService.getDay("37.56197784552834;126.9468124393769"));
-			else
-				return ResponseEntity.ok().body(microdustService.getDay(geo));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body("internal server error");
-		}
 	}
 
 	@GetMapping("/map")
@@ -89,4 +91,5 @@ public class MicrodustController {
 			return ResponseEntity.internalServerError().body("internal server error");
 		}
 	}
+	 */
 }
