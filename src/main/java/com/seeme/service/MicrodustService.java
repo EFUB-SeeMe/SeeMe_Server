@@ -57,7 +57,7 @@ public class MicrodustService {
 		} catch (Exception e) {
 			resDto = ResDto.builder()
 				.resultCode(500).response("main")
-				.errorMessage(ErrorMessage.UNKNOWN)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
 				.document(null)
 				.build();
 		}
@@ -107,7 +107,7 @@ public class MicrodustService {
 		} catch (Exception e) {
 			resDto = ResDto.builder()
 				.resultCode(500).response("other")
-				.errorMessage(ErrorMessage.UNKNOWN)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
 				.document(null)
 				.build();
 		}

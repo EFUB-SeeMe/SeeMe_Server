@@ -81,6 +81,8 @@ public class MicrodustOpenApi {
 		// TODO: call api, parsing data, and return valid value;
 
 		return MicrodustOtherResDto.builder()
+			.pm10(16).pm10Flag(true)
+			.pm25(6).pm25Flag(true)
 			.co(20).coFlag(true)
 			.no2(18).no2Flag(true)
 			.o3(15).o3Flag(true)

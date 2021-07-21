@@ -1,7 +1,6 @@
 package com.seeme.controller;
 
 import com.seeme.domain.location.Address;
-import com.seeme.domain.microdust.MicrodustTimeResDto;
 import com.seeme.service.MicrodustService;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @AllArgsConstructor
