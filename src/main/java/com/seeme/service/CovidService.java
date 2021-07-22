@@ -23,8 +23,7 @@ public class CovidService {
 	private final CovidOpenApi covidOpenApi;
 
 	public CovidResDto getMain(String location) throws ParserConfigurationException, SAXException, IOException {
-		int compRegion = 0, compTotal = 0, coronicRegion = 0,
-			coronicTotal = 0, isIncRegion = 0, isIncTotal = 0;
+		int compRegion = 0, compTotal = 0, coronicRegion = 0, coronicTotal = 0;
 		boolean isTotalRecentValueBinding = false, isRegionRecentValueBinding = false;
 
 		for (CovidDto covid : covidOpenApi.getMainApi()) {
@@ -40,16 +39,6 @@ public class CovidService {
 				} else compRegion = Integer.parseInt(covid.getIncDec()) - coronicRegion;
 			}
 		}
-
-
-		if (0 < compRegion)
-			isIncRegion = -1;
-		else if (compRegion < 0)
-			isIncRegion = 1;
-		if (0 < compTotal)
-			isIncTotal = -1;
-		else if (compTotal < 0)
-			isIncTotal = 1;
 
 		return CovidResDto.builder()
 			.location(location)
@@ -68,17 +57,19 @@ public class CovidService {
 
 	public CovidRegionalResDto getRegional(String location) throws IOException, ParserConfigurationException, SAXException {
 		List<Coronic> coronicList = new ArrayList<>();
-
 		int newCoronic = 0, totalCoronic = 0;
 
 		for (CovidRegionalDto regionCovid : covidOpenApi.getRegionalApi()) {
 			if (regionCovid.getGubun().equals(location)) {
 				coronicList.add(Coronic.builder()
-						.day(regionCovid.getStdDay())
-						.coronicByDay(Integer.parseInt(regionCovid.getLocalOccCnt())+Integer.parseInt(regionCovid.getOverFlowCnt()))
-						.build());
+					.day(regionCovid.getStdDay())
+					.coronicByDay(
+						Integer.parseInt(regionCovid.getLocalOccCnt())
+							+ Integer.parseInt(regionCovid.getOverFlowCnt()))
+					.build());
 				if (totalCoronic < Integer.parseInt(regionCovid.getDefCnt())) {
-					newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt())+Integer.parseInt(regionCovid.getOverFlowCnt());
+					newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt())
+						+ Integer.parseInt(regionCovid.getOverFlowCnt());
 					totalCoronic = Integer.parseInt(regionCovid.getDefCnt());
 				}
 			}
@@ -91,31 +82,4 @@ public class CovidService {
 			.coronicList(coronicList)
 			.build();
 	}
-
-	public CovidRegionalResDto getNational() throws ParserConfigurationException, SAXException, IOException {
-		List<Coronic> coronicList = new ArrayList<>();
-
-		int newCoronic = 0, totalCoronic = 0;
-
-		for (CovidRegionalDto regionCovid : covidOpenApi.getRegionalApi()) {
-			if (regionCovid.getGubun().equals("합계")) {
-				coronicList.add(Coronic.builder()
-						.day(regionCovid.getStdDay())
-						.coronicByDay(Integer.parseInt(regionCovid.getLocalOccCnt())+Integer.parseInt(regionCovid.getOverFlowCnt()))
-						.build());
-				if (totalCoronic < Integer.parseInt(regionCovid.getDefCnt())) {
-					newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt())+Integer.parseInt(regionCovid.getOverFlowCnt());
-					totalCoronic = Integer.parseInt(regionCovid.getDefCnt());
-				}
-			}
-		}
-		Collections.reverse(coronicList);
-
-		return CovidRegionalResDto.builder()
-				.newCoronic(newCoronic)
-				.totalCoronic(totalCoronic)
-				.coronicList(coronicList)
-				.build();
-	}
-
 }
