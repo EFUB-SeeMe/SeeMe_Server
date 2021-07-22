@@ -23,19 +23,22 @@ public class MicrodustService {
 	private final MicrodustOpenApi microdustOpenApi;
 	private final AddressRepository addressRepository;
 
-	public List<ResDto> getMain(List<String> measuringStationList) {
-		List<ResDto> resDtoList = new ArrayList<>();
-		resDtoList.add(getMainResDto(measuringStationList));
-		resDtoList.add(getOtherResDto(measuringStationList));
-		resDtoList.add(getRecResDto(resDtoList.get(0), resDtoList.get(1)));
-		return resDtoList;
+	public MicrodustMainResDto getMain(List<String> measuringStationList) {
+		ResDto main = getMainResDto(measuringStationList);
+		ResDto total = getOtherResDto(measuringStationList);
+
+		return MicrodustMainResDto.builder()
+			.mainInfo(main)
+			.totalInfo(total)
+			.maskInfo(getRecResDto(main, total))
+			.build();
 	}
 
 	private ResDto getMainResDto(List<String> measuringStationList) {
 		ResDto resDto;
 		try {
 			resDto = ResDto.builder()
-				.resultCode(200).response("main")
+				.resultCode(200)
 				.errorMessage(null)
 //				.document(getMainApi(measuringStationList)) // front를 위해서 임시로 막아둠
 				.document(MicrodustResDto.builder()
@@ -56,7 +59,7 @@ public class MicrodustService {
 //				.build();
 		} catch (Exception e) {
 			resDto = ResDto.builder()
-				.resultCode(500).response("main")
+				.resultCode(500)
 				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
 				.document(null)
 				.build();
@@ -100,13 +103,13 @@ public class MicrodustService {
 		ResDto resDto;
 		try {
 			resDto = ResDto.builder()
-				.resultCode(200).response("other")
+				.resultCode(200)
 				.errorMessage(null)
 				.document(microdustOpenApi.getOtherApi(measuringStationList))
 				.build();
 		} catch (Exception e) {
 			resDto = ResDto.builder()
-				.resultCode(500).response("other")
+				.resultCode(500)
 				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
 				.document(null)
 				.build();
@@ -120,11 +123,9 @@ public class MicrodustService {
 		boolean caiFlag = MicrodustUtil.getCaiFlag(cai);
 
 		return ResDto.builder()
-			.resultCode(200).response("rec")
+			.resultCode(200)
 			.errorMessage(null)
 			.document(MicrodustRecResDto.builder()
-				.cai(cai)
-				.caiFlag(caiFlag)
 				.maskIcon(getMaskIcon(microdustResDto))
 				.desc(getdesc(microdustResDto))
 				.build())

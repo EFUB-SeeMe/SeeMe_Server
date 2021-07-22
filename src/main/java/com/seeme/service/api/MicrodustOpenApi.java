@@ -87,6 +87,8 @@ public class MicrodustOpenApi {
 			.no2(18).no2Flag(true)
 			.o3(15).o3Flag(true)
 			.so2(10).so2Flag(true)
+			.cai(40.03821).caiFlag(true)
+			.caiIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/cai/good.png")
 			.build();
 	}
 

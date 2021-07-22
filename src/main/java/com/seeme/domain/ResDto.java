@@ -8,6 +8,5 @@ import lombok.Getter;
 public class ResDto {
 	private final int resultCode;
 	private final String errorMessage;
-	private final String response;
 	private final Object document;
 }
