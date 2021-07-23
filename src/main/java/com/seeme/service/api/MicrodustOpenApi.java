@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -77,18 +78,50 @@ public class MicrodustOpenApi {
 		return stationList;
 	}
 
-	public MicrodustOtherResDto getOtherApi(List<String> measuringStationList) {
-		// TODO: call api, parsing data, and return valid value;
+	public MicrodustOtherResDto getOtherApi(List<String> stationList, int index) throws IOException, ParseException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+				.fromUriString(apiConfig.getMicrodustOtherUrl())
+				.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustOtherKey())
+				.queryParam(MicrodustUtil.RETURN_TYPE, "json")
+				.queryParam(MicrodustUtil.NUM_OF_ROWS, 1)
+				.queryParam(MicrodustUtil.PAGE_NO, 1)
+				.queryParam(MicrodustUtil.STATION_NAME, URLEncoder.encode(stationList.get(index), StandardCharsets.UTF_8))
+				.queryParam(MicrodustUtil.DATA_TERM, "DAILY")
+				.queryParam(MicrodustUtil.VERSION, 1.0);
+
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+		System.out.println(url);
+		BufferedReader bf;
+		bf = new BufferedReader(new InputStreamReader(url.openStream()));
+		String result = bf.readLine();
+
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+		JSONObject responseObject = (JSONObject) jsonObject.get("response");
+		JSONObject bodyObject = (JSONObject) responseObject.get("body");
+		JSONArray itemsObject = (JSONArray) bodyObject.get("items");
+		JSONObject itemObject = (JSONObject) itemsObject.get(0);
+
+		String[] flags = {"pm10Value", "pm25Value", "coValue", "no2Value","o3Value","so2Value","khaiValue"};
+		ArrayList<Boolean> boolFlags = new ArrayList<>();
+		for (int i = 0; i<flags.length; i++){
+			if (itemObject.get(flags[i]) != "-"){
+				boolFlags.add(true);
+			}
+			else{
+				boolFlags.add(false);
+			}
+		}
 
 		return MicrodustOtherResDto.builder()
-			.pm10(16).pm10Flag(true)
-			.pm25(6).pm25Flag(true)
-			.co(20).coFlag(true)
-			.no2(18).no2Flag(true)
-			.o3(15).o3Flag(true)
-			.so2(10).so2Flag(true)
-			.cai(40.03821).caiFlag(true)
-			.caiIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/cai/good.png")
+			.pm10(Double.parseDouble(itemObject.get("pm10Value").toString())).pm10Flag(boolFlags.get(0))
+			.pm25(Double.parseDouble(itemObject.get("pm25Value").toString())).pm25Flag(boolFlags.get(1))
+			.co(Double.parseDouble(itemObject.get("coValue").toString())).coFlag(boolFlags.get(2))
+			.no2(Double.parseDouble(itemObject.get("no2Value").toString())).no2Flag(boolFlags.get(3))
+			.o3(Double.parseDouble(itemObject.get("o3Value").toString())).o3Flag(boolFlags.get(4))
+			.so2(Double.parseDouble(itemObject.get("so2Value").toString())).so2Flag(boolFlags.get(5))
+			.cai(Double.parseDouble(itemObject.get("khaiValue").toString())).caiFlag(boolFlags.get(6))
+			.caiIcon(MicrodustUtil.getCaiIcon(Double.parseDouble(itemObject.get("khaiValue").toString())))
 			.build();
 	}
 
