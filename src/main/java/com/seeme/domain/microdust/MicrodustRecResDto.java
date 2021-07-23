@@ -8,4 +8,6 @@ import lombok.Getter;
 public class MicrodustRecResDto {
 	private final String maskIcon;
 	private final String desc;
+	private final Double cai;
+	private final Boolean caiFlag;
 }
