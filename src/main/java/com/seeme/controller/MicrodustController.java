@@ -15,47 +15,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("microdust")
 public class MicrodustController {
 
-	public final MicrodustService microdustService;
+    public final MicrodustService microdustService;
 
-	@GetMapping("/main")
-	public ResponseEntity<Object> getMain(
-		@RequestParam(required = false) String code,
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
-		try {
-			if (code != null) {
-				Address address = microdustService.getAddressByCode(code);
-				return ResponseEntity.ok().body(microdustService.getMain(
-					microdustService.getStationList(address.getLat(), address.getLon())));
-			} else if (lat != null && lon != null)
-				return ResponseEntity.ok().body(microdustService.getMain(
-					microdustService.getStationList(lat, lon)));
-			else
-				return ResponseEntity.ok().body(microdustService.getMain(
-					MicrodustUtil.DEFAULT_STATION));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body("internal server error");
-		}
-	}
+    @GetMapping("/main")
+    public ResponseEntity<Object> getMain(
+        @RequestParam(required = false) String code,
+        @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+        try {
+            if (code != null) {
+                Address address = microdustService.getAddressByCode(code);
+                return ResponseEntity.ok().body(microdustService.getMain(
+                    microdustService.getStationList(address.getLat(), address.getLon())));
+            } else if (lat != null && lon != null)
+                return ResponseEntity.ok().body(microdustService.getMain(
+                    microdustService.getStationList(lat, lon)));
+            else
+                return ResponseEntity.ok().body(microdustService.getMain(
+                    MicrodustUtil.DEFAULT_STATION));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("internal server error");
+        }
+    }
 
-	@GetMapping("/day")
-	public ResponseEntity<Object> getDay(
-		@RequestParam(required = false) String code,
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
-		try {
-			if (code != null) {
-				Address address = microdustService.getAddressByCode(code);
-				return ResponseEntity.ok().body(microdustService.getDay(
-					address.getLat() + ";" + address.getLon()));
-			} else if (lat != null && lon != null)
-				return ResponseEntity.ok().body(microdustService.getDay(lat + ";" + lon));
-			else
-				return ResponseEntity.ok().body(microdustService.getDay(MicrodustUtil.DEFAULT_GEO));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body("internal server error");
-		}
-	}
+    @GetMapping("/day")
+    public ResponseEntity<Object> getDay(
+        @RequestParam(required = false) String code,
+        @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+        try {
+            if (code != null) {
+                Address address = microdustService.getAddressByCode(code);
+                return ResponseEntity.ok().body(microdustService.getDay(
+                    address.getLat() + ";" + address.getLon()));
+            } else if (lat != null && lon != null)
+                return ResponseEntity.ok().body(microdustService.getDay(lat + ";" + lon));
+            else
+                return ResponseEntity.ok().body(microdustService.getDay(MicrodustUtil.DEFAULT_GEO));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("internal server error");
+        }
+    }
 
 	/*
 	@GetMapping("/time")
