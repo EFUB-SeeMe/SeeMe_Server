@@ -13,12 +13,12 @@ public class MicrodustOtherResDto {
 	private final Boolean o3Flag;
 	private final Boolean no2Flag;
 	private final Boolean caiFlag;
-	private final Integer pm10;
-	private final Integer pm25;
-	private final Integer so2;
-	private final Integer co;
-	private final Integer o3;
-	private final Integer no2;
+	private final Double pm10;
+	private final Double pm25;
+	private final Double so2;
+	private final Double co;
+	private final Double o3;
+	private final Double no2;
 	private final Double cai;
 	private final String caiIcon;
 }

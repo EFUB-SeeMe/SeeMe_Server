@@ -19,6 +19,8 @@ microdust-main-key:
 microdust-station-url: http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList
 specific-address-url: https://dapi.kakao.com/v2/local/geo/coord2regioncode.json
 specific-address-key:
+microdust-other-url: http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty
+microdust-other-key:
 microdust-day-url: https://api.waqi.info/feed/
 microdust-day-key:
 TM-address-url: http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getTMStdrCrdnt
