@@ -165,7 +165,7 @@ public class MicrodustUtil {
         else if (cai <= 250)
             iconName = "bad";
         else if (cai >= 251)
-            iconName = "sobad";
+            iconName = "so+bad";
         return "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/cai/" + iconName + ".png";
     }
 }
