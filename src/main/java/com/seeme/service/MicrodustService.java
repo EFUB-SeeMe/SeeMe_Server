@@ -23,7 +23,7 @@ public class MicrodustService {
     private final MicrodustOpenApi microdustOpenApi;
     private final AddressRepository addressRepository;
 
-    public MicrodustMainResDto getMain(List<String> measuringStationList) throws IOException, ParseException {
+    public MicrodustMainResDto getMain(List<String> measuringStationList) {
         ResDto main = getMainResDto(measuringStationList);
         ResDto total = getOtherResDto(measuringStationList);
 
@@ -40,23 +40,14 @@ public class MicrodustService {
             resDto = ResDto.builder()
                 .resultCode(200)
                 .errorMessage(null)
-//				.document(getMainApi(measuringStationList)) // front를 위해서 임시로 막아둠
-                .document(MicrodustResDto.builder()
-                    .desc(MicrodustUtil.getDesc(1))
-                    .pm10Flag(true)
-                    .pm10(16)
-                    .pm25Flag(true)
-                    .pm25(14)
-                    .gradeIcon(MicrodustUtil.GRADE_ICON)
-                    .grade(MicrodustUtil.getGrade("1"))
-                    .build())
+				.document(getMainApi(measuringStationList))
                 .build();
-//		} catch (ParseException | IOException e) { // front를 위해서 임시로 막아둠
-//			resDto = ResDto.builder()
-//				.resultCode(500).response("main")
-//				.errorMessage(ErrorMessage.WRONG_JSON_PARSING)
-//				.document(null)
-//				.build();
+		} catch (ParseException | IOException e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
         } catch (Exception e) {
             resDto = ResDto.builder()
                 .resultCode(500)
@@ -94,7 +85,7 @@ public class MicrodustService {
             .pm10(Integer.parseInt(pm10))
             .pm25(Integer.parseInt(pm25))
             .grade(String.valueOf(pmGrade))
-            .gradeIcon(MicrodustUtil.GRADE_ICON)
+            .gradeIcon(MicrodustUtil.getPmGradeIcon(pmGrade))
             .desc(MicrodustUtil.getDesc(pmGrade))
             .build();
     }
