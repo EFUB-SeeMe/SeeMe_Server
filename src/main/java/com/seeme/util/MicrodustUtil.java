@@ -32,6 +32,8 @@ public class MicrodustUtil {
     public static final String MASK_KF80 = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/mask/kf80.png";
     public static final String MASK_KF94 = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/mask/kf94.png";
 
+    public static final String MICRODUST_ICON_PREFIX = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust";
+
     public static String getGrade(String pm10Grade1h) {
         switch (Integer.parseInt(pm10Grade1h)) {
             case 1:
@@ -157,7 +159,7 @@ public class MicrodustUtil {
     }
 
     public static String getCaiIcon(double cai) {
-        String iconName = "";
+        String iconName;
         if (cai >= 0 && cai <= 50)
             iconName = "good";
         else if (cai <= 100)
@@ -166,6 +168,23 @@ public class MicrodustUtil {
             iconName = "bad";
         else if (cai >= 251)
             iconName = "so+bad";
-        return "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust/cai/" + iconName + ".png";
+        else
+            iconName = "error";
+        return MICRODUST_ICON_PREFIX + "/cai/" + iconName + ".png";
     }
+
+	public static String getPmGradeIcon(int pmGrade) {
+          String iconName;
+        if (pmGrade == 1)
+            iconName = "good";
+        else if (pmGrade == 2)
+            iconName = "soso";
+        else if (pmGrade == 3)
+            iconName = "bad";
+        else if (pmGrade == 4)
+            iconName = "so+bad";
+        else
+            iconName = "error";
+        return MICRODUST_ICON_PREFIX + "/pm/" + iconName + ".png";
+	}
 }
