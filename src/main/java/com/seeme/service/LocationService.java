@@ -32,4 +32,8 @@ public class LocationService {
 			.addressList(addressList)
 			.build();
 	}
+
+	public Address getAddressByCode(String code) {
+		return addressRepository.findByBjdongCode(code);
+	}
 }
