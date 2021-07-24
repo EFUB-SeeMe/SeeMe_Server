@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Getter
 @Builder
-public class MicrodustOtherResDto {
+public class MicrodustTotalResDto {
 	private final Boolean pm10Flag;
 	private final Boolean pm25Flag;
 	private final Boolean so2Flag;
