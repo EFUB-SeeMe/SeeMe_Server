@@ -60,6 +60,8 @@ public class WeatherService {
 			.top("top.png")
 			.bottom("bottom.png")
 			.shoes("shoes.png")
+			.desc("아이템 설명")
+			.reason("추천 이유")
 			.build();
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
 			.umbrellaIcon("umbrella.png")
