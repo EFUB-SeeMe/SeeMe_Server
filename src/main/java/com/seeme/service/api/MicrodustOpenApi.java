@@ -104,8 +104,8 @@ public class MicrodustOpenApi {
 
         String[] flags = {"pm10Value", "pm25Value", "coValue", "no2Value", "o3Value", "so2Value", "khaiValue"};
         ArrayList<Boolean> boolFlags = new ArrayList<>();
-        for (int i = 0; i < flags.length; i++) {
-            if (itemObject.get(flags[i]) != "-") {
+        for (String flag : flags) {
+            if (itemObject.get(flag) != "-") {
                 boolFlags.add(true);
             } else {
                 boolFlags.add(false);
