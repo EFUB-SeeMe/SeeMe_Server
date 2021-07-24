@@ -117,21 +117,27 @@ public class MicrodustService {
 	}
 
 	private MicrodustTotalResDto getTotalApi(List<String> measuringStationList) throws IOException, ParseException {
-		int index = 0;
+		int index = 0, cnt = 0;
+		String[] values = {"pm10Value", "pm25Value", "coValue", "no2Value", "o3Value", "so2Value", "khaiValue", "pm10Value24", "pm25Value24",};
 		while (index < 3) {
 			JSONObject jsonObject = microdustOpenApi.getTotalApi(measuringStationList, index++);
-			String khaiValue = jsonObject.get("khaiValue").toString();
-			if (!khaiValue.equals("-"))
+			for (String value : values) {
+				if (!jsonObject.get(value).equals("-")) {
+					cnt += 1;
+				}
+			}
+			if (cnt == values.length)
 				break;
+			cnt = 0;
 		}
+
 		JSONObject jsonObject = microdustOpenApi.getTotalApi(measuringStationList, --index);
-		String[] values = {"pm10Value", "pm25Value", "coValue", "no2Value", "o3Value", "so2Value", "khaiValue"};
 		ArrayList<Boolean> boolFlags = new ArrayList<>();
 		for (String value : values) {
-			if (jsonObject.get(value) != "-") {
-				boolFlags.add(true);
-			} else {
+			if (jsonObject.get(value).equals("-")) {
 				boolFlags.add(false);
+			} else {
+				boolFlags.add(true);
 			}
 		}
 
