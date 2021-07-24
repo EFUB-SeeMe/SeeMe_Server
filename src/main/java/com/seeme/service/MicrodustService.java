@@ -1,8 +1,6 @@
 package com.seeme.service;
 
 import com.seeme.domain.ResDto;
-import com.seeme.domain.location.Address;
-import com.seeme.domain.location.AddressRepository;
 import com.seeme.domain.microdust.*;
 import com.seeme.service.api.MicrodustOpenApi;
 import com.seeme.util.ErrorMessage;
@@ -21,7 +19,6 @@ import java.util.List;
 public class MicrodustService {
 
     private final MicrodustOpenApi microdustOpenApi;
-    private final AddressRepository addressRepository;
 
     public MicrodustMainResDto getMain(List<String> measuringStationList) {
         ResDto main = getMainResDto(measuringStationList);
@@ -39,7 +36,7 @@ public class MicrodustService {
         try {
             resDto = ResDto.builder()
                 .resultCode(200)
-                .errorMessage(null)
+                .errorMessage(ErrorMessage.SUCCESS)
 				.document(getMainApi(measuringStationList))
                 .build();
 		} catch (ParseException | IOException e) {
@@ -95,7 +92,7 @@ public class MicrodustService {
         try {
             resDto = ResDto.builder()
                 .resultCode(200)
-                .errorMessage(null)
+                .errorMessage(ErrorMessage.SUCCESS)
                 .document(microdustOpenApi.getOtherApi(measuringStationList, 0))
                 .build();
         } catch (Exception e) {
@@ -112,7 +109,7 @@ public class MicrodustService {
     private ResDto getRecResDto(ResDto microdustResDto, ResDto otherResDto) {
         return ResDto.builder()
             .resultCode(200)
-            .errorMessage(null)
+            .errorMessage(ErrorMessage.SUCCESS)
             .document(MicrodustRecResDto.builder()
                 .maskIcon(getMaskIcon(microdustResDto))
                 .desc(getdesc(microdustResDto))
@@ -147,10 +144,6 @@ public class MicrodustService {
 
     public List<String> getStationList(Double lat, Double lon) throws IOException, ParseException {
         return microdustOpenApi.getStationList(lat, lon);
-    }
-
-    public Address getAddressByCode(String code) {
-        return addressRepository.findByBjdongCode(code);
     }
 
 	/*
