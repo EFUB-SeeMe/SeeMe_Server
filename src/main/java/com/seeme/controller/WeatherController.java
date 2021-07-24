@@ -1,14 +1,15 @@
 package com.seeme.controller;
 
+import com.seeme.domain.location.Address;
+import com.seeme.service.LocationService;
 import com.seeme.service.WeatherService;
+import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
-import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.io.IOException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @AllArgsConstructor
@@ -16,9 +17,50 @@ import java.io.IOException;
 public class WeatherController {
 
 	private final WeatherService weatherService;
+	private final LocationService locationService;
 
-	@GetMapping("/temp")
-	public ResponseEntity<Object> getTemperature() throws IOException, ParseException {
-		return ResponseEntity.accepted().body(weatherService.getTemperature("53", "127"));
+	@GetMapping("/main")
+	public ResponseEntity<Object> getMain(
+		@RequestParam(required = false) String code,
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		if (code != null) {
+			Address address = locationService.getAddressByCode(code);
+			return ResponseEntity.ok().body(weatherService.getMain(
+				address.getLat(), address.getLon()));
+		} else if (lat != null && lon != null)
+			return ResponseEntity.ok().body(weatherService.getMain(lat, lon));
+		else
+			return ResponseEntity.ok().body(weatherService.getMain(
+				WeatherUtil.DEFAULT_LAT, WeatherUtil.DEFAULT_LON));
+	}
+
+	@GetMapping("/time")
+	public ResponseEntity<Object> getTime(
+		@RequestParam(required = false) String code,
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		if (code != null) {
+			Address address = locationService.getAddressByCode(code);
+			return ResponseEntity.ok().body(weatherService.getTime(
+				address.getLat(), address.getLon()));
+		} else if (lat != null && lon != null)
+			return ResponseEntity.ok().body(weatherService.getTime(lat, lon));
+		else
+			return ResponseEntity.ok().body(weatherService.getTime(
+				WeatherUtil.DEFAULT_LAT, WeatherUtil.DEFAULT_LON));
+	}
+
+	@GetMapping("/week")
+	public ResponseEntity<Object> getWeek(
+		@RequestParam(required = false) String code,
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		if (code != null) {
+			Address address = locationService.getAddressByCode(code);
+			return ResponseEntity.ok().body(weatherService.getWeek(
+				address.getLat(), address.getLon()));
+		} else if (lat != null && lon != null)
+			return ResponseEntity.ok().body(weatherService.getWeek(lat, lon));
+		else
+			return ResponseEntity.ok().body(weatherService.getWeek(
+				WeatherUtil.DEFAULT_LAT, WeatherUtil.DEFAULT_LON));
 	}
 }
