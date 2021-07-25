@@ -4,9 +4,18 @@ import com.seeme.domain.weather.WeatherMainResDto;
 import com.seeme.domain.weather.WeatherRainResDto;
 import com.seeme.domain.weather.WeatherTempResDto;
 import com.seeme.domain.weather.WeatherWeekResDto;
+import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +25,69 @@ public class WeatherOpenApi {
 
 	private final ApiConfig apiConfig;
 
-	public WeatherMainResDto getMainApi() {
+	public WeatherMainResDto getMainApi(String locationCode) throws IOException, ParseException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherMainUrl()+locationCode)
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.DETAILS, "true")
+
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+		BufferedReader bf;
+		bf = new BufferedReader(new InputStreamReader(url.openStream()));
+		String result = bf.readLine();
+
+		String icon, iconDesc, desc, comp;
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+
+		JSONObject TextObject = (JSONObject) jsonObject.get("weatherText");
+		JSONObject IconObject = (JSONObject) jsonObject.get("weatherIcon");
+		desc = WeatherUtil.getDesc(TextObject.toString());
+		icon = WeatherUtil.getIcon(Integer.parseInt(IconObject.toString()));
+		iconDesc = WeatherUtil.getIconDesc(Integer.parseInt(IconObject.toString()));
+
+		JSONObject tempValueObject = (JSONObject) jsonObject.get("Temperature");
+		JSONObject tempMetObject = (JSONObject) tempValueObject.get("Metric");
+		JSONObject tempObject = (JSONObject) tempMetObject.get("Value");
+
+		JSONObject realValueObject = (JSONObject) jsonObject.get("RealFeelTemperature");
+		JSONObject realMetObject = (JSONObject) realValueObject.get("Metric");
+		JSONObject realObject = (JSONObject) realMetObject.get("Value");
+
+		JSONObject past24Object = (JSONObject) jsonObject.get("Past24HourTemperatureDeparture");
+		JSONObject pastMetObject = (JSONObject) past24Object.get("Metric");
+		JSONObject compareObject = (JSONObject) pastMetObject.get("Value");
+		comp = WeatherUtil.getComp(Double.parseDouble(compareObject.toString()));
+
 		return WeatherMainResDto.builder()
-			.icon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Sun.png")
-			.iconDesc("맑음")
-			.currTemp(26)
-			.feelTemp(28)
+			.icon(icon)
+			.iconDesc(iconDesc)
+			.currTemp(Integer.parseInt(tempObject.toString()))
+			.feelTemp(Integer.parseInt(realObject.toString()))
 			.max(29)
 			.min(20)
-			.desc("오늘은 초복이에요! 기력을 보충해보는 건 어떨까요?")
-			.comp("오늘은 어제와 비슷한 날씨가 예상됩니다.")
+			.desc(desc)
+			.comp(comp)
 			.build();
+	}
+
+	public String getLocationApi(Double lat, Double lon) throws IOException, ParseException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherLocationUrl())
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.Q, lat+","+lon)
+			.queryParam(WeatherUtil.DETAILS, "true");
+
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+		BufferedReader bf;
+		bf = new BufferedReader(new InputStreamReader(url.openStream()));
+		String result = bf.readLine();
+
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+		JSONObject detailObject = (JSONObject) jsonObject.get("Details");
+
+		return detailObject.get("Key").toString();
 	}
 
 	public List<WeatherTempResDto> getTimeTempApi() {
