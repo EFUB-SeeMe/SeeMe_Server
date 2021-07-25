@@ -5,9 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MicrodustRecResDto {
+public class MicrodustMaskResDto {
 	private final String maskIcon;
 	private final String desc;
-	private final Double cai;
-	private final Boolean caiFlag;
 }
