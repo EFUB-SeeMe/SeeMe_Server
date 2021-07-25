@@ -4,9 +4,16 @@ import com.seeme.domain.weather.WeatherMainResDto;
 import com.seeme.domain.weather.WeatherRainResDto;
 import com.seeme.domain.weather.WeatherTempResDto;
 import com.seeme.domain.weather.WeatherWeekResDto;
+import com.seeme.util.JSONParsingUtil;
+import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +22,17 @@ import java.util.List;
 public class WeatherOpenApi {
 
 	private final ApiConfig apiConfig;
+
+	public String getLocationApi(Double lat, Double lon) throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherLocationUrl())
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.Q, lat + "," + lon);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		return jsonObject.get("Key").toString();
+	}
 
 	public WeatherMainResDto getMainApi() {
 		return WeatherMainResDto.builder()
