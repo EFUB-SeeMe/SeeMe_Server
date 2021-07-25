@@ -33,4 +33,8 @@ public class ApiConfig {
 	private String microdustTimeKey;
 	private String microdustMapUrl;
 	private String microdustMapKey;
+	private String weatherLocationUrl;
+	private String weatherForecastUrl;
+	private String weatherMainUrl;
+	private String weatherKey;
 }
