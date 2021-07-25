@@ -1,12 +1,17 @@
 package com.seeme.service;
 
 import com.seeme.domain.ResDto;
+import com.seeme.domain.microdust.MicrodustResDto;
 import com.seeme.domain.weather.*;
 import com.seeme.service.api.WeatherOpenApi;
 import com.seeme.util.ErrorMessage;
+import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -15,13 +20,42 @@ public class WeatherService {
 
 	private final WeatherOpenApi weatherOpenApi;
 
-	public ResDto getMain(Double lat, Double lon) {
-		WeatherMainResDto main = weatherOpenApi.getMainApi(); // add exception;
-		return ResDto.builder()
-			.resultCode(200)
+	public WeatherMainResDto getMain(Double lat, Double lon) throws IOException, ParseException {
+
+		String locationCode =  weatherOpenApi.getLocationApi(lat, lon);
+		WeatherMain main = weatherOpenApi.getMainApi(locationCode);
+		// MIN MAX 구하기 ResDto forecast = getTemp
+
+		return WeatherMainResDto.builder()
+			.icon("")
 			.errorMessage(ErrorMessage.SUCCESS)
 			.document(main)
 			.build();
+	}
+
+	private ResDto getMainResDto(String locationCode) {
+		ResDto resDto;
+		try {
+			resDto = ResDto.builder()
+				.resultCode(200)
+				.errorMessage(null)
+				.document(weatherOpenApi.getMainApi(locationCode))
+				.build();
+		} catch (ParseException | IOException e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
+
+		return resDto;
 	}
 
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
