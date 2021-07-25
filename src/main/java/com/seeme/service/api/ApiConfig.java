@@ -27,8 +27,8 @@ public class ApiConfig {
 	private String TMAddressKey;
 	private String microdustDayUrl;
 	private String microdustDayKey;
-	private String microdustOtherUrl;
-	private String microdustOtherKey;
+	private String microdustTotalUrl;
+	private String microdustTotalKey;
 	private String microdustTimeUrl;
 	private String microdustTimeKey;
 	private String microdustMapUrl;

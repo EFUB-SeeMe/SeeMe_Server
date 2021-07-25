@@ -49,7 +49,7 @@ public class CovidController {
 		try {
 			if (location != null)
 				return ResponseEntity.ok().body(covidService.getRegional(location));
-			if (lat == null || lon == null)
+			else if (lat == null || lon == null)
 				return ResponseEntity.ok().body(covidService.getRegional("서울"));
 			else
 				return ResponseEntity.ok()

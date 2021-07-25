@@ -1,6 +1,7 @@
 package com.seeme.controller;
 
 import com.seeme.domain.location.Address;
+import com.seeme.service.LocationService;
 import com.seeme.service.MicrodustService;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("microdust")
 public class MicrodustController {
 
+    public final LocationService locationService;
     public final MicrodustService microdustService;
 
     @GetMapping("/main")
@@ -23,7 +25,7 @@ public class MicrodustController {
         @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
         try {
             if (code != null) {
-                Address address = microdustService.getAddressByCode(code);
+                Address address = locationService.getAddressByCode(code);
                 return ResponseEntity.ok().body(microdustService.getMain(
                     microdustService.getStationList(address.getLat(), address.getLon())));
             } else if (lat != null && lon != null)
@@ -44,7 +46,7 @@ public class MicrodustController {
         @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
         try {
             if (code != null) {
-                Address address = microdustService.getAddressByCode(code);
+                Address address = locationService.getAddressByCode(code);
                 return ResponseEntity.ok().body(microdustService.getDay(
                     address.getLat() + ";" + address.getLon()));
             } else if (lat != null && lon != null)
