@@ -28,6 +28,80 @@ public class WeatherService {
 			.build();
 	}
 
+	private ResDto getMainForecast(Double lat, Double lon) {
+		ResDto resDto;
+		try {
+			resDto = ResDto.builder()
+				.resultCode(200)
+				.errorMessage(ErrorMessage.SUCCESS)
+				.document(weatherOpenApi.getMainForecastApi(weatherOpenApi.getLocationApi(lat, lon)))
+				.build();
+		} catch (IOException e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
+
+		return resDto;
+	}
+
+	private ResDto getMainCurrent(Double lat, Double lon) {
+		ResDto resDto;
+		try {
+			resDto = ResDto.builder()
+				.resultCode(200)
+				.errorMessage(ErrorMessage.SUCCESS)
+				.document(weatherOpenApi.getMainApi(weatherOpenApi.getLocationApi(lat, lon)))
+				.build();
+		} catch (IOException | ParseException e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
+
+		return resDto;
+	}
+
+	public ResDto getWeek(Double lat, Double lon) {
+		try {
+			List<WeatherWeekResDto> week = weatherOpenApi.getWeekApi(
+				weatherOpenApi.getLocationApi(lat, lon));
+			return ResDto.builder()
+				.resultCode(200)
+				.errorMessage(ErrorMessage.SUCCESS)
+				.document(week)
+				.build();
+		} catch (IOException | java.text.ParseException e) {
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
+	}
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
 		ResDto temp = getTempResDto(lat, lon);
 		ResDto rain = getRainResDto();
