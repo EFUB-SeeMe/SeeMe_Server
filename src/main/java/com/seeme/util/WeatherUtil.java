@@ -43,5 +43,49 @@ public class WeatherUtil {
 	public static String getTime(String dateTime) {
 		return dateTime.substring(11, 13) + "시";
 	}
-	
+
+	public static String getDayOfWeek(String day) throws ParseException {
+
+		Calendar cal = Calendar.getInstance();
+		String format = "yyyy-mm-dd";
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		Date date = dateFormat.parse(day.substring(0, 10));
+		cal.setTime(date);
+
+		int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+		String dayOfWeek ="";
+		switch(dayNum){
+			case 1:
+				dayOfWeek = " (일)";
+				break;
+			case 2:
+				dayOfWeek = " (월)";
+				break;
+			case 3:
+				dayOfWeek = " (화)";
+				break;
+			case 4:
+				dayOfWeek = " (수)";
+				break;
+			case 5:
+				dayOfWeek = " (목)";
+				break;
+			case 6:
+				dayOfWeek = " (금)";
+				break;
+			case 7:
+				dayOfWeek = " (토)";
+				break;
+		}
+		return day.substring(5, 7)+"월"+day.substring(8, 10)+"일"+dayOfWeek;
+
+	}
+
+	public static String getAMPM(String date){
+		String day = date.format(String.valueOf(DateTimeFormatter.ofPattern("a")));
+		if (day.equals("AM"))
+			return "Day";
+		else
+			return "Night";
+	}
 }
