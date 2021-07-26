@@ -88,4 +88,5 @@ public class WeatherUtil {
 		else
 			return "Night";
 	}
+
 }

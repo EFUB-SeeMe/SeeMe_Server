@@ -30,6 +30,7 @@ microdust-time-key:
 microdust-map-url: http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty
 microdust-map-key:
 weather-location-url: http://dataservice.accuweather.com/locations/v1/cities/geoposition/search
-weather-forecast-url: http://dataservice.accuweather.com/forecasts/v1/daily/5day/2002471
+weather-forecast-url: http://dataservice.accuweather.com/forecasts/v1/daily/5day/
 weather-main-url: http://dataservice.accuweather.com/currentconditions/v1/
+weather-time-temp-url: http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/
 weather-key:

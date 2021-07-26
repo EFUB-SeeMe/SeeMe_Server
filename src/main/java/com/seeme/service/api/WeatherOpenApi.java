@@ -5,14 +5,17 @@ import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import com.seeme.domain.weather.WeatherRainResDto;
+import com.seeme.domain.weather.WeatherTempResDto;
+import com.seeme.domain.weather.WeatherWeekResDto;
+import com.seeme.util.JSONParsingUtil;
+import org.json.simple.JSONArray;
+
+import org.json.simple.JSONValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-
-import com.seeme.util.JSONParsingUtil;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONValue;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,7 +26,7 @@ import java.util.List;
 public class WeatherOpenApi {
 
 	private final ApiConfig apiConfig;
-
+	
 	public WeatherMain getMainApi(String locationCode) throws IOException, ParseException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getWeatherMainUrl() + locationCode)
@@ -59,25 +62,19 @@ public class WeatherOpenApi {
 			.feelTemp(Double.parseDouble(realMetObject.get("Value").toString()))
 			.comp(comp)
 			.build();
-
 	}
-
+	
 	public String getLocationApi(Double lat, Double lon) throws IOException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getWeatherLocationUrl())
 			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
 			.queryParam(WeatherUtil.Q, lat + "," + lon);
 
-		URL url = new URL(uriComponentsBuilder.build().toUriString());
-		System.out.println(url);
-
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
-
-		System.out.println("key" + jsonObject.get("Key").toString());
 		return jsonObject.get("Key").toString();
 	}
-
+	
 	public WeatherMainForecast getMainForecastApi(String locationCode) throws IOException, ParseException {
 
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
@@ -107,6 +104,7 @@ public class WeatherOpenApi {
 			.desc(descObject.get("LongPhrase").toString())
 			.build();
 	}
+
 
 	public List<WeatherTempResDto> getTimeTempApi(String locationCode) throws IOException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
@@ -222,52 +220,3 @@ public class WeatherOpenApi {
 		return week;
 	}
 }
-
-		/*
-		week.add(WeatherWeekResDto.builder()
-			.day("6월 28일 (월)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Cloud.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Cloud.png")
-			.max(29).min(21)
-			.build());
-		week.add(WeatherWeekResDto.builder()
-			.day("6월 29일 (화)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Rain-1.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Rain-1.png")
-			.max(29).min(21)
-			.build());
-		week.add(WeatherWeekResDto.builder()
-			.day("6월 30일 (수)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Sun.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Sun.png")
-			.max(29).min(21)
-			.build());
-		week.add(WeatherWeekResDto.builder()
-			.day("7월 1일 (목)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Sun.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Thunder.png")
-			.max(29).min(21)
-			.build());
-		week.add(WeatherWeekResDto.builder()
-			.day("7월 2일 (금)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Cloud.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Cloud.png")
-			.max(29).min(21)
-			.build());
-		week.add(WeatherWeekResDto.builder()
-			.day("7월 3일 (토)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Rain-1.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Rain-2.png")
-			.max(29).min(21)
-			.build());
-		week.add(WeatherWeekResDto.builder()
-			.day("7월 4일 (일)")
-			.amRain(30).amIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Rain-2.png")
-			.pmRain(10).pmIcon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/Cloud.png")
-			.max(29).min(21)
-			.build());
-
-
-		return week;
-	} */
-
