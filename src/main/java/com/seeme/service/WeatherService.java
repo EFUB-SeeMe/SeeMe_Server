@@ -7,6 +7,8 @@ import com.seeme.util.ErrorMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -25,7 +27,7 @@ public class WeatherService {
 	}
 
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
-		ResDto temp = getTempResDto();
+		ResDto temp = getTempResDto(lat, lon);
 		ResDto rain = getRainResDto();
 		ResDto ootd = getOotdResDto(temp, rain);
 		return WeatherTimeResDto.builder()
@@ -35,13 +37,29 @@ public class WeatherService {
 			.build();
 	}
 
-	private ResDto getTempResDto() {
-		List<WeatherTempResDto> temp = weatherOpenApi.getTimeTempApi(); // add exception;
-		return ResDto.builder()
-			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
-			.document(temp)
-			.build();
+	private ResDto getTempResDto(Double lat, Double lon) {
+		try {
+			List<WeatherTempResDto> temp = weatherOpenApi.getTimeTempApi(
+				weatherOpenApi.getLocationApi(lat, lon)); // add exception;
+			return ResDto.builder()
+				.resultCode(200)
+				.errorMessage(ErrorMessage.SUCCESS)
+				.document(temp)
+				.build();
+		} catch (IOException e) {
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
 	}
 
 	private ResDto getRainResDto() {
@@ -60,6 +78,8 @@ public class WeatherService {
 			.top("top.png")
 			.bottom("bottom.png")
 			.shoes("shoes.png")
+			.desc("아이템 설명")
+			.reason("추천 이유")
 			.build();
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
 			.umbrellaIcon("umbrella.png")

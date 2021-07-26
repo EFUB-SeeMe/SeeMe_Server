@@ -39,7 +39,7 @@ public class MicrodustService {
 		try {
 			resDto = ResDto.builder()
 				.resultCode(200)
-				.errorMessage(null)
+				.errorMessage(ErrorMessage.SUCCESS)
 				.document(getMainApi(measuringStationList))
 				.build();
 		} catch (ParseException | IOException e) {
@@ -96,7 +96,7 @@ public class MicrodustService {
 		try {
 			resDto = ResDto.builder()
 				.resultCode(200)
-				.errorMessage(null)
+				.errorMessage(ErrorMessage.SUCCESS)
 				.document(getTotalApi(measuringStationList))
 				.build();
 		} catch (ParseException | IOException e) {
@@ -156,7 +156,7 @@ public class MicrodustService {
 	private ResDto getRecResDto(ResDto microdustResDto, ResDto otherResDto) {
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(null)
+			.errorMessage(ErrorMessage.SUCCESS)
 			.document(MicrodustRecResDto.builder()
 				.maskIcon(getMaskIcon(microdustResDto))
 				.desc(getdesc(microdustResDto))

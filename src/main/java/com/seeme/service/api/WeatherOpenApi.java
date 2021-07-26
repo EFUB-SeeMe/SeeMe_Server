@@ -4,9 +4,16 @@ import com.seeme.domain.weather.WeatherMainResDto;
 import com.seeme.domain.weather.WeatherRainResDto;
 import com.seeme.domain.weather.WeatherTempResDto;
 import com.seeme.domain.weather.WeatherWeekResDto;
+import com.seeme.util.JSONParsingUtil;
+import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +22,17 @@ import java.util.List;
 public class WeatherOpenApi {
 
 	private final ApiConfig apiConfig;
+
+	public String getLocationApi(Double lat, Double lon) throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherLocationUrl())
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.Q, lat + "," + lon);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		return jsonObject.get("Key").toString();
+	}
 
 	public WeatherMainResDto getMainApi() {
 		return WeatherMainResDto.builder()
@@ -29,34 +47,38 @@ public class WeatherOpenApi {
 			.build();
 	}
 
-	public List<WeatherTempResDto> getTimeTempApi() {
+	public List<WeatherTempResDto> getTimeTempApi(String locationCode) throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherTimeTempUrl())
+			.path(locationCode)
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.LANGUAGE, "ko")
+			.queryParam(WeatherUtil.METRIC, true);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONArray jsonArray = (JSONArray) JSONValue.parse(sb.toString());
+
 		List<WeatherTempResDto> temp = new ArrayList<>();
-		temp.add(
-			WeatherTempResDto.builder()
-				.time("현재")
-				.temperature("25°")
-				.icon("png60.png")
-				.build());
-		temp.add(
-			WeatherTempResDto.builder()
-				.time("18시")
-				.temperature("24°")
-				.icon("png60.png")
-				.build());
-		temp.add(
-			WeatherTempResDto.builder()
-				.time("19시")
-				.temperature("23°")
-				.icon("png60.png")
-				.build());
-		temp.add(
-			WeatherTempResDto.builder()
-				.time("20시")
-				.temperature("22°")
-				.icon("png60.png")
-				.build());
+		int index = 0;
+		for (Object object : jsonArray) {
+			JSONObject jsonObject = (JSONObject) object;
+			String time = (index++ == 0) ?
+				("현재") : (jsonObject.get("DateTime").toString());
+			String temperature = ((JSONObject)
+				jsonObject.get("Temperature")).get("Value").toString() + "°";
+			String icon = jsonObject.get("WeatherIcon").toString();
+
+			temp.add(
+				WeatherTempResDto.builder()
+					.time(time)
+					.temperature(temperature)
+					.icon(WeatherUtil.getWeatherIcon(icon))
+					.build());
+		}
+
 		return temp;
 	}
+
 
 	public List<WeatherRainResDto> getTimeRainApi() {
 		List<WeatherRainResDto> time = new ArrayList<>();
