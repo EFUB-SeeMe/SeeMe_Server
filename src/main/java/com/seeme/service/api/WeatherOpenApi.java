@@ -63,7 +63,7 @@ public class WeatherOpenApi {
 		for (Object object : jsonArray) {
 			JSONObject jsonObject = (JSONObject) object;
 			String time = (index++ == 0) ?
-				("현재") : (jsonObject.get("DateTime").toString());
+				("현재") : WeatherUtil.getTime(jsonObject.get("DateTime").toString());
 			String temperature = ((JSONObject)
 				jsonObject.get("Temperature")).get("Value").toString() + "°";
 			String icon = jsonObject.get("WeatherIcon").toString();

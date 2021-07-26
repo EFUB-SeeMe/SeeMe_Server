@@ -15,4 +15,8 @@ public class WeatherUtil {
 		String icon = "Sun";
 		return WEATHER_ICON_PREFIX + icon + ".png";
 	}
+
+	public static String getTime(String dateTime) {
+		return dateTime.substring(11, 13) + "시";
+	}
 }
