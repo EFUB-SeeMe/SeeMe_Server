@@ -4,20 +4,16 @@ import com.seeme.domain.weather.*;
 import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 import com.seeme.util.JSONParsingUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,39 +31,32 @@ public class WeatherOpenApi {
 			.queryParam(WeatherUtil.LANGUAGE, "ko")
 			.queryParam(WeatherUtil.DETAILS, "true");
 
-		URL url = new URL(uriComponentsBuilder.build().toUriString());
-		System.out.println(url);
-		BufferedReader bf;
-		bf = new BufferedReader(new InputStreamReader(url.openStream()));
-		String result = bf.readLine();
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-		//StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-		//JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONArray jsonArray = (JSONArray) JSONValue.parse(sb.toString());
+		JSONObject jsonObject = (JSONObject) jsonArray.get(0);
 
+		Integer iconNumber;
 		String icon, iconText, comp;
-		JSONObject IconObject = (JSONObject) jsonObject.get("weatherIcon");
-		icon = WeatherUtil.getIcon(Integer.parseInt(IconObject.toString()));
-		iconText = WeatherUtil.getIconDesc(Integer.parseInt(IconObject.toString()));
+		iconNumber = Integer.parseInt(jsonObject.get("WeatherIcon").toString());
+		icon = WeatherUtil.getIcon(iconNumber);
+		iconText = WeatherUtil.getIconDesc(iconNumber);
 
 		JSONObject tempValueObject = (JSONObject) jsonObject.get("Temperature");
 		JSONObject tempMetObject = (JSONObject) tempValueObject.get("Metric");
-		JSONObject tempObject = (JSONObject) tempMetObject.get("Value");
 
 		JSONObject realValueObject = (JSONObject) jsonObject.get("RealFeelTemperature");
 		JSONObject realMetObject = (JSONObject) realValueObject.get("Metric");
-		JSONObject realObject = (JSONObject) realMetObject.get("Value");
 
 		JSONObject past24Object = (JSONObject) jsonObject.get("Past24HourTemperatureDeparture");
 		JSONObject pastMetObject = (JSONObject) past24Object.get("Metric");
-		JSONObject compareObject = (JSONObject) pastMetObject.get("Value");
-		comp = WeatherUtil.getComp(Double.parseDouble(compareObject.toString()));
+		Double compareObject = Double.parseDouble(pastMetObject.get("Value").toString());
+		comp = WeatherUtil.getComp(compareObject);
 
 		return WeatherMain.builder()
 			.icon(icon)
 			.iconDesc(iconText)
-			.currTemp(Double.parseDouble(tempObject.toString()))
-			.feelTemp(Double.parseDouble(realObject.toString()))
+			.currTemp(Double.parseDouble(tempMetObject.get("Value").toString()))
+			.feelTemp(Double.parseDouble(realMetObject.get("Value").toString()))
 			.comp(comp)
 			.build();
 
@@ -83,55 +72,39 @@ public class WeatherOpenApi {
 		System.out.println(url);
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-		System.out.println("1");
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
-		System.out.println(jsonObject);
-		/*
-		BufferedReader bf;
-		System.out.println("1");
-		bf = new BufferedReader(new InputStreamReader(url.openStream()));
-		System.out.println("2");
-		String result = bf.readLine();
-		System.out.println("3");
-		JSONObject jsonObject = (JSONObject) JSONValue.parse(result);
-		System.out.println("4");
-		*/
-		System.out.println(jsonObject.get("Key").toString());
+
+		System.out.println("key" + jsonObject.get("Key").toString());
 		return jsonObject.get("Key").toString();
 	}
 
 	public WeatherMainForecast getMainForecastApi(String locationCode) throws IOException, ParseException {
 
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getWeatherMainUrl() + locationCode)
+			.fromUriString(apiConfig.getWeatherForecastUrl() + locationCode)
 			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
 			.queryParam(WeatherUtil.LANGUAGE, "ko")
 			.queryParam(WeatherUtil.DETAILS, "true")
 			.queryParam(WeatherUtil.METRIC, "true");
 
-		URL url = new URL(uriComponentsBuilder.build().toUriString());
-		System.out.println(url);
-		BufferedReader bf;
-		bf = new BufferedReader(new InputStreamReader(url.openStream()));
-		String result = bf.readLine();
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-		//StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-		//JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 		JSONArray forecastArray = (JSONArray) jsonObject.get("DailyForecasts");
 		JSONObject currentObjects = (JSONObject) forecastArray.get(0);
+
 		JSONObject tempObjects = (JSONObject) currentObjects.get("Temperature");
 		JSONObject maxObject = (JSONObject) tempObjects.get("Maximum");
 		JSONObject minObject = (JSONObject) tempObjects.get("Minimum");
 
-		JSONObject getDate = (JSONObject) currentObjects.get("Date");
-		String time = WeatherUtil.getAMPM(getDate.toString());
+		String day = currentObjects.get("Date").toString();
+		String time = WeatherUtil.getAMPM(day);
+
 		JSONObject descObject = (JSONObject) currentObjects.get(time);
 
 		return WeatherMainForecast.builder()
 			.min(Double.parseDouble(minObject.get("Value").toString()))
 			.max(Double.parseDouble(maxObject.get("Value").toString()))
-			.desc(descObject.get("LongPhase").toString())
+			.desc(descObject.get("LongPhrase").toString())
 			.build();
 	}
 
@@ -210,21 +183,12 @@ public class WeatherOpenApi {
 			.queryParam(WeatherUtil.METRIC, "true");
 		URL url = new URL(uriComponentsBuilder.build().toUriString());
 		System.out.println(url);
-		BufferedReader bf;
-		System.out.println("1");
-		bf = new BufferedReader(new InputStreamReader(url.openStream()));
-		System.out.println("2");
-		String result = bf.readLine();
-		System.out.println("3");
-		JSONParser jsonParser = new JSONParser();
-		System.out.println("4");
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-		System.out.println("5");
-		//StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-		//JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 		JSONArray forecastArray = (JSONArray) jsonObject.get("DailyForecasts");
-		System.out.println("들어가기 전");
 		List<WeatherWeekResDto> week = new ArrayList<>();
+
 		for (int idx = 0; idx < 5; idx++) {
 			JSONObject dailyForecast = (JSONObject) forecastArray.get(idx);
 			String day = dailyForecast.get("Date").toString();
@@ -241,7 +205,6 @@ public class WeatherOpenApi {
 			JSONObject PMObjects = (JSONObject) dailyForecast.get("Day");
 			String PMIcon = WeatherUtil.getWeatherIcon(String.valueOf(PMObjects.get("Icon")));
 			JSONObject PMRainObject = (JSONObject) PMObjects.get("Rain");
-			System.out.println("파싱 다함");
 			week.add(
 				WeatherWeekResDto.builder()
 					.day(day)
