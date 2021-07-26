@@ -19,11 +19,11 @@ public class WeatherService {
 
 	public WeatherMainResDto getMain(Double lat, Double lon) {
 
-		ResDto current = getMainCurrent(lat, lon);
+		ResDto currents = getMainCurrent(lat, lon);
 		ResDto forecast = getMainForecast(lat, lon);
 
 		return WeatherMainResDto.builder()
-			.currentInfo(current)
+			.currentInfo(currents)
 			.forecastInfo(forecast)
 			.build();
 	}
@@ -102,6 +102,7 @@ public class WeatherService {
 				.build();
 		}
 	}
+
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
 		ResDto temp = getTempResDto(lat, lon);
 		ResDto rain = getRainResDto();
