@@ -1,13 +1,10 @@
 package com.seeme.service;
 
 import com.seeme.domain.ResDto;
-import com.seeme.domain.microdust.MicrodustResDto;
 import com.seeme.domain.weather.*;
 import com.seeme.service.api.WeatherOpenApi;
 import com.seeme.util.ErrorMessage;
-import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
@@ -20,46 +17,19 @@ public class WeatherService {
 
 	private final WeatherOpenApi weatherOpenApi;
 
-	public WeatherMainResDto getMain(Double lat, Double lon) throws IOException, ParseException {
+	public WeatherMainResDto getMain(Double lat, Double lon) {
 
-		String locationCode =  weatherOpenApi.getLocationApi(lat, lon);
-		WeatherMain main = weatherOpenApi.getMainApi(locationCode);
-		// MIN MAX 구하기 ResDto forecast = getTemp
+		ResDto current = getMainCurrent(lat, lon);
+		ResDto forecast = getMainForecast(lat, lon);
 
 		return WeatherMainResDto.builder()
-			.icon("")
-			.errorMessage(ErrorMessage.SUCCESS)
-			.document(main)
+			.currentInfo(current)
+			.forecastInfo(forecast)
 			.build();
 	}
 
-	private ResDto getMainResDto(String locationCode) {
-		ResDto resDto;
-		try {
-			resDto = ResDto.builder()
-				.resultCode(200)
-				.errorMessage(null)
-				.document(weatherOpenApi.getMainApi(locationCode))
-				.build();
-		} catch (ParseException | IOException e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
-		}
-
-		return resDto;
-	}
-
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
-		ResDto temp = getTempResDto();
+		ResDto temp = getTempResDto(lat, lon);
 		ResDto rain = getRainResDto();
 		ResDto ootd = getOotdResDto(temp, rain);
 		return WeatherTimeResDto.builder()
@@ -69,13 +39,29 @@ public class WeatherService {
 			.build();
 	}
 
-	private ResDto getTempResDto() {
-		List<WeatherTempResDto> temp = weatherOpenApi.getTimeTempApi(); // add exception;
-		return ResDto.builder()
-			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
-			.document(temp)
-			.build();
+	private ResDto getTempResDto(Double lat, Double lon) {
+		try {
+			List<WeatherTempResDto> temp = weatherOpenApi.getTimeTempApi(
+				weatherOpenApi.getLocationApi(lat, lon)); // add exception;
+			return ResDto.builder()
+				.resultCode(200)
+				.errorMessage(ErrorMessage.SUCCESS)
+				.document(temp)
+				.build();
+		} catch (IOException e) {
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
 	}
 
 	private ResDto getRainResDto() {
@@ -94,6 +80,8 @@ public class WeatherService {
 			.top("top.png")
 			.bottom("bottom.png")
 			.shoes("shoes.png")
+			.desc("아이템 설명")
+			.reason("추천 이유")
 			.build();
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
 			.umbrellaIcon("umbrella.png")
@@ -105,15 +93,6 @@ public class WeatherService {
 			.resultCode(200)
 			.errorMessage(ErrorMessage.SUCCESS)
 			.document(ootd)
-			.build();
-	}
-
-	public ResDto getWeek(Double lat, Double lon) {
-		List<WeatherWeekResDto> weekList = weatherOpenApi.getweekApi(); // add exception;
-		return ResDto.builder()
-			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
-			.document(weekList)
 			.build();
 	}
 }

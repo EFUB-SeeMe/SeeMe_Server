@@ -36,5 +36,6 @@ public class ApiConfig {
 	private String weatherLocationUrl;
 	private String weatherForecastUrl;
 	private String weatherMainUrl;
+	private String weatherTimeTempUrl;
 	private String weatherKey;
 }

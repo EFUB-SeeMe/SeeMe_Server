@@ -10,4 +10,6 @@ public class Clothes {
 	private final String top;
 	private final String bottom;
 	private final String shoes;
+	private final String desc;
+	private final String reason;
 }

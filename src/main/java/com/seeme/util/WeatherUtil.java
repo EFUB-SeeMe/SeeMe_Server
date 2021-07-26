@@ -1,16 +1,24 @@
 package com.seeme.util;
 
+import org.json.simple.JSONObject;
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+
 public class WeatherUtil {
 	public static final Double DEFAULT_LAT = 37.123456;
 	public static final Double DEFAULT_LON = 127.123456;
 	public static final String API_KEY = "apikey";
 	public static final String Q = "q";
 	public static final String DETAILS = "details";
-
-	public static String getDesc(String weatherText){
-		// TODO : 날씨 설명 한글로
-		return "오늘은 오후 6시에 소나기가 내려요! 아 근데 이거 좀 에바";
-	}
+	public static final String LANGUAGE = "language";
+	public static final String METRIC = "metric";
+	public static final String WEATHER_ICON_PREFIX =
+		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/";
 
 	public static String getIcon(Integer iconNumber){
 		// TODO : 날씨 아이콘 매칭칭
@@ -27,5 +35,13 @@ public class WeatherUtil {
 		return "오늘은 어제와 비슷한 날씨가 예상됩니다.";
 	}
 
+	public static String getWeatherIcon(String weatherIcon) {
+		String icon = "Sun";
+		return WEATHER_ICON_PREFIX + icon + ".png";
+	}
 
+	public static String getTime(String dateTime) {
+		return dateTime.substring(11, 13) + "시";
+	}
+	
 }
