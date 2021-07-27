@@ -86,7 +86,6 @@ public class CovidOpenApi {
 
 		doc.getDocumentElement().normalize();
 		NodeList nList = doc.getElementsByTagName("item");
-
 		List<CovidRegionalDto> covidRegionList = new ArrayList<>();
 
 		for (int temp = 0; temp < 114; temp++) {
