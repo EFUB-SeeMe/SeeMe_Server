@@ -21,7 +21,7 @@ public class Address {
 
 	private String sido;
 	private String sigungu;
-	private String sigunguSplit;
+
 	private String bjdong;
 	private String bjdongCode;
 
