@@ -22,7 +22,7 @@ public class CovidUtil {
 
 	public static String getCovidRegionalCreateCreateDt() {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -5);
+		cal.add(Calendar.DATE, -6);
 		return DATE_FORMAT.format(cal.getTime());
 	}
 
