@@ -5,11 +5,14 @@ import com.seeme.service.LocationService;
 import com.seeme.service.WeatherService;
 import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.IOException;
 
 @Controller
 @AllArgsConstructor
