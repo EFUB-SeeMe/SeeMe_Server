@@ -84,7 +84,7 @@ public class MicrodustService {
 			.pm25Flag(pm25Flag)
 			.pm10(Integer.parseInt(pm10))
 			.pm25(Integer.parseInt(pm25))
-			.grade(String.valueOf(pmGrade))
+			.grade(MicrodustUtil.getGrade(pmGrade))
 			.gradeIcon(MicrodustUtil.getPmGradeIcon(pmGrade))
 			.desc(MicrodustUtil.getDesc(pmGrade))
 			.build();

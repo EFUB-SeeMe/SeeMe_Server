@@ -34,8 +34,8 @@ public class MicrodustUtil {
 
     public static final String MICRODUST_ICON_PREFIX = "https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/microdust";
 
-    public static String getGrade(String pm10Grade1h) {
-        switch (Integer.parseInt(pm10Grade1h)) {
+    public static String getGrade(int pm10Grade1h) {
+        switch (pm10Grade1h) {
             case 1:
                 return "좋음";
             case 2:
