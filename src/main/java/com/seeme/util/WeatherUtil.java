@@ -19,6 +19,8 @@ public class WeatherUtil {
 	public static final String METRIC = "metric";
 	public static final String WEATHER_ICON_PREFIX =
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/";
+	public static final String RAIN_ICON_PREFIX =
+		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/";
 
 	public static String getIcon(Integer iconNumber){
 		// TODO : 날씨 아이콘 매칭칭
@@ -38,6 +40,10 @@ public class WeatherUtil {
 	public static String getWeatherIcon(String weatherIcon) {
 		String icon = "Sun";
 		return WEATHER_ICON_PREFIX + icon + ".png";
+	}
+
+	public static String getRainIcon (int rainProbability) {
+			return RAIN_ICON_PREFIX + rainProbability + ".png";
 	}
 
 	public static String getTime(String dateTime) {
