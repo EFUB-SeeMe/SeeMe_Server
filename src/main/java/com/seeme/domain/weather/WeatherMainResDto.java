@@ -8,5 +8,6 @@ import lombok.Getter;
 @Builder
 public class WeatherMainResDto {
 	ResDto currentInfo;
-	ResDto forecastInfo;
+	ResDto minmaxInfo;
+	ResDto weekInfo;
 }

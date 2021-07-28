@@ -17,24 +17,26 @@ public class WeatherService {
 
 	private final WeatherOpenApi weatherOpenApi;
 
-	public WeatherMainResDto getMain(Double lat, Double lon) {
+	public WeatherMainResDto getMain(Double lat, Double lon) throws IOException, java.text.ParseException, ParseException {
 
 		ResDto currents = getMainCurrent(lat, lon);
-		ResDto forecast = getMainForecast(lat, lon);
+		ResDto minmax = getMainMinMax(lat, lon);
+		ResDto week = getWeek(lat, lon);
 
 		return WeatherMainResDto.builder()
 			.currentInfo(currents)
-			.forecastInfo(forecast)
+			.minmaxInfo(minmax)
+			.weekInfo(week)
 			.build();
 	}
 
-	private ResDto getMainForecast(Double lat, Double lon) {
+	private ResDto getMainMinMax(Double lat, Double lon) {
 		ResDto resDto;
 		try {
 			resDto = ResDto.builder()
 				.resultCode(200)
 				.errorMessage(ErrorMessage.SUCCESS)
-				.document(weatherOpenApi.getMainForecastApi(weatherOpenApi.getLocationApi(lat, lon)))
+				.document(weatherOpenApi.getMainMinMaxApi(weatherOpenApi.getLocationApi(lat, lon)))
 				.build();
 		} catch (IOException e) {
 			resDto = ResDto.builder()

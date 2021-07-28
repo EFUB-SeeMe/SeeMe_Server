@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class WeatherMainForecast {
-	private final Double min;
-	private final Double max;
+public class WeatherMainMinMax {
+	private final int min;
+	private final int max;
 	private final String desc;
 }
