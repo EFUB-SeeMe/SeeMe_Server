@@ -105,7 +105,7 @@ public class WeatherService {
 
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
 		ResDto temp = getTempResDto(lat, lon);
-		ResDto rain = getRainResDto();
+		ResDto rain = getRainResDto(lat,lon);
 		ResDto ootd = getOotdResDto(temp, rain);
 		return WeatherTimeResDto.builder()
 			.tempInfo(temp)
@@ -139,13 +139,29 @@ public class WeatherService {
 		}
 	}
 
-	private ResDto getRainResDto() {
-		List<WeatherRainResDto> rain = weatherOpenApi.getTimeRainApi(); // add exception;
-		return ResDto.builder()
-			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
-			.document(rain)
-			.build();
+	private ResDto getRainResDto(Double lat, Double lon) {
+		try {
+			List<WeatherRainResDto> rain = weatherOpenApi.getTimeRainApi(
+				weatherOpenApi.getLocationApi(lat, lon)); // add exception;
+			return ResDto.builder()
+				.resultCode(200)
+				.errorMessage(ErrorMessage.SUCCESS)
+				.document(rain)
+				.build();
+		} catch (IOException e) {
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
 	}
 
 	private ResDto getOotdResDto(ResDto temp, ResDto main) {
