@@ -8,7 +8,6 @@ import com.seeme.service.api.MicrodustOpenApi;
 import com.seeme.util.ErrorMessage;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
@@ -25,178 +24,152 @@ public class MicrodustService {
 	private final MicrodustOpenApi microdustOpenApi;
 	private final AddressRepository addressRepository;
 
-	public MicrodustMainResDto getMain(List<String> measuringStationList) {
-		ResDto main = getMainResDto(measuringStationList);
-		ResDto total = getTotalResDto(measuringStationList);
-		ResDto mask = getMaskResDto(measuringStationList);
-
-		return MicrodustMainResDto.builder()
-			.mainInfo(main)
-			.totalInfo(total)
-			.maskInfo(mask)
-			.build();
-	}
-
-	private ResDto getMainResDto(List<String> measuringStationList) {
-		ResDto resDto;
+	public MicrodustMainResDto getMain(List<String> measuringStationList) throws IOException, ParseException {
 		try {
-			resDto = ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(getMainApi(measuringStationList))
+			List<Microdust> microdustList = getMainApi(measuringStationList);
+			return MicrodustMainResDto.builder()
+				.mainInfo(getMainResDto(microdustList))
+				.totalInfo(getTotalResDto(microdustList))
+				.maskInfo(getMaskResDto(microdustList))
 				.build();
 		} catch (ParseException | IOException e) {
-			resDto = ResDto.builder()
+			e.printStackTrace();
+			ResDto resDto = ResDto.builder()
 				.resultCode(500)
 				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
 				.document(null)
 				.build();
+			return MicrodustMainResDto.builder()
+				.mainInfo(resDto).totalInfo(resDto).maskInfo(resDto).build();
 		} catch (Exception e) {
-			resDto = ResDto.builder()
+			e.printStackTrace();
+			ResDto resDto = ResDto.builder()
 				.resultCode(500)
 				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
 				.document(null)
 				.build();
-		}
 
-		return resDto;
+			return MicrodustMainResDto.builder()
+				.mainInfo(resDto).totalInfo(resDto).maskInfo(resDto).build();
+		}
 	}
 
-	private MicrodustResDto getMainApi(List<String> measuringStationList) throws IOException, ParseException {
-		int index = 0, pmGrade = -1;
+	private List<Microdust> getMainApi(List<String> measuringStationList) throws IOException, ParseException {
+		List<Microdust> microdustList = new ArrayList<>();
+		int index = 0;
+		while (index < 3)
+			microdustList.add(microdustOpenApi.getMainApi(measuringStationList, index++));
+		return microdustList;
+	}
+
+	private ResDto getMainResDto(List<Microdust> microdustList) {
+		int pmGrade = -1;
 		String pm10 = "-1", pm25 = "-1";
 		boolean pm10Flag = false, pm25Flag = false;
-		while (index < 3) {
+		for (Microdust microdust : microdustList) {
 			if (pm10Flag && pm25Flag)
 				break;
-			JSONObject jsonObject = microdustOpenApi.getMainApi(measuringStationList, index++);
-			if (!pm10Flag && !jsonObject.get("pm10Value").equals("-")) {
+			if (!pm10Flag && !microdust.getPm10Value().equals("-")) {
 				pm10Flag = true;
-				pm10 = jsonObject.get("pm10Value").toString();
-				pmGrade = Integer.parseInt(jsonObject.get("pm10Grade").toString());
+				pm10 = microdust.getPm10Value();
+				pmGrade = Integer.parseInt(microdust.getPm10Grade());
 			}
-			if (!pm25Flag && !jsonObject.get("pm25Value").equals("-")) {
+			if (!pm25Flag && !microdust.getPm25Value().equals("-")) {
 				pm25Flag = true;
-				pm25 = jsonObject.get("pm25Value").toString();
-				pmGrade = Math.max(pmGrade, Integer.parseInt(jsonObject.get("pm25Grade").toString()));
+				pm25 = microdust.getPm25Value();
+				pmGrade = Math.max(pmGrade, Integer.parseInt(microdust.getPm25Grade()));
 			}
 		}
 
-		return MicrodustResDto.builder()
-			.pm10Flag(pm10Flag)
-			.pm25Flag(pm25Flag)
-			.pm10(Integer.parseInt(pm10))
-			.pm25(Integer.parseInt(pm25))
-			.grade(MicrodustUtil.getGrade(pmGrade))
-			.gradeIcon(MicrodustUtil.getPmGradeIcon(pmGrade))
-			.desc(MicrodustUtil.getDesc(pmGrade))
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(MicrodustResDto.builder()
+				.pm10Flag(pm10Flag)
+				.pm25Flag(pm25Flag)
+				.pm10(Integer.parseInt(pm10))
+				.pm25(Integer.parseInt(pm25))
+				.grade(MicrodustUtil.getGrade(pmGrade))
+				.gradeIcon(MicrodustUtil.getPmGradeIcon(pmGrade))
+				.desc(MicrodustUtil.getDesc(pmGrade))
+				.build())
 			.build();
 	}
 
-	private ResDto getTotalResDto(List<String> measuringStationList) {
+	private ResDto getTotalResDto(List<Microdust> microdustList) {
+		for (Microdust microdust : microdustList) {
+			if (!microdust.getCoValue().equals("-") && !microdust.getNo2Value().equals("-") &&
+				!microdust.getO3Value().equals("-") && !microdust.getSo2Value().equals("-") &&
+				!microdust.getPm10Value24().equals("-") && !microdust.getPm25Value24().equals("-") &&
+				!microdust.getKhaiValue().equals("-"))
 
-		ResDto resDto;
-		try {
-			resDto = ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(getTotalApi(measuringStationList))
-				.build();
-		} catch (ParseException | IOException e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
+				return ResDto.builder()
+					.resultCode(200)
+					.errorMessage(ErrorMessage.SUCCESS)
+					.document(MicrodustTotalResDto.builder()
+						.pm10(Double.parseDouble(microdust.getPm10Value())).pm10Flag(true)
+						.pm25(Double.parseDouble(microdust.getPm25Value())).pm25Flag(true)
+						.co(Double.parseDouble(microdust.getCoValue())).coFlag(true)
+						.no2(Double.parseDouble(microdust.getNo2Value())).no2Flag(true)
+						.o3(Double.parseDouble(microdust.getO3Value())).o3Flag(true)
+						.so2(Double.parseDouble(microdust.getSo2Value())).so2Flag(true)
+						.cai(Double.parseDouble(microdust.getKhaiValue())).caiFlag(true)
+						.caiIcon(MicrodustUtil.getCaiIcon(Double.parseDouble(microdust.getKhaiValue())))
+						.build())
+					.build();
 		}
 
-		return resDto;
+		// error case return;
+		Microdust microdust = microdustList.get(0);
+
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(MicrodustTotalResDto.builder()
+				.pm10(MicrodustUtil.getDouble(microdust.getPm10Value()))
+				.pm10Flag(MicrodustUtil.getBool(microdust.getPm10Value()))
+				.pm25(MicrodustUtil.getDouble(microdust.getPm25Value()))
+				.pm25Flag(MicrodustUtil.getBool(microdust.getPm25Value()))
+				.co(MicrodustUtil.getDouble(microdust.getCoValue()))
+				.coFlag(MicrodustUtil.getBool(microdust.getCoValue()))
+				.no2(MicrodustUtil.getDouble(microdust.getNo2Value()))
+				.no2Flag(MicrodustUtil.getBool(microdust.getNo2Value()))
+				.o3(MicrodustUtil.getDouble(microdust.getO3Value()))
+				.o3Flag(MicrodustUtil.getBool(microdust.getO3Value()))
+				.so2(MicrodustUtil.getDouble(microdust.getSo2Value()))
+				.so2Flag(MicrodustUtil.getBool(microdust.getSo2Value()))
+				.cai(MicrodustUtil.getDouble(microdust.getKhaiValue()))
+				.caiFlag(MicrodustUtil.getBool(microdust.getKhaiValue()))
+				.caiIcon(MicrodustUtil.getCaiIcon(MicrodustUtil.getDouble(microdust.getKhaiValue())))
+				.build())
+			.build();
+
 	}
 
-	private MicrodustTotalResDto getTotalApi(List<String> measuringStationList) throws IOException, ParseException {
-		int index = 0, cnt = 0;
-		String[] values = {"pm10Value", "pm25Value", "coValue", "no2Value", "o3Value", "so2Value", "khaiValue", "pm10Value24", "pm25Value24",};
-		while (index < 3) {
-			JSONObject jsonObject = microdustOpenApi.getTotalApi(measuringStationList, index++);
-			for (String value : values) {
-				if (!jsonObject.get(value).equals("-")) {
-					cnt += 1;
-				}
-			}
-			if (cnt == values.length)
+	private ResDto getMaskResDto(List<Microdust> microdustList) {
+		String pm10 = "-";
+		for (Microdust microdust : microdustList) {
+			if (!microdust.getPm10Value().equals("-")) {
+				pm10 = microdust.getPm10Value();
 				break;
-			cnt = 0;
-		}
-
-		JSONObject jsonObject = microdustOpenApi.getTotalApi(measuringStationList, --index);
-		ArrayList<Boolean> boolFlags = new ArrayList<>();
-		for (String value : values) {
-			if (jsonObject.get(value).equals("-")) {
-				boolFlags.add(false);
-			} else {
-				boolFlags.add(true);
 			}
 		}
-
-		return MicrodustTotalResDto.builder()
-			.pm10(Double.parseDouble(jsonObject.get("pm10Value").toString())).pm10Flag(boolFlags.get(0))
-			.pm25(Double.parseDouble(jsonObject.get("pm25Value").toString())).pm25Flag(boolFlags.get(1))
-			.co(Double.parseDouble(jsonObject.get("coValue").toString())).coFlag(boolFlags.get(2))
-			.no2(Double.parseDouble(jsonObject.get("no2Value").toString())).no2Flag(boolFlags.get(3))
-			.o3(Double.parseDouble(jsonObject.get("o3Value").toString())).o3Flag(boolFlags.get(4))
-			.so2(Double.parseDouble(jsonObject.get("so2Value").toString())).so2Flag(boolFlags.get(5))
-			.cai(Double.parseDouble(jsonObject.get("khaiValue").toString())).caiFlag(boolFlags.get(6))
-			.caiIcon(MicrodustUtil.getCaiIcon(Double.parseDouble(jsonObject.get("khaiValue").toString())))
-			.build();
-	}
-
-	private ResDto getMaskResDto(List<String> measuringStationList) {
-
-		ResDto resDto;
-		try {
-			resDto = ResDto.builder()
-				.resultCode(200)
-				.errorMessage(null)
-				.document(getMaskApi(measuringStationList))
-				.build();
-		} catch (ParseException | IOException e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
-		}
-
-		return resDto;
-	}
-
-	private MicrodustMaskResDto getMaskApi(List<String> measuringStationList) throws IOException, ParseException {
-		JSONObject jsonObject = microdustOpenApi.getTotalApi(measuringStationList, 0);
-		String pm10 = (String) jsonObject.get("pm10Value");
-		int pm10Value = Integer.parseInt(pm10);
+		int pm10Value = (pm10.equals("-")) ? 1 : Integer.parseInt(pm10);
 		String maskIcon = getMaskIcon(pm10Value);
 		String desc = getMaskdesc(maskIcon);
 
-		return MicrodustMaskResDto.builder()
-			.maskIcon(maskIcon)
-			.desc(desc)
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(null)
+			.document(MicrodustMaskResDto.builder()
+				.maskIcon(maskIcon)
+				.desc(desc)
+				.build())
 			.build();
 	}
 
 	private String getMaskIcon(int pm10) {
-		if (pm10 >=0 && pm10 <= 15)
+		if (pm10 >= 0 && pm10 <= 15)
 			return MicrodustUtil.MASK_DENTAL;
 		else if (pm10 <= 35)
 			return MicrodustUtil.MASK_KF80;

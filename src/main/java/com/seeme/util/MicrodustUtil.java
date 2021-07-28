@@ -187,4 +187,12 @@ public class MicrodustUtil {
             iconName = "error";
         return MICRODUST_ICON_PREFIX + "/pm/" + iconName + ".png";
 	}
+
+	public static Double getDouble(String value) {
+        return Double.parseDouble(value.equals("-") ? "-1" : value);
+	}
+
+    public static Boolean getBool(String value) {
+        return !value.equals("-");
+    }
 }
