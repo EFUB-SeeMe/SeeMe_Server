@@ -1,5 +1,7 @@
 package com.seeme.service.api;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.seeme.domain.microdust.*;
 import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.MicrodustUtil;
@@ -27,7 +29,7 @@ public class MicrodustOpenApi {
 	private final ApiConfig apiConfig;
 	private final LocationApi locationApi;
 
-	public JSONObject getMainApi(List<String> stationList, int index) throws IOException, ParseException {
+	public Microdust getMainApi(List<String> stationList, int index) throws IOException, ParseException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getMicrodustMainUrl())
 			.queryParam(MicrodustUtil.SERVICE_KEY, apiConfig.getMicrodustMainKey())
@@ -36,7 +38,7 @@ public class MicrodustOpenApi {
 			.queryParam(MicrodustUtil.PAGE_NO, 1)
 			.queryParam(MicrodustUtil.STATION_NAME, URLEncoder.encode(stationList.get(index), StandardCharsets.UTF_8))
 			.queryParam(MicrodustUtil.DATA_TERM, "DAILY")
-			.queryParam(MicrodustUtil.VERSION, 1.0);
+			.queryParam(MicrodustUtil.VERSION, 1.1);
 		System.out.println(uriComponentsBuilder.build());
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
@@ -45,8 +47,9 @@ public class MicrodustOpenApi {
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(sb.toString());
 		JSONObject responseObject = (JSONObject) jsonObject.get("response");
 		JSONObject bodyObject = (JSONObject) responseObject.get("body");
-		JSONArray itemsObjects = (JSONArray) bodyObject.get("items");
-		return (JSONObject) itemsObjects.get(0);
+		JSONArray jsonArray = (JSONArray) bodyObject.get("items");
+
+		return new Gson().fromJson(jsonArray.get(0).toString(), Microdust.class);
 	}
 
 	public List<String> getStationList(Double lat, Double lon) throws IOException, ParseException {
