@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class WeatherMain {
-	private final Double currTemp;
-	private final Double feelTemp;
+	private final int currTemp;
+	private final int feelTemp;
 	private final String iconDesc;
 	private final String icon;
 	private final String comp;
