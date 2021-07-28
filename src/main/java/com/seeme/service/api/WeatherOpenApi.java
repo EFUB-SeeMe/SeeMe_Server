@@ -118,11 +118,9 @@ public class WeatherOpenApi {
 		JSONArray jsonArray = (JSONArray) JSONValue.parse(sb.toString());
 
 		List<WeatherTempResDto> temp = new ArrayList<>();
-		int index = 0;
 		for (Object object : jsonArray) {
 			JSONObject jsonObject = (JSONObject) object;
-			String time = (index++ == 0) ?
-				("현재") : WeatherUtil.getTime(jsonObject.get("DateTime").toString());
+			String time = WeatherUtil.getTime(jsonObject.get("DateTime").toString());
 			String temperature = ((JSONObject)
 				jsonObject.get("Temperature")).get("Value").toString() + "°";
 			String icon = jsonObject.get("WeatherIcon").toString();
@@ -139,37 +137,35 @@ public class WeatherOpenApi {
 	}
 
 
-	public List<WeatherRainResDto> getTimeRainApi() {
-		List<WeatherRainResDto> time = new ArrayList<>();
-		time.add(
-			WeatherRainResDto.builder()
-				.time("현재")
-				.rain(0)
-				.percent(0)
-				.icon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/0.png")
-				.build());
-		time.add(
-			WeatherRainResDto.builder()
-				.time("18시")
-				.rain(30)
-				.percent(60)
-				.icon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/60.png")
-				.build());
-		time.add(
-			WeatherRainResDto.builder()
-				.time("19시")
-				.rain(40)
-				.percent(90)
-				.icon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/90.png")
-				.build());
-		time.add(
-			WeatherRainResDto.builder()
-				.time("20시")
-				.rain(10)
-				.percent(10)
-				.icon("https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/10.png")
-				.build());
-		return time;
+	public List<WeatherRainResDto> getTimeRainApi(String locationCode) throws IOException, NullPointerException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherTimeTempUrl())
+			.path(locationCode)
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.LANGUAGE, "ko")
+			.queryParam(WeatherUtil.DETAILS, true)
+			.queryParam(WeatherUtil.METRIC, true);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONArray jsonArray = (JSONArray) JSONValue.parse(sb.toString());
+
+		List<WeatherRainResDto> rain = new ArrayList<>();
+		for (Object object : jsonArray) {
+			JSONObject jsonObject = (JSONObject) object;
+			String time = WeatherUtil.getTime(jsonObject.get("DateTime").toString());
+			String rainAmount = ((JSONObject) jsonObject.get("Rain")).get("Value").toString();
+			String percent = jsonObject.get("RainProbability").toString();
+
+			rain.add(
+				WeatherRainResDto.builder()
+					.time(time)
+					.rain((int)Double.parseDouble(rainAmount))
+					.percent(Integer.parseInt(percent))
+					.icon(WeatherUtil.getRainIcon(Integer.parseInt(percent)))
+					.build());
+		}
+
+		return rain;
 	}
 
 	public List<WeatherWeekResDto> getWeekApi(String locationCode) throws IOException, java.text.ParseException, ParseException {

@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.seeme.util.MicrodustUtil.*;
+
 @Service
 @AllArgsConstructor
 public class MicrodustService {
@@ -26,11 +28,12 @@ public class MicrodustService {
 	public MicrodustMainResDto getMain(List<String> measuringStationList) {
 		ResDto main = getMainResDto(measuringStationList);
 		ResDto total = getTotalResDto(measuringStationList);
+		ResDto mask = getMaskResDto(measuringStationList);
 
 		return MicrodustMainResDto.builder()
 			.mainInfo(main)
 			.totalInfo(total)
-			.maskInfo(getRecResDto(main, total))
+			.maskInfo(mask)
 			.build();
 	}
 
@@ -153,26 +156,65 @@ public class MicrodustService {
 			.build();
 	}
 
-	private ResDto getRecResDto(ResDto microdustResDto, ResDto otherResDto) {
-		return ResDto.builder()
-			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
-			.document(MicrodustRecResDto.builder()
-				.maskIcon(getMaskIcon(microdustResDto))
-				.desc(getdesc(microdustResDto))
-				.build())
+	private ResDto getMaskResDto(List<String> measuringStationList) {
+
+		ResDto resDto;
+		try {
+			resDto = ResDto.builder()
+				.resultCode(200)
+				.errorMessage(null)
+				.document(getMaskApi(measuringStationList))
+				.build();
+		} catch (ParseException | IOException e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+		} catch (Exception e) {
+			resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+		}
+
+		return resDto;
+	}
+
+	private MicrodustMaskResDto getMaskApi(List<String> measuringStationList) throws IOException, ParseException {
+		JSONObject jsonObject = microdustOpenApi.getTotalApi(measuringStationList, 0);
+		String pm10 = (String) jsonObject.get("pm10Value");
+		int pm10Value = Integer.parseInt(pm10);
+		String maskIcon = getMaskIcon(pm10Value);
+		String desc = getMaskdesc(maskIcon);
+
+		return MicrodustMaskResDto.builder()
+			.maskIcon(maskIcon)
+			.desc(desc)
 			.build();
 	}
 
-	private String getMaskIcon(ResDto microdustResDto) {
-		// TODO: add logic;
-		// MicrodustUtil.MASK_KF80, MicrodustUtil.MASK_KF94
-		return MicrodustUtil.MASK_DENTAL;
+	private String getMaskIcon(int pm10) {
+		if (pm10 >=0 && pm10 <= 15)
+			return MicrodustUtil.MASK_DENTAL;
+		else if (pm10 <= 35)
+			return MicrodustUtil.MASK_KF80;
+		else
+			return MicrodustUtil.MASK_KF94;
 	}
 
-	private String getdesc(ResDto microdustResDto) {
-		// TODO: add logic;
-		return "미세먼지 좋아요~ 덴탈마스크 추천!";
+	private String getMaskdesc(String maskIcon) {
+		switch (maskIcon) {
+			case MASK_DENTAL:
+				return "미세먼지 좋아요~ 덴탈마스크 추천!";
+			case MASK_KF80:
+				return "미세먼지가 꽤 있어요 ㅠㅠ kf80 추천!";
+			case MASK_KF94:
+				return "미세먼지 위험해요.. kf94 추천!";
+			default:
+				return "error";
+		}
 	}
 
 	public List<MicrodustDayResDto> getDay(String geo) throws IOException, ParseException {
