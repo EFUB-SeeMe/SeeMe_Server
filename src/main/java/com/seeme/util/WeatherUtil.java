@@ -19,7 +19,7 @@ public class WeatherUtil {
 	public static final String RAIN_ICON_PREFIX =
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/";
 
-	public static String getIcon(Integer iconNumber) {
+	public static String getWeatherIcon(Integer iconNumber) {
 		String icon;
 		switch (iconNumber) {
 			case 1: case 2: case 3:
@@ -67,23 +67,19 @@ public class WeatherUtil {
 		return WEATHER_ICON_PREFIX + icon + ".png";
 	}
 
-	public static String getIconDesc(Integer iconNumber){
+	public static String getIconDesc(Integer iconNumber) {
 		// TODO : 날씨 아이콘 설명
 		return "흐림";
 	}
 
-	public static String getComp(Double compareVal){
+	public static String getComp(Double compareVal) {
 		// TODO : 날씨 변화량 보여주기
 		return "오늘은 어제와 비슷한 날씨가 예상됩니다.";
 	}
 
-	public static String getWeatherIcon(String weatherIcon) {
-		String icon = "Sun";
-		return WEATHER_ICON_PREFIX + icon + ".png";
-	}
-
-	public static String getRainIcon (int rainProbability) {
-			return RAIN_ICON_PREFIX + rainProbability + ".png";
+	public static String getRainIcon(Double rainProbability) {
+		int rain = (int) (Math.round(rainProbability/10.0) * 10);
+		return RAIN_ICON_PREFIX + rain + ".png";
 	}
 
 	public static String getTime(String dateTime) {
@@ -99,8 +95,8 @@ public class WeatherUtil {
 		cal.setTime(date);
 
 		int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-		String dayOfWeek ="";
-		switch(dayNum){
+		String dayOfWeek = "";
+		switch (dayNum) {
 			case 1:
 				dayOfWeek = " (일)";
 				break;
@@ -123,11 +119,11 @@ public class WeatherUtil {
 				dayOfWeek = " (토)";
 				break;
 		}
-		return day.substring(5, 7)+"월"+day.substring(8, 10)+"일"+dayOfWeek;
+		return day.substring(5, 7) + "월" + day.substring(8, 10) + "일" + dayOfWeek;
 
 	}
 
-	public static String getAMPM(String date){
+	public static String getAMPM(String date) {
 		String day = date.format(String.valueOf(DateTimeFormatter.ofPattern("a")));
 		if (day.equals("AM"))
 			return "Day";
