@@ -15,7 +15,7 @@ public class LocationController {
 
 	public final LocationService locationService;
 
-	@GetMapping("/latLonToUmd")
+	@GetMapping("/getAddress")
 	public String getLatlonToUmd(@RequestParam Double lat, @RequestParam Double lon) {
 		try {
 			return locationService.getLatlonToUmd(lat, lon);
@@ -25,13 +25,13 @@ public class LocationController {
 		}
 	}
 
-	@GetMapping("/search")
+	@GetMapping("/latlon")
+	public ResponseEntity<Object> searchByLatLon(@RequestParam Double lat, @RequestParam Double lon) {
+		return ResponseEntity.ok().body(locationService.searchByLatLon(lat, lon));
+	}
+
+	@GetMapping("/umd")
 	public ResponseEntity<Object> searchByUmd(@RequestParam String umd) {
-		try {
-			return ResponseEntity.ok().body(locationService.searchByUmd(umd));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body("internal server error");
-		}
+		return ResponseEntity.ok().body(locationService.searchByUmd(umd));
 	}
 }
