@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -26,8 +27,7 @@ public class CovidOpenApi {
 
 	private final ApiConfig apiConfig;
 
-	public List<CovidDto> getMainApi() throws IOException, ParserConfigurationException, SAXException {
-
+	public List<CovidDto> getMainApi(String region) throws IOException, ParserConfigurationException, SAXException {
 		String endCreateDt = CovidUtil.getCovidMainEndCreateDt();
 		String startCreateDt = CovidUtil.getCovidMainCreateCreateDt();
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
@@ -49,13 +49,15 @@ public class CovidOpenApi {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
-				covidList.add(
-					CovidDto.builder()
-						.stdDay(getTagValue("stdDay", eElement))
-						.gubun(getTagValue("gubun", eElement))
-						.incDec(getTagValue("incDec", eElement))
-						.build()
-				);
+				if (Objects.equals(getTagValue("gubun", eElement), "합계") ||
+					Objects.equals(getTagValue("gubun", eElement), region))
+					covidList.add(
+						CovidDto.builder()
+							.stdDay(getTagValue("stdDay", eElement))
+							.gubun(getTagValue("gubun", eElement))
+							.incDec(getTagValue("incDec", eElement))
+							.build()
+					);
 			}
 		}
 		return covidList;
@@ -69,7 +71,7 @@ public class CovidOpenApi {
 		return nValue.getNodeValue();
 	}
 
-	public List<CovidRegionalDto> getRegionalApi() throws IOException, ParserConfigurationException, SAXException {
+	public List<CovidRegionalDto> getRegionalApi(String region) throws IOException, ParserConfigurationException, SAXException {
 		String endCreateDt = CovidUtil.getCovidMainEndCreateDt();
 		String startCreateDt = CovidUtil.getCovidRegionalCreateCreateDt();
 
@@ -92,15 +94,16 @@ public class CovidOpenApi {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
-				covidRegionList.add(
-					CovidRegionalDto.builder()
-						.stdDay(getTagValue("stdDay", eElement))
-						.gubun(getTagValue("gubun", eElement))
-						.overFlowCnt(getTagValue("overFlowCnt", eElement))
-						.localOccCnt(getTagValue("localOccCnt", eElement))
-						.defCnt(getTagValue("defCnt", eElement))
-						.build()
-				);
+				if (Objects.equals(getTagValue("gubun", eElement), region))
+					covidRegionList.add(
+						CovidRegionalDto.builder()
+							.stdDay(getTagValue("stdDay", eElement))
+							.gubun(getTagValue("gubun", eElement))
+							.overFlowCnt(getTagValue("overFlowCnt", eElement))
+							.localOccCnt(getTagValue("localOccCnt", eElement))
+							.defCnt(getTagValue("defCnt", eElement))
+							.build()
+					);
 			}
 		}
 		return covidRegionList;
