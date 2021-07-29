@@ -2,7 +2,6 @@ package com.seeme.service;
 
 import com.seeme.domain.location.*;
 import com.seeme.service.api.LocationApi;
-import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
