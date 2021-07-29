@@ -1,5 +1,6 @@
 package com.seeme.util;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +32,7 @@ public class WeatherUtil {
 			case 12: case 39: case 40:
 				icon = "Rain-2";
 				break;
-			case 7: case 11: case 38:
+			case 7: case 8: case 9: case 10: case 11: case 38:
 				icon = "Cloud";
 				break;
 			case 22: case 24: case 44:
@@ -68,13 +69,57 @@ public class WeatherUtil {
 	}
 
 	public static String getIconDesc(Integer iconNumber) {
-		// TODO : 날씨 아이콘 설명
-		return "흐림";
+		String iconDesc;
+		switch (iconNumber) {
+			case 1: case 2: case 3: case 33: case 34: case 35: case 36: case 37:
+				iconDesc = "맑음";
+				break;
+			case 15: case 18: case 26: case 29: case 41: case 42:
+				iconDesc = "흐리고 비";
+				break;
+			case 12: case 39: case 40:
+				iconDesc = "흐리고 한때 비";
+				break;
+			case 7: case 8: case 9: case 10: case 11: case 38:
+				iconDesc = "흐림";
+				break;
+			case 22: case 24: case 44:
+				iconDesc = "눈";
+				break;
+			case 4: case 5: case 6:
+				iconDesc = "구름 조금";
+				break;
+			case 16: case 17:
+				iconDesc = "비";
+				break;
+			case 13: case 14:
+				iconDesc = "한때 비";
+				break;
+			case 19: case 20: case 21: case 23: case 25: case 43:
+				iconDesc = "한때 눈";
+				break;
+			case 30:
+				iconDesc = "더위";
+				break;
+			case 31:
+				iconDesc = "추위";
+				break;
+			case 32:
+				iconDesc = "바람";
+				break;
+			default:
+				iconDesc = "정보 없음";
+		}
+		return iconDesc;
 	}
 
-	public static String getComp(Double compareVal) {
-		// TODO : 날씨 변화량 보여주기
-		return "오늘은 어제와 비슷한 날씨가 예상됩니다.";
+	public static String getComp(Integer compareVal) {
+		if (compareVal <= -1 )
+			return "오늘은 어제보다 "+compareVal+"도 낮습니다.";
+		else if (compareVal >= 1)
+			return "오늘은 어제보다"+compareVal+"도 높습니다.";
+		else
+			return "오늘은 어제와 비슷한 날씨가 예상됩니다.";
 	}
 
 	public static String getRainIcon(Double rainProbability) {
