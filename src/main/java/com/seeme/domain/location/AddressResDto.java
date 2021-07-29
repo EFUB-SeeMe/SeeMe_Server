@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AddressResDto {
+	private final String sidoShort;
 	private final String address;
 	private final String addressCode;
 	private final Double lat;

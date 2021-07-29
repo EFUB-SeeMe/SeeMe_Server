@@ -25,8 +25,8 @@ public class LocationUtil {
 		return latitude.toString() + "," + longitude.toString();
 	}
 
-	public static String getLocation(String address) {
-		String longName = address.split(" ")[1], shortName = "서울";
+	public static String longToShortSido(String longName) {
+		String shortName = "서울";
 		switch (longName) {
 			case "서울특별시":
 				shortName = "서울";
@@ -81,6 +81,11 @@ public class LocationUtil {
 				break;
 		}
 		return shortName;
+	}
+
+	public static String getLocation(String address) {
+		String longName = address.split(" ")[1];
+		return longToShortSido(longName);
 	}
 
 	public static String getRegion2AndRegion3(JSONObject jsonObject) {
