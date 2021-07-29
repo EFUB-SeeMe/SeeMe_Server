@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class AddressCodeResDto {
 	private final Integer totalCount;
-	private final List<AddressCode> addressList;
+	private final List<AddressResDto> addressList;
 }

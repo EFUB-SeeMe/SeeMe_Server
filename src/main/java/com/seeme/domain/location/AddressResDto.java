@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AddressCode {
+public class AddressResDto {
 	private final String address;
 	private final String addressCode;
+	private final Double lat;
+	private final Double lon;
 }

@@ -25,10 +25,11 @@ public class Address {
 	private String bjdong;
 	private String bjdongCode;
 
-	public AddressCode toAddressCode() {
-		return AddressCode.builder()
+	public AddressResDto toAddressResDto() {
+		return AddressResDto.builder()
 			.address(sido + " " + sigungu + " " + bjdong)
 			.addressCode(bjdongCode)
+			.lat(lat).lon(lon)
 			.build();
 	}
 }
