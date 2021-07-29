@@ -15,7 +15,7 @@ public class LocationController {
 
 	public final LocationService locationService;
 
-	@GetMapping("/getAddress")
+	@GetMapping("/latlon2address")
 	public String getLatlonToUmd(@RequestParam Double lat, @RequestParam Double lon) {
 		try {
 			return locationService.getLatlonToUmd(lat, lon);
