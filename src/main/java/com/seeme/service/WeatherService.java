@@ -1,14 +1,18 @@
 package com.seeme.service;
 
+import com.google.gson.Gson;
 import com.seeme.domain.ResDto;
 import com.seeme.domain.weather.*;
 import com.seeme.service.api.WeatherOpenApi;
 import com.seeme.util.ErrorMessage;
+import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,95 +23,88 @@ public class WeatherService {
 
 	public WeatherMainResDto getMain(Double lat, Double lon) {
 
-		ResDto currents = getMainCurrent(lat, lon);
-		ResDto minmax = getMainMinMax(lat, lon);
-		ResDto week = getWeek(lat, lon);
+		try {
+			String location = weatherOpenApi.getLocationApi(lat, lon);
+			List<Weather> weather = weatherOpenApi.getForecastApi(location);
+			ResDto currents = getMainCurrent(location);
+			ResDto minmax = getMainMinMax(weather);
+			ResDto week = getWeek(weather);
+			return WeatherMainResDto.builder()
+				.currentInfo(currents)
+				.minmaxInfo(minmax)
+				.weekInfo(week)
+				.build();
+		} catch (IOException | ParseException e) {
+			e.printStackTrace();
+			ResDto resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+			return WeatherMainResDto.builder()
+				.currentInfo(resDto).minmaxInfo(resDto).weekInfo(resDto).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResDto resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+			return WeatherMainResDto.builder()
+				.currentInfo(resDto).minmaxInfo(resDto).weekInfo(resDto).build();
+		}
+	}
 
-		return WeatherMainResDto.builder()
-			.currentInfo(currents)
-			.minmaxInfo(minmax)
-			.weekInfo(week)
+	private ResDto getMainMinMax(List<Weather> weatherList) {
+		Weather weather = weatherList.get(0);
+
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(WeatherMainMinMax.builder()
+				.min(weather.getMin())
+				.max(weather.getMax())
+				.desc(weather.getDesc())
+				.build())
 			.build();
 	}
 
-	private ResDto getMainMinMax(Double lat, Double lon) {
-		ResDto resDto;
-		try {
-			resDto = ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(weatherOpenApi.getMainMinMaxApi(weatherOpenApi.getLocationApi(lat, lon)))
-				.build();
-		} catch (IOException e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
-		}
-
-		return resDto;
+	private ResDto getMainCurrent(String location) throws IOException, ParseException {
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(weatherOpenApi.getMainApi(location))
+			.build();
 	}
 
-	private ResDto getMainCurrent(Double lat, Double lon) {
-		ResDto resDto;
-		try {
-			resDto = ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(weatherOpenApi.getMainApi(weatherOpenApi.getLocationApi(lat, lon)))
-				.build();
-		} catch (IOException | ParseException e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			resDto = ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
-		}
+	public ResDto getWeek(List<Weather> weatherList) {
 
-		return resDto;
-	}
-
-	public ResDto getWeek(Double lat, Double lon) {
-		try {
-			List<WeatherWeekResDto> week = weatherOpenApi.getWeekApi(
-				weatherOpenApi.getLocationApi(lat, lon));
-			return ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(week)
-				.build();
-		} catch (IOException | java.text.ParseException e) {
-			return ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
+		List<WeatherWeekResDto> week = new ArrayList<>();
+		for (Weather weather : weatherList) {
+			week.add(
+				WeatherWeekResDto.builder()
+					.day(weather.getDate())
+					.amRain(weather.getAmRain())
+					.amRainPercent(weather.getAmRainPercent())
+					.amIcon(weather.getAmIcon())
+					.pmRain(weather.getPmRain())
+					.pmRainPercent(weather.getPmRainPercent())
+					.pmIcon(weather.getPmIcon())
+					.max(weather.getMax())
+					.min(weather.getMin())
+					.build()
+			);
 		}
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(week)
+			.build();
 	}
 
 	public WeatherTimeResDto getTime(Double lat, Double lon) {
 		ResDto temp = getTempResDto(lat, lon);
-		ResDto rain = getRainResDto(lat,lon);
+		ResDto rain = getRainResDto(lat, lon);
 		ResDto ootd = getOotdResDto(temp, rain);
 		return WeatherTimeResDto.builder()
 			.tempInfo(temp)
