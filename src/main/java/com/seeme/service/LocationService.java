@@ -1,11 +1,10 @@
 package com.seeme.service;
 
-import com.seeme.domain.location.Address;
-import com.seeme.domain.location.AddressCode;
-import com.seeme.domain.location.AddressCodeResDto;
-import com.seeme.domain.location.AddressRepository;
+import com.seeme.domain.location.*;
 import com.seeme.service.api.LocationApi;
+import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,10 +21,25 @@ public class LocationService {
 		return locationApi.covertGpsToSpecificAddress(lat, lon);
 	}
 
+	public UmdCodeResDto searchByLatLon(Double lat, Double lon) {
+		try {
+			JSONObject jsonObject = locationApi.searchByLatLon(lat, lon);
+			return UmdCodeResDto.builder()
+				.res(true)
+				.umd(jsonObject.get("region_3depth_name").toString())
+				.addressCode(jsonObject.get("code").toString())
+				.build();
+		} catch (Exception e) {
+			return UmdCodeResDto.builder()
+				.res(false)
+				.build();
+		}
+	}
+
 	public AddressCodeResDto searchByUmd(String umd) {
-		List<AddressCode> addressList = new ArrayList<>();
+		List<AddressResDto> addressList = new ArrayList<>();
 		addressRepository.findAllByBjdong(umd)
-			.stream().map(Address::toAddressCode).forEach(addressList::add);
+			.stream().map(Address::toAddressResDto).forEach(addressList::add);
 
 		return AddressCodeResDto.builder()
 			.totalCount(addressList.size())

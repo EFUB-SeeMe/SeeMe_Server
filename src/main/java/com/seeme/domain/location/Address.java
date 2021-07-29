@@ -1,5 +1,7 @@
 package com.seeme.domain.location;
 
+import com.seeme.util.CovidUtil;
+import com.seeme.util.LocationUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,10 +27,12 @@ public class Address {
 	private String bjdong;
 	private String bjdongCode;
 
-	public AddressCode toAddressCode() {
-		return AddressCode.builder()
+	public AddressResDto toAddressResDto() {
+		return AddressResDto.builder()
+			.sidoShort(LocationUtil.longToShortSido(sido))
 			.address(sido + " " + sigungu + " " + bjdong)
 			.addressCode(bjdongCode)
+			.lat(lat).lon(lon)
 			.build();
 	}
 }

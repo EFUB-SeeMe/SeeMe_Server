@@ -46,6 +46,20 @@ public class LocationApi {
 		return LocationUtil.getRegion2AndRegion3(jsonObject);
 	}
 
+
+	public JSONObject searchByLatLon(Double lat, Double lon) throws IOException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getSpecificAddressUrl())
+			.queryParam(LocationUtil.X, lon)
+			.queryParam(LocationUtil.Y, lat);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSBWithAuth(
+			uriComponentsBuilder, apiConfig.getSpecificAddressKey());
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		JSONArray jsonArray = (JSONArray) jsonObject.get("documents");
+		return (JSONObject) jsonArray.get(0);
+	}
+
 	public String covertWGS84ToTM(Double lat, Double lon) throws IOException {
 		String accessToken = getTMAccessToken();
 

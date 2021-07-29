@@ -17,7 +17,7 @@ public class WeatherService {
 
 	private final WeatherOpenApi weatherOpenApi;
 
-	public WeatherMainResDto getMain(Double lat, Double lon) throws IOException, java.text.ParseException, ParseException {
+	public WeatherMainResDto getMain(Double lat, Double lon) {
 
 		ResDto currents = getMainCurrent(lat, lon);
 		ResDto minmax = getMainMinMax(lat, lon);

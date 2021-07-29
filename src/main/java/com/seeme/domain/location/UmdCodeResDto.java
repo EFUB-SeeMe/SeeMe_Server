@@ -5,7 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AddressCode {
-	private final String address;
+public class UmdCodeResDto {
+	private final boolean res;
+	private final String umd;
 	private final String addressCode;
 }

@@ -12,7 +12,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class CovidService {
 		int compRegion = 0, compTotal = 0, coronicRegion = 0, coronicTotal = 0;
 		boolean isTotalRecentValueBinding = false, isRegionRecentValueBinding = false;
 
-		for (CovidDto covid : covidOpenApi.getMainApi()) {
+		for (CovidDto covid : covidOpenApi.getMainApi(location)) {
 			if (covid.getGubun().equals("합계")) {
 				if (!isTotalRecentValueBinding) {
 					coronicTotal = Integer.parseInt(covid.getIncDec());
@@ -59,19 +58,17 @@ public class CovidService {
 		List<Coronic> coronicList = new ArrayList<>();
 		int newCoronic = 0, totalCoronic = 0;
 
-		for (CovidRegionalDto regionCovid : covidOpenApi.getRegionalApi()) {
-			if (regionCovid.getGubun().equals(location)) {
-				coronicList.add(Coronic.builder()
-					.day(regionCovid.getStdDay())
-					.coronicByDay(
-						Integer.parseInt(regionCovid.getLocalOccCnt())
-							+ Integer.parseInt(regionCovid.getOverFlowCnt()))
-					.build());
-				if (totalCoronic < Integer.parseInt(regionCovid.getDefCnt())) {
-					newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt())
-						+ Integer.parseInt(regionCovid.getOverFlowCnt());
-					totalCoronic = Integer.parseInt(regionCovid.getDefCnt());
-				}
+		for (CovidRegionalDto regionCovid : covidOpenApi.getRegionalApi(location)) {
+			coronicList.add(Coronic.builder()
+				.day(regionCovid.getStdDay())
+				.coronicByDay(
+					Integer.parseInt(regionCovid.getLocalOccCnt())
+						+ Integer.parseInt(regionCovid.getOverFlowCnt()))
+				.build());
+			if (totalCoronic < Integer.parseInt(regionCovid.getDefCnt())) {
+				newCoronic = Integer.parseInt(regionCovid.getLocalOccCnt())
+					+ Integer.parseInt(regionCovid.getOverFlowCnt());
+				totalCoronic = Integer.parseInt(regionCovid.getDefCnt());
 			}
 		}
 		Collections.reverse(coronicList);

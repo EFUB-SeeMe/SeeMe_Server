@@ -1,8 +1,6 @@
 package com.seeme.service;
 
 import com.seeme.domain.ResDto;
-import com.seeme.domain.location.Address;
-import com.seeme.domain.location.AddressRepository;
 import com.seeme.domain.microdust.*;
 import com.seeme.service.api.MicrodustOpenApi;
 import com.seeme.util.ErrorMessage;
@@ -22,10 +20,10 @@ import static com.seeme.util.MicrodustUtil.*;
 public class MicrodustService {
 
 	private final MicrodustOpenApi microdustOpenApi;
-	private final AddressRepository addressRepository;
 
-	public MicrodustMainResDto getMain(List<String> measuringStationList) throws IOException, ParseException {
+	public MicrodustMainResDto getMain(List<String> measuringStationList) {
 		try {
+			System.out.println(measuringStationList);
 			List<Microdust> microdustList = getMainApi(measuringStationList);
 			return MicrodustMainResDto.builder()
 				.mainInfo(getMainResDto(microdustList))
@@ -119,9 +117,7 @@ public class MicrodustService {
 					.build();
 		}
 
-		// error case return;
 		Microdust microdust = microdustList.get(0);
-
 		return ResDto.builder()
 			.resultCode(200)
 			.errorMessage(ErrorMessage.SUCCESS)
@@ -204,60 +200,11 @@ public class MicrodustService {
 		return microdustDayResDtoList;
 	}
 
-	public List<String> getStationList(Double lat, Double lon) throws IOException, ParseException {
-		return microdustOpenApi.getStationList(lat, lon);
-	}
-
-	public Address getAddressByCode(String code) {
-		return addressRepository.findByBjdongCode(code);
-	}
-
-	/*
-	public MicrodustTimeResDto getFirstTime(List<String> measuringStationList) throws IOException, ParseException {
-		MicrodustTimeDto microdust = microdustOpenApi.getFirstTimeApi(measuringStationList);
-		return MicrodustTimeResDto.builder()
-			.time(microdust.getStartTime())
-			.pm10(microdust.getPm10Value())
-			.pm25(microdust.getPm25Value())
-			.build();
-	}
-
-	public List<MicrodustTimeResDto> getOtherTime(String location) throws IOException, ParseException {
-		List<MicrodustTimeResDto> microdustTimeResDtoList = new ArrayList<>();
-		for (MicrodustTimeDto microdustTimeDto : microdustOpenApi.getOtherTimeApi(location)) {
-			microdustTimeResDtoList.add(MicrodustTimeResDto.builder()
-				.time(microdustTimeDto.getStartTime())
-				.pm10(microdustTimeDto.getPm10Value())
-				.pm25(microdustTimeDto.getPm25Value())
-				.build()
-			);
+	public List<String> getStationList(Double lat, Double lon) {
+		try {
+			return microdustOpenApi.getStationList(lat, lon);
+		} catch (Exception e) {
+			return List.of("신촌로", "한강대로", "중구");
 		}
-		return microdustTimeResDtoList;
 	}
-
-	public String getAddress(Double lat, Double lon) throws Exception {
-		return locationApi.covertGpsToSpecificAddress(lat, lon);
-	}
-
-	@Transactional
-	public List<MicrodustMapResDto> getMap() throws IOException {
-		Map<String, MicrodustStation> map = new HashMap<>();
-		microdustStationRepository.findAll().forEach(station -> map.put(station.getName(), station));
-
-		List<MicrodustMapResDto> microdustMapList = new ArrayList<>();
-		for (Microdust microdust : microdustOpenApi.getMap()) {
-			MicrodustStation station = map.get(microdust.getStationName());
-			microdustMapList.add(MicrodustMapResDto.builder()
-				.stationName(microdust.getStationName())
-				.lat(station.getX())
-				.lon(station.getY())
-				.pm10(microdust.getPm10Value())
-				.pm25(microdust.getPm25Value())
-				.grade(microdust.getPm10Grade())
-				.build());
-		}
-
-		return microdustMapList;
-	}
-	*/
 }

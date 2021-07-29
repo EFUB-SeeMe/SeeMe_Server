@@ -41,7 +41,7 @@ public class WeatherOpenApi {
 		Integer iconNumber;
 		String icon, iconText, comp;
 		iconNumber = Integer.parseInt(jsonObject.get("WeatherIcon").toString());
-		icon = WeatherUtil.getIcon(iconNumber);
+		icon = WeatherUtil.getWeatherIcon(iconNumber);
 		iconText = WeatherUtil.getIconDesc(iconNumber);
 
 		JSONObject tempValueObject = (JSONObject) jsonObject.get("Temperature");
@@ -129,7 +129,7 @@ public class WeatherOpenApi {
 				WeatherTempResDto.builder()
 					.time(time)
 					.temperature(temperature)
-					.icon(WeatherUtil.getWeatherIcon(icon))
+					.icon(WeatherUtil.getWeatherIcon(Integer.parseInt(icon)))
 					.build());
 		}
 
@@ -161,7 +161,7 @@ public class WeatherOpenApi {
 					.time(time)
 					.rain((int)Double.parseDouble(rainAmount))
 					.percent(Integer.parseInt(percent))
-					.icon(WeatherUtil.getRainIcon(Integer.parseInt(percent)))
+					.icon(WeatherUtil.getRainIcon(Double.parseDouble(percent)))
 					.build());
 		}
 
@@ -193,11 +193,11 @@ public class WeatherOpenApi {
 			JSONObject minObjects = (JSONObject) tempObjects.get("Minimum");
 
 			JSONObject AMObjects = (JSONObject) dailyForecast.get("Day");
-			String AMIcon = WeatherUtil.getWeatherIcon(String.valueOf(AMObjects.get("Icon")));
+			String AMIcon = WeatherUtil.getWeatherIcon(Integer.parseInt(AMObjects.get("Icon").toString()));
 			JSONObject AMRainObject = (JSONObject) AMObjects.get("Rain");
 
 			JSONObject PMObjects = (JSONObject) dailyForecast.get("Day");
-			String PMIcon = WeatherUtil.getWeatherIcon(String.valueOf(PMObjects.get("Icon")));
+			String PMIcon = WeatherUtil.getWeatherIcon(Integer.parseInt(PMObjects.get("Icon").toString()));
 			JSONObject PMRainObject = (JSONObject) PMObjects.get("Rain");
 
 			week.add(
