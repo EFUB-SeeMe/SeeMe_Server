@@ -32,7 +32,7 @@ public class CovidController {
 		}
 	}
 
-	@GetMapping("/national")
+	@GetMapping("/nation")
 	public ResponseEntity<Object> getNational() {
 		try {
 			return ResponseEntity.ok().body(covidService.getRegional("합계"));
@@ -43,7 +43,7 @@ public class CovidController {
 
 	}
 
-	@GetMapping("/regional")
+	@GetMapping("/region")
 	public ResponseEntity<Object> getRegional(@RequestParam(required = false) String location,
 		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		try {
