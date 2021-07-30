@@ -9,5 +9,4 @@ import lombok.Getter;
 public class WeatherTimeResDto {
 	private final ResDto tempInfo;
 	private final ResDto rainInfo;
-	private final ResDto ootdInfo;
 }

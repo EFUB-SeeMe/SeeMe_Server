@@ -1,17 +1,23 @@
 package com.seeme.domain.weather;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Getter
-@Builder
+@NoArgsConstructor
+@Entity
 public class Clothes {
-	private final String item1;
-	private final String item1Desc;
-	private final String item2;
-	private final String item2Desc;
-	private final String item3;
-	private final String item3Desc;
-	private final String item4;
-	private final String item4Desc;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private Integer iconNum;
+	private Integer age;
+	private Integer temp;
+	private String category;
+	private String description;
 }

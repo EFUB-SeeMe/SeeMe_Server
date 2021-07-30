@@ -5,8 +5,6 @@ import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import com.seeme.domain.weather.WeatherRainResDto;
-import com.seeme.domain.weather.WeatherTempResDto;
 import com.seeme.util.JSONParsingUtil;
 import org.json.simple.JSONArray;
 
@@ -16,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
-import java.text.ParseException;
-
 @Controller
 @AllArgsConstructor
 @RequestMapping("weather")
@@ -25,7 +22,7 @@ public class WeatherController {
 	@GetMapping("/main")
 	public ResponseEntity<Object> getMain(
 		@RequestParam(required = false) String code,
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) throws IOException, ParseException, org.json.simple.parser.ParseException {
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		if (code != null) {
 			Address address = locationService.getAddressByCode(code);
 			return ResponseEntity.ok().body(weatherService.getMain(
@@ -40,7 +37,7 @@ public class WeatherController {
 	@GetMapping("/time")
 	public ResponseEntity<Object> getTime(
 		@RequestParam(required = false) String code,
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) throws IOException {
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
 		if (code != null) {
 			Address address = locationService.getAddressByCode(code);
 			return ResponseEntity.ok().body(weatherService.getTime(

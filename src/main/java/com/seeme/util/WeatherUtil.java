@@ -19,6 +19,8 @@ public class WeatherUtil {
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/";
 	public static final String RAIN_ICON_PREFIX =
 		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/weather/rain/";
+	public static final String CLOTHES_ICON_PREFIX =
+		"https://seeme-icon.s3.ap-northeast-2.amazonaws.com/icon/clothes/";
 
 	public static String getWeatherIcon(Integer iconNumber) {
 		String icon;
@@ -176,4 +178,7 @@ public class WeatherUtil {
 			return "Night";
 	}
 
+	public static String getClothesIcon(Integer iconNum4) {
+		return CLOTHES_ICON_PREFIX + iconNum4 + ".png";
+	}
 }
