@@ -1,6 +1,5 @@
 package com.seeme.domain.location;
 
-import com.seeme.util.CovidUtil;
 import com.seeme.util.LocationUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

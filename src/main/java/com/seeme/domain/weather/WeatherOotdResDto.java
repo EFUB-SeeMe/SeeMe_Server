@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class WeatherOotdResDto {
-	private final Clothes age10;
-	private final Clothes age20;
-	private final Clothes age30;
-	private final Clothes age40;
-	private final Clothes age50;
+	private final ClothesResDto age10;
+	private final ClothesResDto age20;
+	private final ClothesResDto age30;
+	private final ClothesResDto age40;
+	private final ClothesResDto age50;
 }
