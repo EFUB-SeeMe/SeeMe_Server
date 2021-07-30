@@ -174,8 +174,6 @@ public class WeatherService {
 			.build();
 
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
-			.umbrellaIcon("https://~umbrella.png")
-			.umbrellaFlag(true)
 			.age10(clothes)
 			.age20(clothes)
 			.age30(clothes)
