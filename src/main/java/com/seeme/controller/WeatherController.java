@@ -40,7 +40,7 @@ public class WeatherController {
 	@GetMapping("/time")
 	public ResponseEntity<Object> getTime(
 		@RequestParam(required = false) String code,
-		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) {
+		@RequestParam(required = false) Double lat, @RequestParam(required = false) Double lon) throws IOException {
 		if (code != null) {
 			Address address = locationService.getAddressByCode(code);
 			return ResponseEntity.ok().body(weatherService.getTime(

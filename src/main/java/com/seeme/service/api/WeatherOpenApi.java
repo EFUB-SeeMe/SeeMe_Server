@@ -125,38 +125,7 @@ public class WeatherOpenApi {
 		return weather;
 	}
 
-	public List<WeatherTempResDto> getTimeTempApi(String locationCode) throws IOException {
-		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
-			.fromUriString(apiConfig.getWeatherTimeTempUrl())
-			.path(locationCode)
-			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
-			.queryParam(WeatherUtil.LANGUAGE, "ko")
-			.queryParam(WeatherUtil.METRIC, true);
-
-		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
-		JSONArray jsonArray = (JSONArray) JSONValue.parse(sb.toString());
-
-		List<WeatherTempResDto> temp = new ArrayList<>();
-		for (Object object : jsonArray) {
-			JSONObject jsonObject = (JSONObject) object;
-			String time = WeatherUtil.getTime(jsonObject.get("DateTime").toString());
-			String temperature = ((JSONObject)
-				jsonObject.get("Temperature")).get("Value").toString() + "°";
-			String icon = jsonObject.get("WeatherIcon").toString();
-
-			temp.add(
-				WeatherTempResDto.builder()
-					.time(time)
-					.temperature(temperature)
-					.icon(WeatherUtil.getWeatherIcon(Integer.parseInt(icon)))
-					.build());
-		}
-
-		return temp;
-	}
-
-
-	public List<WeatherRainResDto> getTimeRainApi(String locationCode) throws IOException, NullPointerException {
+	public List<WeatherTime> getTimeApi(String locationCode) throws IOException, NullPointerException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getWeatherTimeTempUrl())
 			.path(locationCode)
@@ -168,22 +137,76 @@ public class WeatherOpenApi {
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
 		JSONArray jsonArray = (JSONArray) JSONValue.parse(sb.toString());
 
-		List<WeatherRainResDto> rain = new ArrayList<>();
+		List<WeatherTime> times = new ArrayList<>();
 		for (Object object : jsonArray) {
 			JSONObject jsonObject = (JSONObject) object;
 			String time = WeatherUtil.getTime(jsonObject.get("DateTime").toString());
 			String rainAmount = ((JSONObject) jsonObject.get("Rain")).get("Value").toString();
 			String percent = jsonObject.get("RainProbability").toString();
+			String temperature = ((JSONObject)
+				jsonObject.get("Temperature")).get("Value").toString() + "°";
+			String tempIcon = jsonObject.get("WeatherIcon").toString();
 
-			rain.add(
-				WeatherRainResDto.builder()
+			times.add(
+				WeatherTime.builder()
 					.time(time)
-					.rain((int) Double.parseDouble(rainAmount))
-					.percent(Integer.parseInt(percent))
-					.icon(WeatherUtil.getRainIcon(Double.parseDouble(percent)))
+					.rain(rainAmount)
+					.percent(percent)
+					.temperature(temperature)
+					.rainIcon(WeatherUtil.getRainIcon(Double.parseDouble(percent)))
+					.tempIcon(WeatherUtil.getWeatherIcon(Integer.parseInt(tempIcon)))
 					.build());
 		}
 
-		return rain;
+		return times;
+	}
+
+	public List<WeatherWeekResDto> getWeekApi(String locationCode) throws IOException, java.text.ParseException, ParseException {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+			.fromUriString(apiConfig.getWeatherForecastUrl() + locationCode)
+			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.LANGUAGE, "ko")
+			.queryParam(WeatherUtil.DETAILS, "true")
+			.queryParam(WeatherUtil.METRIC, "true");
+		URL url = new URL(uriComponentsBuilder.build().toUriString());
+		System.out.println(url);
+
+		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		JSONArray forecastArray = (JSONArray) jsonObject.get("DailyForecasts");
+		List<WeatherWeekResDto> week = new ArrayList<>();
+
+		for (int idx = 0; idx < 5; idx++) {
+			JSONObject dailyForecast = (JSONObject) forecastArray.get(idx);
+			String day = dailyForecast.get("Date").toString();
+			String date = WeatherUtil.getDayOfWeek(day);
+
+			JSONObject tempObjects = (JSONObject) dailyForecast.get("Temperature");
+			JSONObject maxObjects = (JSONObject) tempObjects.get("Maximum");
+			JSONObject minObjects = (JSONObject) tempObjects.get("Minimum");
+
+			JSONObject AMObjects = (JSONObject) dailyForecast.get("Day");
+			String AMIcon = WeatherUtil.getWeatherIcon(Integer.parseInt(AMObjects.get("Icon").toString()));
+			JSONObject AMRainObject = (JSONObject) AMObjects.get("Rain");
+
+			JSONObject PMObjects = (JSONObject) dailyForecast.get("Day");
+			String PMIcon = WeatherUtil.getWeatherIcon(Integer.parseInt(PMObjects.get("Icon").toString()));
+			JSONObject PMRainObject = (JSONObject) PMObjects.get("Rain");
+
+			week.add(
+				WeatherWeekResDto.builder()
+					.day(date)
+					.amRain((int) Double.parseDouble(AMRainObject.get("Value").toString()))
+					.amRainPercent(Integer.parseInt(AMObjects.get("RainProbability").toString()))
+					.amIcon(AMIcon)
+					.pmRain((int) Double.parseDouble(PMRainObject.get("Value").toString()))
+					.pmRainPercent(Integer.parseInt(PMObjects.get("RainProbability").toString()))
+					.pmIcon(PMIcon)
+					.max((int) Double.parseDouble(maxObjects.get("Value").toString()))
+					.min((int) Double.parseDouble(minObjects.get("Value").toString()))
+					.build()
+			);
+		}
+		return week;
 	}
 }

@@ -99,65 +99,86 @@ public class WeatherService {
 			.build();
 	}
 
-	public WeatherTimeResDto getTime(Double lat, Double lon) {
-		ResDto temp = getTempResDto(lat, lon);
-		ResDto rain = getRainResDto(lat, lon);
-		ResDto ootd = getOotdResDto(temp, rain);
-		return WeatherTimeResDto.builder()
-			.tempInfo(temp)
-			.rainInfo(rain)
-			.ootdInfo(ootd)
+	public WeatherTimeResDto getTime(Double lat, Double lon) throws IOException {
+		try {
+			List<WeatherTime> weatherTimeList = weatherOpenApi.getTimeApi(
+				weatherOpenApi.getLocationApi(lat, lon));
+			return WeatherTimeResDto.builder()
+				.tempInfo(getTempResDto(weatherTimeList))
+				.rainInfo(getRainResDto(weatherTimeList))
+				.ootdInfo(getOotdResDto(
+					getTempResDto(weatherTimeList), getRainResDto(weatherTimeList)))
+				.build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			ResDto resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.document(null)
+				.build();
+
+			return WeatherTimeResDto.builder()
+				.tempInfo(resDto).rainInfo(resDto).ootdInfo(resDto).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResDto resDto = ResDto.builder()
+				.resultCode(500)
+				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.document(null)
+				.build();
+
+			return WeatherTimeResDto.builder()
+				.tempInfo(resDto).rainInfo(resDto).ootdInfo(resDto).build();
+		}
+	}
+
+	private ResDto getTempResDto(List<WeatherTime> weatherTimeList) {
+
+		List<WeatherTempResDto> weatherTempResDtoList = new ArrayList<>();
+
+		for (WeatherTime weatherTime : weatherTimeList) {
+
+			if (!weatherTime.getTime().equals("-") && !weatherTime.getTempIcon().equals("-") &&
+				!weatherTime.getTemperature().equals("-"))
+
+				weatherTempResDtoList.add(
+					WeatherTempResDto.builder()
+						.time(weatherTime.getTime())
+						.temperature(weatherTime.getTemperature())
+						.icon(weatherTime.getTempIcon())
+						.build());
+		}
+
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(weatherTempResDtoList)
 			.build();
 	}
 
-	private ResDto getTempResDto(Double lat, Double lon) {
-		try {
-			List<WeatherTempResDto> temp = weatherOpenApi.getTimeTempApi(
-				weatherOpenApi.getLocationApi(lat, lon)); // add exception;
-			return ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(temp)
-				.build();
-		} catch (IOException e) {
-			return ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
-		}
-	}
+	private ResDto getRainResDto(List<WeatherTime> weatherTimeList) {
 
-	private ResDto getRainResDto(Double lat, Double lon) {
-		try {
-			List<WeatherRainResDto> rain = weatherOpenApi.getTimeRainApi(
-				weatherOpenApi.getLocationApi(lat, lon)); // add exception;
-			return ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(rain)
-				.build();
-		} catch (IOException e) {
-			return ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
-				.document(null)
-				.build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResDto.builder()
-				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
-				.document(null)
-				.build();
+		List<WeatherRainResDto> weatherRainResDtoList = new ArrayList<>();
+
+		for (WeatherTime weatherTime : weatherTimeList) {
+
+			if (!weatherTime.getTime().equals("-") && !weatherTime.getRain().equals("-") &&
+				!weatherTime.getRainIcon().equals("-") && !weatherTime.getPercent().equals("-"))
+
+				weatherRainResDtoList.add(
+					WeatherRainResDto.builder()
+						.time(weatherTime.getTime())
+						.rain((int) Double.parseDouble(weatherTime.getRain()))
+						.percent(Integer.parseInt(weatherTime.getPercent()))
+					.icon(weatherTime.getRainIcon())
+					.build());
 		}
+
+		return ResDto.builder()
+			.resultCode(200)
+			.errorMessage(ErrorMessage.SUCCESS)
+			.document(weatherRainResDtoList)
+			.build();
 	}
 
 	private ResDto getOotdResDto(ResDto temp, ResDto main) {
