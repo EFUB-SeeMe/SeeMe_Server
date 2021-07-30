@@ -9,6 +9,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -139,67 +140,52 @@ public class WeatherService {
 	}
 
 	private ResDto getTempResDto(List<WeatherTime> weatherTimeList) {
+
+		List<WeatherTempResDto> weatherTempResDtoList = new ArrayList<>();
+
 		for (WeatherTime weatherTime : weatherTimeList) {
 
 			if (!weatherTime.getTime().equals("-") && !weatherTime.getTempIcon().equals("-") &&
 				!weatherTime.getTemperature().equals("-"))
 
-			return ResDto.builder()
-				.resultCode(200)
-				.errorMessage(ErrorMessage.SUCCESS)
-				.document(WeatherTempResDto.builder()
-					.time(weatherTime.getTime())
-					.temperature(weatherTime.getTemperature())
-					.icon(weatherTime.getTempIcon())
-					.build())
-				.build();
+				weatherTempResDtoList.add(
+					WeatherTempResDto.builder()
+						.time(weatherTime.getTime())
+						.temperature(weatherTime.getTemperature())
+						.icon(weatherTime.getTempIcon())
+						.build());
 		}
-
-		WeatherTime weatherTime = weatherTimeList.get(0);
 
 		return ResDto.builder()
 			.resultCode(200)
 			.errorMessage(ErrorMessage.SUCCESS)
-			.document(WeatherTempResDto.builder()
-				.time(weatherTime.getTime())
-				.temperature(weatherTime.getTemperature())
-				.icon(weatherTime.getTempIcon())
-				.build())
+			.document(weatherTempResDtoList)
 			.build();
-
 	}
 
 	private ResDto getRainResDto(List<WeatherTime> weatherTimeList) {
+
+		List<WeatherRainResDto> weatherRainResDtoList = new ArrayList<>();
+
 		for (WeatherTime weatherTime : weatherTimeList) {
 
 			if (!weatherTime.getTime().equals("-") && !weatherTime.getRain().equals("-") &&
 				!weatherTime.getRainIcon().equals("-") && !weatherTime.getPercent().equals("-"))
 
-				return ResDto.builder()
-					.resultCode(200)
-					.errorMessage(ErrorMessage.SUCCESS)
-					.document(WeatherRainResDto.builder()
+				weatherRainResDtoList.add(
+					WeatherRainResDto.builder()
 						.time(weatherTime.getTime())
-						.rain((int)Double.parseDouble(weatherTime.getRain()))
+						.rain((int) Double.parseDouble(weatherTime.getRain()))
 						.percent(Integer.parseInt(weatherTime.getPercent()))
-						.icon(weatherTime.getRainIcon())
-						.build())
-					.build();
+					.icon(weatherTime.getRainIcon())
+					.build());
 		}
-
-		WeatherTime weatherTime = weatherTimeList.get(0);
 
 		return ResDto.builder()
 			.resultCode(200)
 			.errorMessage(ErrorMessage.SUCCESS)
-			.document(WeatherRainResDto.builder()
-				.time(weatherTime.getTime())
-				.rain(Integer.parseInt(weatherTime.getRain()))
-				.percent(Integer.parseInt(weatherTime.getPercent()))
-				.icon(weatherTime.getRainIcon())
-				.build())
+			.document(weatherRainResDtoList)
 			.build();
-
 	}
 
 	private ResDto getOotdResDto(ResDto temp, ResDto main) {
