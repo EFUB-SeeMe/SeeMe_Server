@@ -119,7 +119,7 @@ public class WeatherUtil {
 		if (compareVal <= -1 )
 			return "오늘은 어제보다 "+compareVal+"도 낮습니다.";
 		else if (compareVal >= 1)
-			return "오늘은 어제보다"+compareVal+"도 높습니다.";
+			return "오늘은 어제보다 "+compareVal+"도 높습니다.";
 		else
 			return "오늘은 어제와 비슷한 날씨가 예상됩니다.";
 	}
@@ -202,19 +202,19 @@ public class WeatherUtil {
 		if (temp <= 4)
 			temp = 4;
 		else if (temp <=8)
-			temp = 8;
+			temp = 5;
 		else if (temp <= 11)
-			temp = 11;
+			temp = 9;
 		else if (temp <= 16)
-			temp = 16;
+			temp = 12;
 		else if (temp <= 19)
-			temp = 19;
+			temp = 17;
 		else if (temp <= 22)
-			temp = 22;
+			temp = 20;
 		else if (temp <= 27)
-			temp = 27;
+			temp = 23;
 		else if (temp <= 32)
-			temp = 32;
+			temp = 28;
 		else
 			temp = 33;
 		return temp;
