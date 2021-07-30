@@ -180,7 +180,7 @@ public class WeatherService {
 					.errorMessage(ErrorMessage.SUCCESS)
 					.document(WeatherRainResDto.builder()
 						.time(weatherTime.getTime())
-						.rain(Integer.parseInt(weatherTime.getRain()))
+						.rain((int)Double.parseDouble(weatherTime.getRain()))
 						.percent(Integer.parseInt(weatherTime.getPercent()))
 						.icon(weatherTime.getRainIcon())
 						.build())
