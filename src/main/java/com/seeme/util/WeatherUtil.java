@@ -108,7 +108,7 @@ public class WeatherUtil {
 				iconDesc = "바람";
 				break;
 			default:
-				iconDesc = "정보 없음";
+				iconDesc = "흐림";
 		}
 		return iconDesc;
 	}
