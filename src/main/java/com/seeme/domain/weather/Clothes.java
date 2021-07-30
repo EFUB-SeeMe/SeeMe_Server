@@ -6,10 +6,12 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Clothes {
-	private final int age;
-	private final String top;
-	private final String bottom;
-	private final String shoes;
-	private final String desc;
-	private final String reason;
+	private final String item1;
+	private final String item1Desc;
+	private final String item2;
+	private final String item2Desc;
+	private final String item3;
+	private final String item3Desc;
+	private final String item4;
+	private final String item4Desc;
 }

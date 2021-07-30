@@ -1,17 +1,12 @@
 package com.seeme.service.api;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.seeme.domain.weather.*;
 import com.seeme.util.WeatherUtil;
-import javassist.bytecode.SignatureAttribute;
 import lombok.AllArgsConstructor;
-import net.bytebuddy.description.method.MethodDescription;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import com.seeme.domain.weather.WeatherRainResDto;
 import com.seeme.domain.weather.WeatherTempResDto;
-import com.seeme.domain.weather.WeatherWeekResDto;
 import com.seeme.util.JSONParsingUtil;
 import org.json.simple.JSONArray;
 
@@ -21,10 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
-import java.lang.reflect.Type;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -33,7 +25,7 @@ public class WeatherOpenApi {
 
 	private final ApiConfig apiConfig;
 
-	public WeatherMain getMainApi(String locationCode) throws IOException, ParseException {
+	public WeatherMain getMainApi(String locationCode) throws IOException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getWeatherMainUrl() + locationCode)
 			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())

@@ -1,13 +1,10 @@
 package com.seeme.service;
 
-import com.google.gson.Gson;
 import com.seeme.domain.ResDto;
 import com.seeme.domain.weather.*;
 import com.seeme.service.api.WeatherOpenApi;
 import com.seeme.util.ErrorMessage;
-import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
@@ -166,17 +163,22 @@ public class WeatherService {
 	private ResDto getOotdResDto(ResDto temp, ResDto main) {
 		// TODO: add clothes recommendation logic to here page
 		Clothes clothes = Clothes.builder()
-			.age(20)
-			.top("top.png")
-			.bottom("bottom.png")
-			.shoes("shoes.png")
-			.desc("아이템 설명")
-			.reason("추천 이유")
+			.item1("https://~.png")
+			.item1Desc("하와이안 셔츠")
+			.item2("https://~.png")
+			.item2Desc("반바지")
+			.item3("https://~.png")
+			.item3Desc("선크림")
+			.item4("https://~.png")
+			.item4Desc("샌들")
 			.build();
+
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
-			.umbrellaIcon("umbrella.png")
-			.umbrellaFlag(true)
-			.clothes(clothes)
+			.age10(clothes)
+			.age20(clothes)
+			.age30(clothes)
+			.age40(clothes)
+			.age50(clothes)
 			.build();
 
 		return ResDto.builder()

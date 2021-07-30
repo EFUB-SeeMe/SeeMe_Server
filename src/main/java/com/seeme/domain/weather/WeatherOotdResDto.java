@@ -6,7 +6,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class WeatherOotdResDto {
-	private final String umbrellaIcon;
-	private final Boolean umbrellaFlag;
-	private final Clothes clothes;
+	private final Clothes age10;
+	private final Clothes age20;
+	private final Clothes age30;
+	private final Clothes age40;
+	private final Clothes age50;
 }
