@@ -81,8 +81,6 @@ public class WeatherOpenApi {
 		return jsonObject.get("Key").toString();
 	}
 
-	public WeatherMainMinMax getMainMinMaxApi(String locationCode) throws IOException, ParseException { }
-
 	public List<Weather> getForecastApi(String locationCode) throws IOException, java.text.ParseException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getWeatherForecastUrl() + locationCode)
@@ -110,6 +108,30 @@ public class WeatherOpenApi {
 			String AMIcon = WeatherUtil.getWeatherIcon(Integer.parseInt(AMObjects.get("Icon").toString()));
 			JSONObject AMRainObject = (JSONObject) AMObjects.get("Rain");
 
+			JSONObject PMObjects = (JSONObject) dailyForecast.get("Night");
+			String PMIcon = WeatherUtil.getWeatherIcon(Integer.parseInt(PMObjects.get("Icon").toString()));
+			JSONObject PMRainObject = (JSONObject) PMObjects.get("Rain");
+
+			String time = WeatherUtil.getAMPM(day);
+			JSONObject descObject = (JSONObject) dailyForecast.get(time);
+
+			weather.add(
+				Weather.builder()
+					.date(date)
+					.amRain((int) Double.parseDouble(AMRainObject.get("Value").toString()))
+					.amRainPercent(Integer.parseInt(AMObjects.get("RainProbability").toString()))
+					.amIcon(AMIcon)
+					.pmRain((int) Double.parseDouble(PMRainObject.get("Value").toString()))
+					.pmRainPercent(Integer.parseInt(PMObjects.get("RainProbability").toString()))
+					.pmIcon(PMIcon)
+					.max((int) Double.parseDouble(maxObjects.get("Value").toString()))
+					.min((int) Double.parseDouble(minObjects.get("Value").toString()))
+					.desc(descObject.get("LongPhrase").toString())
+					.build()
+			);
+		}
+		return weather;
+	}
 
 	public List<WeatherTime> getTimeApi(String locationCode) throws IOException, NullPointerException {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
