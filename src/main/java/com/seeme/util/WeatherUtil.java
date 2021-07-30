@@ -1,6 +1,6 @@
 package com.seeme.util;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -64,7 +64,7 @@ public class WeatherUtil {
 			case 33: case 34: case 35: case 36: case 37:
 				icon = "Moon";
 				break;
-			default: // TODO: add default error icon
+			default:
 				icon = "Cloud";
 		}
 		return WEATHER_ICON_PREFIX + icon + ".png";
@@ -180,5 +180,43 @@ public class WeatherUtil {
 
 	public static String getClothesIcon(Integer iconNum4) {
 		return CLOTHES_ICON_PREFIX + iconNum4 + ".png";
+	}
+
+	public static String getObjectValue(Object obj, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+		Field field = obj.getClass().getDeclaredField(fieldName);
+		field.setAccessible(true);
+		return field.get(obj).toString();
+	}
+
+	public static String getTime() {
+		Calendar cal = Calendar.getInstance();
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		if (hour >= 5 && hour <= 12)
+			return "minmax";
+		else
+			return "curr";
+	}
+
+	public static int getTemp(String temperature){
+		int temp = Integer.parseInt(temperature);
+		if (temp <= 4)
+			temp = 4;
+		else if (temp <=8)
+			temp = 8;
+		else if (temp <= 11)
+			temp = 11;
+		else if (temp <= 16)
+			temp = 16;
+		else if (temp <= 19)
+			temp = 19;
+		else if (temp <= 22)
+			temp = 22;
+		else if (temp <= 27)
+			temp = 27;
+		else if (temp <= 32)
+			temp = 32;
+		else
+			temp = 33;
+		return temp;
 	}
 }
