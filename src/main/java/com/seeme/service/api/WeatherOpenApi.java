@@ -85,8 +85,8 @@ public class WeatherOpenApi {
 		JSONArray forecastArray = (JSONArray) jsonObject.get("DailyForecasts");
 
 		List<Weather> weather = new ArrayList<>();
-		for (int idx = 0; idx < 5; idx++) {
-			JSONObject dailyForecast = (JSONObject) forecastArray.get(idx);
+		for (Object object : forecastArray) {
+			JSONObject dailyForecast = (JSONObject) object;
 
 			String day = dailyForecast.get("Date").toString();
 			String date = WeatherUtil.getDayOfWeek(day);
