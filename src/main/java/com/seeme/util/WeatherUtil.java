@@ -3,6 +3,7 @@ package com.seeme.util;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -117,7 +118,7 @@ public class WeatherUtil {
 
 	public static String getComp(Integer compareVal) {
 		if (compareVal <= -1 )
-			return "오늘은 어제보다 "+compareVal+"도 낮습니다.";
+			return "오늘은 어제보다 "+Math.abs(compareVal)+"도 낮습니다.";
 		else if (compareVal >= 1)
 			return "오늘은 어제보다 "+compareVal+"도 높습니다.";
 		else
@@ -135,13 +136,12 @@ public class WeatherUtil {
 
 	public static String getDayOfWeek(String day) throws ParseException {
 
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = transFormat.parse(day);
 		Calendar cal = Calendar.getInstance();
-		String format = "yyyy-mm-dd";
-		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		Date date = dateFormat.parse(day.substring(0, 10));
 		cal.setTime(date);
 
-		int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+		int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
 		String dayOfWeek = "";
 		switch (dayNum) {
 			case 1:
