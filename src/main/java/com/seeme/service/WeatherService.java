@@ -3,7 +3,7 @@ package com.seeme.service;
 import com.seeme.domain.ResDto;
 import com.seeme.domain.weather.*;
 import com.seeme.service.api.WeatherOpenApi;
-import com.seeme.util.ErrorMessage;
+import com.seeme.util.ErrorMessageUtil;
 import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class WeatherService {
 			e.printStackTrace();
 			ResDto resDto = ResDto.builder()
 				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.errorMessage(ErrorMessageUtil.JSON_PARSING_ERROR)
 				.document(null)
 				.build();
 			return WeatherMainResDto.builder()
@@ -51,7 +51,7 @@ public class WeatherService {
 			e.printStackTrace();
 			ResDto resDto = ResDto.builder()
 				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.errorMessage(ErrorMessageUtil.UNKNOWN_ERROR)
 				.document(null)
 				.build();
 			return WeatherMainResDto.builder()
@@ -64,7 +64,7 @@ public class WeatherService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(WeatherMainMinMax.builder()
 				.min(weather.getMin())
 				.max(weather.getMax())
@@ -76,7 +76,7 @@ public class WeatherService {
 	private ResDto getCurrentResDto(WeatherMain current) {
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(current)
 			.build();
 	}
@@ -101,7 +101,7 @@ public class WeatherService {
 		}
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(week)
 			.build();
 	}
@@ -118,7 +118,7 @@ public class WeatherService {
 			e.printStackTrace();
 			ResDto resDto = ResDto.builder()
 				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.errorMessage(ErrorMessageUtil.JSON_PARSING_ERROR)
 				.document(null)
 				.build();
 
@@ -128,7 +128,7 @@ public class WeatherService {
 			e.printStackTrace();
 			ResDto resDto = ResDto.builder()
 				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.errorMessage(ErrorMessageUtil.UNKNOWN_ERROR)
 				.document(null)
 				.build();
 
@@ -153,7 +153,7 @@ public class WeatherService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(weatherTempResDtoList)
 			.build();
 	}
@@ -175,7 +175,7 @@ public class WeatherService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(weatherRainResDtoList)
 			.build();
 	}
@@ -210,7 +210,7 @@ public class WeatherService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(ootd)
 			.build();
 	}
