@@ -144,15 +144,12 @@ public class WeatherService {
 
 		for (WeatherTime weatherTime : weatherTimeList) {
 
-			if (!weatherTime.getTime().equals("-") && !weatherTime.getTempIcon().equals("-") &&
-				!weatherTime.getTemperature().equals("-"))
-
-				weatherTempResDtoList.add(
-					WeatherTempResDto.builder()
-						.time(weatherTime.getTime())
-						.temperature(weatherTime.getTemperature())
-						.icon(weatherTime.getTempIcon())
-						.build());
+			weatherTempResDtoList.add(
+				WeatherTempResDto.builder()
+					.time(weatherTime.getTime())
+					.temperature(weatherTime.getTemperature())
+					.icon(weatherTime.getTempIcon())
+					.build());
 		}
 
 		return ResDto.builder()
@@ -168,16 +165,13 @@ public class WeatherService {
 
 		for (WeatherTime weatherTime : weatherTimeList) {
 
-			if (!weatherTime.getTime().equals("-") && !weatherTime.getRain().equals("-") &&
-				!weatherTime.getRainIcon().equals("-") && !weatherTime.getPercent().equals("-"))
-
-				weatherRainResDtoList.add(
-					WeatherRainResDto.builder()
-						.time(weatherTime.getTime())
-						.rain((int) Double.parseDouble(weatherTime.getRain()))
-						.percent(Integer.parseInt(weatherTime.getPercent()))
-						.icon(weatherTime.getRainIcon())
-						.build());
+			weatherRainResDtoList.add(
+				WeatherRainResDto.builder()
+					.time(weatherTime.getTime())
+					.rain((int) Double.parseDouble(weatherTime.getRain()))
+					.percent(Integer.parseInt(weatherTime.getPercent()))
+					.icon(weatherTime.getRainIcon())
+					.build());
 		}
 
 		return ResDto.builder()
