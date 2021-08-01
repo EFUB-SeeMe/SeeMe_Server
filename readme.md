@@ -11,9 +11,9 @@
 
 
 
-## 프로젝트 구조 및 설명
+## ☁ 프로젝트 구조 및 설명
 
-## 기능
+## ☁ 기능
 
 ### 위치 API
 
@@ -42,13 +42,13 @@
 
     
 
-## 기술 스택
+## ☁ 기술 스택
 
-[![Spring boot](https://img.shields.io/badge/Springboot-6DB33F?style=round-square&logo=Spring boot&logoColor=white)](https://spring.io/)</a> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>  <img src="https://img.shields.io/badge/Amazon EC2-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/></a> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/></a> <img src="https://img.shields.io/badge/GitHub -181717?style=flat-square&logo=GitHub&logoColor=white"/></a> 
+<img src=https://img.shields.io/badge/Springboot-6DB33F?style=round-square&logo=Spring boot&logoColor=white />(https://spring.io/)</a> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>  <img src="https://img.shields.io/badge/Amazon EC2-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/></a> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/></a> <img src="https://img.shields.io/badge/GitHub -181717?style=flat-square&logo=GitHub&logoColor=white"/></a> 
 
 
 
-## 라이브러리
+## ☁ 라이브러리
 
 1. lombok
 2. spring web
@@ -59,7 +59,7 @@
 
 
 
-## 프로젝트 구조
+## ☁ 프로젝트 구조
 
 ### 폴더 구조
 
@@ -179,12 +179,12 @@
 
 
 
-## ERD
+## ☁ ERD
 
 ![img](https://lh6.googleusercontent.com/ZP55kR8IXG16yhJKRJPfzXQko1Qg5817NuIjkQL58bWwq-kKp37HeBe-xApRLmcPFyxH0UU7AU7HlDM_qwDKKjAmWZlEvruYErU0o3VemNH5_93zoI2agTPH5aXY6B7RZdExdBIX)
 
 
 
-## [API 명세서]([**https://ssk0967.gitbook.io/seeme-api/**](https://ssk0967.gitbook.io/seeme-api/))
+## ☁ [API 명세서]([**https://ssk0967.gitbook.io/seeme-api/**](https://ssk0967.gitbook.io/seeme-api/))
 
 링크 참고
