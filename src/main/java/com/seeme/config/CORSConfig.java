@@ -13,5 +13,4 @@ public class CORSConfig implements WebMvcConfigurer {
 			.allowedMethods("GET")
 			.maxAge(3000);
 	}
-
 }

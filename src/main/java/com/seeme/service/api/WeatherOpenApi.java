@@ -141,8 +141,7 @@ public class WeatherOpenApi {
 			String time = WeatherUtil.getTime(jsonObject.get("DateTime").toString());
 			String rainAmount = ((JSONObject) jsonObject.get("Rain")).get("Value").toString();
 			String percent = jsonObject.get("RainProbability").toString();
-			String temperature = ((JSONObject)
-				jsonObject.get("Temperature")).get("Value").toString() + "°";
+			String temperature = ((JSONObject) jsonObject.get("Temperature")).get("Value").toString() + "°";
 			String tempIcon = jsonObject.get("WeatherIcon").toString();
 
 			times.add(
