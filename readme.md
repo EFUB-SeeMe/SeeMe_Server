@@ -21,26 +21,33 @@
 
 # 🌈 프로젝트 구조 및 설명
 
+## ☁ API docs
+
+<div align=center>
+  
+### [HERE! ⛅ API DOCUMENT LINK ⛅](https://ssk0967.gitbook.io/seeme-api/)
+  </div>
+  
 ## ☁ 위치 API
 
  - 읍면동의 시도, 행정구역코드, 위경도 정보를 반환하는 API
  - 위경도의 읍면동, 행정구역코드 정보를 반환하는 API
 
-## ☁ Weather 페이지
+## ☁ Weather API
 
  - 현재 날씨 : 현재 온도, 최고/최저 온도, 날씨 설명, 어제와의 날씨 비교
  - 시간대별 기온 및 강수량(12시간)
  - 기온별 10대~50대 OOTD 추천
  - 이번 주 날씨 
 
-## ☁ Microdust 페이지
+## ☁ Microdust API
 
  - 현재 미세먼지 농도
  - 요일별 추이
  - 통합대기환경지수
  - 마스크 추천
 
-## ☁ Covid 페이지
+## ☁ Covid API
 
  - 현재 코로나 확진자 수
  - 전국 확진자 추이
@@ -190,9 +197,3 @@
 # 🌈 ERD
 ![image](https://user-images.githubusercontent.com/80563849/127768089-d264abe8-8d61-4c8c-8c1d-16433497225a.png)
 
-
-
-
-# 🌈 API 문서
-
-### [gitbook link](https://ssk0967.gitbook.io/seeme-api/)
