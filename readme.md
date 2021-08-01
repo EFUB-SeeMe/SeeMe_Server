@@ -1,13 +1,11 @@
-# ☀웨더레인저 - 백엔드☀ 
-![logo](https://user-images.githubusercontent.com/68282057/127764146-7f69ef87-12e8-48a7-aa06-29c03481a6a8.png)
-
+# 🌞Team.Weather Ranger - backend🌞
 
 # 🌈 백엔드 팀원 소개
 
 | [강민지](https://github.com/nitronium102)                    | [박주은](https://github.com/hoit1302)                        | [서수경](https://github.com/sukyeongs)                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **![img](https://lh4.googleusercontent.com/fO4iZwIoHdE2Nz9BPVrkDoHo1f7YcpNnnOrUxKnJx8Z3rBPfMhB9AtCSD3qku0U00GirxfRJfUg58T8VIiEl4CXrYnsJL_-Ryoc6MY-q63szPSU8tEme7rMKQ2EpGY-h095BA-Nc)** | **![img](https://lh6.googleusercontent.com/Db8d2da9sy0oj_HWr5g66ACitq1GcJOiKO3m7W9IaOOGj8o_wo6uiMMcIrqVfMyvg2geD3krcRQn11xtdB7WZOyOsGmdhcGPxjT0weJ0uGGhJRy1qXiOLSNVxNtxge-dh51RLdV4)** | **![img](https://lh3.googleusercontent.com/vFtrKwbCwc3ndWdrL_GPC-AeWs33C0RPhDjAMIs7Cf7uZBjUY9TH1-RuD9m5yXOtBAdtkjiTjzJWKAoQWRYNxOVlYzAN31DKk7wavIWJK9wndd2IxLBqRIzhgJYWBFXheCD1XQPZ)** |
-| [날씨] 현재 날씨 추천, 이번 주 날씨, ootd<br />[미세먼지] 요일별 추이, 통합대기환경지수 <br />[코로나] 지역별 확진자 추이<br />[자료조사] 각 페이지별 API 조사 | [날씨] 시간대별 기온, ootd<br />[미세먼지] 현재 미세먼지, 지도<br />[코로나] 어제 확진자 수<br />[위치] 좌표 변환, 위경도 주소 변환<br />[서버] aws의 모든 서비스 활용 및 배포<br />[기타] 팀 리딩, 리팩토링 | [날씨] 시간대별 강수량, 시간대별 api <br />[미세먼지] 시간별 추이 (api 문제로 사라짐)<br />[코로나] 전국 확진자 추이<br />[기타] DB ERD 작성, gitbook 관리 |
+| **![img](https://lh4.googleusercontent.com/fO4iZwIoHdE2Nz9BPVrkDoHo1f7YcpNnnOrUxKnJx8Z3rBPfMhB9AtCSD3qku0U00GirxfRJfUg58T8VIiEl4CXrYnsJL_-Ryoc6MY-q63szPSU8tEme7rMKQ2EpGY-h095BA-Nc)** | ![image-20210801171841839](C:\Users\Jueun\AppData\Roaming\Typora\typora-user-images\image-20210801171841839.png) | **![img](https://lh3.googleusercontent.com/vFtrKwbCwc3ndWdrL_GPC-AeWs33C0RPhDjAMIs7Cf7uZBjUY9TH1-RuD9m5yXOtBAdtkjiTjzJWKAoQWRYNxOVlYzAN31DKk7wavIWJK9wndd2IxLBqRIzhgJYWBFXheCD1XQPZ)** |
+| [날씨] 현재 날씨 추천, 이번 주 날씨, ootd<br />[미세먼지] 요일별 추이, 통합대기환경지수 <br />[코로나] 지역별 확진자 추이<br />[자료조사] 각 페이지별 API 조사 | [날씨] 시간대별 기온, ootd<br />[미세먼지] 현재 미세먼지, 지도<br />[코로나] 어제 확진자 수<br />[위치] 좌표 변환, 위경도 주소 변환<br />[서버] aws 서비스 구축, 배포<br />[기타] 팀 리딩, 리팩토링 | [날씨] 시간대별 강수량, 시간대별 api <br />[미세먼지] 시간별 추이 (api 문제로 사라짐)<br />[코로나] 전국 확진자 추이<br />[기타] DB ERD 작성, gitbook 관리 |
 
 
 
@@ -81,27 +79,27 @@
 │  │      └─seeme
 │  │          │  SeemeApplication.java
 │  │          │
-│  │          ├─common
+│  │          ├─📒 common 
 │  │          │      CORSConfig.java
 │  │          │      ApiConfig.java
 │  │          │
-│  │          ├─controller
+│  │          ├─📒 controller
 │  │          │      CovidController.java
 │  │          │      LocationController.java
 │  │          │      MicrodustController.java
 │  │          │      WeatherController.java
 │  │          │
-│  │          ├─domain
+│  │          ├─📒 domain
 │  │          │  │  ResDto.java
 │  │          │  │
-│  │          │  ├─covid
+│  │          │  ├─📒 covid
 │  │          │  │      Coronic.java
 │  │          │  │      CovidDto.java
 │  │          │  │      CovidRegionalDto.java
 │  │          │  │      CovidRegionalResDto.java
 │  │          │  │      CovidResDto.java
 │  │          │  │
-│  │          │  ├─location
+│  │          │  ├─📒 location
 │  │          │  │      Address.java
 │  │          │  │      AddressCodeResDto.java
 │  │          │  │      AddressRepository.java
@@ -109,7 +107,7 @@
 │  │          │  │      TMAddress.java
 │  │          │  │      UmdCodeResDto.java
 │  │          │  │
-│  │          │  ├─microdust
+│  │          │  ├─📒 microdust
 │  │          │  │      Microdust.java
 │  │          │  │      MicrodustDay.java
 │  │          │  │      MicrodustDayResDto.java
@@ -123,7 +121,7 @@
 │  │          │  │      MicrodustTimeResDto.java
 │  │          │  │      MicrodustTotalResDto.java
 │  │          │  │
-│  │          │  └─weather
+│  │          │  └─📒 weather
 │  │          │          Clothes.java
 │  │          │          ClothesRepository.java
 │  │          │          ClothesResDto.java
@@ -138,19 +136,19 @@
 │  │          │          WeatherTimeResDto.java
 │  │          │          WeatherWeekResDto.java
 │  │          │
-│  │          ├─service
+│  │          ├─📒 service
 │  │          │  │  CovidService.java
 │  │          │  │  LocationService.java
 │  │          │  │  MicrodustService.java
 │  │          │  │  WeatherService.java
 │  │          │  │
-│  │          │  └─api
+│  │          │  └─📒 api
 │  │          │          CovidOpenApi.java
 │  │          │          LocationApi.java
 │  │          │          MicrodustOpenApi.java
 │  │          │          WeatherOpenApi.java
 │  │          │
-│  │          └─util
+│  │          └─📒 util
 │  │                  CovidUtil.java
 │  │                  ErrorMessage.java
 │  │                  JSONParsingUtil.java
@@ -167,13 +165,14 @@
             └─seeme
                 │  SeemeApplicationTests.java
                 │
-                └─controller
+                └─📒 controller
                         CovidControllerTest.java
                         LocationControllerTest.java
                         MicrodustControllerTest.java
                         WeatherControllerTest.java
 </code>
 </pre>
+
 
 
 
