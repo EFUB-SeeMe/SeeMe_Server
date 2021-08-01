@@ -1,8 +1,8 @@
-# ☀웨더레인저 - 백엔드☀ 
+☀웨더레인저 - 백엔드☀ 
 
 
 
-## ☁ 백엔드 팀원 소개
+## 🌈 백엔드 팀원 소개
 
 | [강민지](https://github.com/nitronium102)                    | [박주은](https://github.com/hoit1302)                        | [서수경](https://github.com/sukyeongs)                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -11,30 +11,28 @@
 
 
 
-## ☁ 프로젝트 구조 및 설명
+## 🌈 프로젝트 구조 및 설명
 
-## ☁ 기능
+### ☁ 위치 API
 
-### 위치 API
+ - 읍면동의 시도, 행정구역코드, 위경도 정보를 반환하는 API
+ - 위경도의 읍면동, 행정구역코드 정보를 반환하는 API
 
- - 읍면동의 시도, 행정구역코드, 위경도 정보를 반환하는 api
- - 위경도의 읍면동, 행정구역코드 정보를 반환하는 api
-
-### weather 페이지
+### ☁ Weather 페이지
 
  - 현재 날씨 : 현재 온도, 최고/최저 온도, 날씨 설명, 어제와의 날씨 비교
  - 시간대별 기온 및 강수량(12시간)
  - 기온별 10대~50대 OOTD 추천
  - 이번 주 날씨 
 
-### microdust 페이지
+### ☁ Microdust 페이지
 
  - 현재 미세먼지 농도
  - 요일별 추이
  - 통합대기환경지수
  - 마스크 추천
 
-### covid 페이지
+### ☁ Covid 페이지
 
  - 현재 코로나 확진자 수
  - 전국 확진자 추이
@@ -42,13 +40,13 @@
 
     
 
-## ☁ 기술 스택
+## 🌈 기술 스택
 
-<img src=https://img.shields.io/badge/Springboot-6DB33F?style=round-square&logo=SpringBoot&logoColor=white />(https://spring.io/)</a> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>  <img src="https://img.shields.io/badge/Amazon EC2-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/></a> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/></a> <img src="https://img.shields.io/badge/GitHub -181717?style=flat-square&logo=GitHub&logoColor=white"/></a> 
+![Spring boot](https://img.shields.io/badge/Springboot-6DB33F?style=round-square&logo=Spring Boot&logoColor=white)</a> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>  <img src="https://img.shields.io/badge/Amazon EC2-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/></a> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/></a> <img src="https://img.shields.io/badge/GitHub -181717?style=flat-square&logo=GitHub&logoColor=white"/></a> 
 
 
 
-## ☁ 라이브러리
+## 🌈 라이브러리
 
 1. lombok
 2. spring web
@@ -59,9 +57,9 @@
 
 
 
-## ☁ 프로젝트 구조
+## 🌈 프로젝트 구조
 
-### 폴더 구조
+### ☁ 폴더 구조
 
 1. main/java/com/seeme/SeemeApplication.javamain/java/com/seeme/**controller** ▶️Controller
 2. main/java/com/seeme/**service** ▶️ Service
@@ -179,12 +177,12 @@
 
 
 
-## ☁ ERD
+## 🌈 ERD
 
 ![img](https://lh6.googleusercontent.com/ZP55kR8IXG16yhJKRJPfzXQko1Qg5817NuIjkQL58bWwq-kKp37HeBe-xApRLmcPFyxH0UU7AU7HlDM_qwDKKjAmWZlEvruYErU0o3VemNH5_93zoI2agTPH5aXY6B7RZdExdBIX)
 
 
 
-## ☁ [API 명세서]([**https://ssk0967.gitbook.io/seeme-api/**](https://ssk0967.gitbook.io/seeme-api/))
+## 🌈 [API 명세서]([**https://ssk0967.gitbook.io/seeme-api/**](https://ssk0967.gitbook.io/seeme-api/))
 
 링크 참고
