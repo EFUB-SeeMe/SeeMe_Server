@@ -1,7 +1,7 @@
 # 🌞Team. Weather Ranger - backend🌞
 
 <div align=center>
-  
+
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/EFUB-SeeMe/SeeMe_Server&count_bg=%23E71B8E&title_bg=%23555555&icon=&icon_color=%23E7E7E7)](https://hits.seeyoufarm.com) 
 </div>
 
@@ -15,7 +15,7 @@
 | [강민지](https://github.com/nitronium102)                    | [박주은](https://github.com/hoit1302)                        | [서수경](https://github.com/sukyeongs)                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | **![img](https://lh4.googleusercontent.com/fO4iZwIoHdE2Nz9BPVrkDoHo1f7YcpNnnOrUxKnJx8Z3rBPfMhB9AtCSD3qku0U00GirxfRJfUg58T8VIiEl4CXrYnsJL_-Ryoc6MY-q63szPSU8tEme7rMKQ2EpGY-h095BA-Nc)** | ![image](https://user-images.githubusercontent.com/68107000/127767511-acbf8118-dbed-44e8-98ff-2251d3bdb53a.png) | **![img](https://lh3.googleusercontent.com/vFtrKwbCwc3ndWdrL_GPC-AeWs33C0RPhDjAMIs7Cf7uZBjUY9TH1-RuD9m5yXOtBAdtkjiTjzJWKAoQWRYNxOVlYzAN31DKk7wavIWJK9wndd2IxLBqRIzhgJYWBFXheCD1XQPZ)** |
-| [날씨] 현재 날씨 추천, 이번 주 날씨, ootd<br />[미세먼지] 요일별 추이, 통합대기환경지수 <br />[코로나] 지역별 확진자 추이<br />[자료조사] 각 페이지별 API 조사 | [날씨] 시간대별 기온, ootd<br />[미세먼지] 현재 미세먼지, 지도<br />[코로나] 어제 확진자 수<br />[위치] 좌표 변환, 위경도 주소 변환<br />[서버] aws 서비스 구축, 배포<br />[기타] 팀 리딩, 리팩토링 | [날씨] 시간대별 강수량, 시간대별 api <br />[미세먼지] 시간별 추이 (api 문제로 사라짐)<br />[코로나] 전국 확진자 추이<br />[기타] DB ERD 작성, gitbook 관리 |
+| [날씨] 현재 날씨 추천, 이번 주 날씨, ootd<br />[미세먼지] 요일별 추이, 통합대기환경지수 <br />[코로나] 지역별 확진자 추이<br />[자료조사] 각 페이지별 API 조사 | [날씨] 시간대별 기온, ootd<br />[미세먼지] 현재 미세먼지, 지도<br />[코로나] 어제 확진자 수, 비교<br />[위치] 좌표 변환, 위경도 주소 변환<br />[서버] aws 서비스와 DB 구축, 배포<br />[기타] 프로젝트 총괄, 팀 leading, framing(로직을 구현할 수 있도록 틀 잡아주기), 리팩토링, 적극적인 코드 리뷰 | [날씨] 시간대별 강수량, 시간대별 api <br />[미세먼지] 시간별 추이<br />[코로나] 전국 확진자 추이<br />[기타] DB ERD 작성, gitbook 관리 |
 
 
 
