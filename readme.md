@@ -1,5 +1,5 @@
 # ☀웨더레인저 - 백엔드☀ 
-![image](https://user-images.githubusercontent.com/68282057/127764697-30098e4d-7f4e-4709-9a83-f31df4e3ca2b.png)
+![logo (2)](https://user-images.githubusercontent.com/68282057/127765868-d29a1154-c7d2-4c95-ab77-e1a72bbef5b2.png)
 
 
 # 🌈 백엔드 팀원 소개
