@@ -187,8 +187,6 @@
 
 
 # 🌈 ERD
-
-![img](https://lh6.googleusercontent.com/ZP55kR8IXG16yhJKRJPfzXQko1Qg5817NuIjkQL58bWwq-kKp37HeBe-xApRLmcPFyxH0UU7AU7HlDM_qwDKKjAmWZlEvruYErU0o3VemNH5_93zoI2agTPH5aXY6B7RZdExdBIX)
 ![image](https://user-images.githubusercontent.com/80563849/127768089-d264abe8-8d61-4c8c-8c1d-16433497225a.png)
 
 
