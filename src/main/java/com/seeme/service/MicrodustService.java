@@ -3,7 +3,7 @@ package com.seeme.service;
 import com.seeme.domain.ResDto;
 import com.seeme.domain.microdust.*;
 import com.seeme.service.api.MicrodustOpenApi;
-import com.seeme.util.ErrorMessage;
+import com.seeme.util.ErrorMessageUtil;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -34,7 +34,7 @@ public class MicrodustService {
 			e.printStackTrace();
 			ResDto resDto = ResDto.builder()
 				.resultCode(500)
-				.errorMessage(ErrorMessage.JSON_PARSING_ERROR)
+				.errorMessage(ErrorMessageUtil.JSON_PARSING_ERROR)
 				.document(null)
 				.build();
 			return MicrodustMainResDto.builder()
@@ -43,7 +43,7 @@ public class MicrodustService {
 			e.printStackTrace();
 			ResDto resDto = ResDto.builder()
 				.resultCode(500)
-				.errorMessage(ErrorMessage.UNKNOWN_ERROR)
+				.errorMessage(ErrorMessageUtil.UNKNOWN_ERROR)
 				.document(null)
 				.build();
 
@@ -81,7 +81,7 @@ public class MicrodustService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(MicrodustResDto.builder()
 				.pm10Flag(pm10Flag)
 				.pm25Flag(pm25Flag)
@@ -103,7 +103,7 @@ public class MicrodustService {
 
 				return ResDto.builder()
 					.resultCode(200)
-					.errorMessage(ErrorMessage.SUCCESS)
+					.errorMessage(ErrorMessageUtil.SUCCESS)
 					.document(MicrodustTotalResDto.builder()
 						.pm10(Double.parseDouble(microdust.getPm10Value())).pm10Flag(true)
 						.pm25(Double.parseDouble(microdust.getPm25Value())).pm25Flag(true)
@@ -120,7 +120,7 @@ public class MicrodustService {
 		Microdust microdust = microdustList.get(0);
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(ErrorMessage.SUCCESS)
+			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(MicrodustTotalResDto.builder()
 				.pm10(MicrodustUtil.getDouble(microdust.getPm10Value()))
 				.pm10Flag(MicrodustUtil.getBool(microdust.getPm10Value()))
@@ -156,7 +156,7 @@ public class MicrodustService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(null)
+			.errorMessage("SUCCESS")
 			.document(MicrodustMaskResDto.builder()
 				.maskIcon(maskIcon)
 				.desc(desc)
