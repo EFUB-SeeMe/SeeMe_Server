@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,17 +181,32 @@ public class WeatherService {
 			.build();
 	}
 
-	private ResDto getOotdResDto(ResDto currentResDto, ResDto mixmaxResDto) {
-		// TODO: link data to temp and rainFlag variable;
-		int temp = 33;
-		Boolean rainFlag = false;
+	private ResDto getOotdResDto(ResDto currentResDto, ResDto mixmaxResDto) throws IllegalAccessException, NoSuchFieldException {
+		Object curr = currentResDto.getDocument();
+
+		String time = WeatherUtil.getTime();
+		boolean rainFlag = false;
+		String icon = WeatherUtil.getObjectValue(curr, "icon");
+		int temp = 0;
+
+		if (icon.equals(WeatherUtil.WEATHER_ICON_PREFIX + "Rain-1.png") || icon.equals(WeatherUtil.WEATHER_ICON_PREFIX + "Rain-2.png"))
+			rainFlag = true;
+
+		if (time.equals("curr")) {
+			temp = WeatherUtil.getTemp(WeatherUtil.getObjectValue(curr, "feelTemp"));
+			System.out.println("curr" + temp);
+		} else {
+			Object minmax = mixmaxResDto.getDocument();
+			temp = WeatherUtil.getTemp(WeatherUtil.getObjectValue(minmax, "max"));
+			System.out.println("minmax" + temp);
+		}
 
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
-			.age10(getClothesResDto(temp, 10, false)) // update 3rd parameter to "rainFlag";
-			.age20(getClothesResDto(temp, 20, false))
-			.age30(getClothesResDto(temp, 30, false))
-			.age40(getClothesResDto(temp, 40, true))
-			.age50(getClothesResDto(temp, 50, true))
+			.age10(getClothesResDto(temp, 10, rainFlag)) // update 3rd parameter to "rainFlag";
+			.age20(getClothesResDto(temp, 20, rainFlag))
+			.age30(getClothesResDto(temp, 30, rainFlag))
+			.age40(getClothesResDto(temp, 40, rainFlag))
+			.age50(getClothesResDto(temp, 50, rainFlag))
 			.build();
 
 		return ResDto.builder()
