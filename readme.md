@@ -75,7 +75,7 @@
 
 <pre>
     <code>
-    ├─main
+   ├─main
 │  ├─java
 │  │  └─com
 │  │      └─seeme
@@ -183,6 +183,6 @@
 
 
 
-## 🌈 [API 명세서]([**https://ssk0967.gitbook.io/seeme-api/**](https://ssk0967.gitbook.io/seeme-api/))
+## 🌈 [API 명세서](https://ssk0967.gitbook.io/seeme-api/)
 
 링크 참고
