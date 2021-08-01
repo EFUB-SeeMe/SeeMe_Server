@@ -156,7 +156,7 @@ public class MicrodustService {
 
 		return ResDto.builder()
 			.resultCode(200)
-			.errorMessage(null)
+			.errorMessage("SUCCESS")
 			.document(MicrodustMaskResDto.builder()
 				.maskIcon(maskIcon)
 				.desc(desc)
