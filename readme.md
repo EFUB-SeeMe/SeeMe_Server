@@ -1,6 +1,14 @@
-# ☀웨더레인저 - 백엔드☀ 
-![logo (2)](https://user-images.githubusercontent.com/68282057/127765868-d29a1154-c7d2-4c95-ab77-e1a72bbef5b2.png)
+# 🌞Team. Weather Ranger - backend🌞
 
+<div align=center>
+ 
+  [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/EFUB-SeeMe/SeeMe_Server&count_bg=%23E71B8E&title_bg=%23555555&icon=&icon_color=%23E7E7E7)](https://hits.seeyoufarm.com) 
+	</div>
+  
+<div align=center>
+ 
+<img src = "https://user-images.githubusercontent.com/68282057/127765868-d29a1154-c7d2-4c95-ab77-e1a72bbef5b2.png" height="200px">
+  </div>
 
 # 🌈 백엔드 팀원 소개
 
