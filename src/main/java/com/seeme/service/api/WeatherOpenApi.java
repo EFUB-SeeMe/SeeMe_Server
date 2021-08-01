@@ -1,5 +1,6 @@
 package com.seeme.service.api;
 
+import com.seeme.config.ApiConfig;
 import com.seeme.domain.weather.*;
 import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;

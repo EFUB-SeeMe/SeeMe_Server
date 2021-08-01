@@ -1,4 +1,4 @@
-package com.seeme.common;
+package com.seeme.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,4 +13,5 @@ public class CORSConfig implements WebMvcConfigurer {
 			.allowedMethods("GET")
 			.maxAge(3000);
 	}
+
 }
