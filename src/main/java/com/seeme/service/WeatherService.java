@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,7 +186,7 @@ public class WeatherService {
 		String time = WeatherUtil.getTime();
 		boolean rainFlag = false;
 		String icon = WeatherUtil.getObjectValue(curr, "icon");
-		int temp = 0;
+		int temp;
 
 		if (icon.equals(WeatherUtil.WEATHER_ICON_PREFIX + "Rain-1.png") || icon.equals(WeatherUtil.WEATHER_ICON_PREFIX + "Rain-2.png"))
 			rainFlag = true;
@@ -202,7 +201,7 @@ public class WeatherService {
 		}
 
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()
-			.age10(getClothesResDto(temp, 10, rainFlag)) // update 3rd parameter to "rainFlag";
+			.age10(getClothesResDto(temp, 10, rainFlag))
 			.age20(getClothesResDto(temp, 20, rainFlag))
 			.age30(getClothesResDto(temp, 30, rainFlag))
 			.age40(getClothesResDto(temp, 40, rainFlag))
