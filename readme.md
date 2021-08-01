@@ -7,7 +7,7 @@
 | [강민지](https://github.com/nitronium102)                    | [박주은](https://github.com/hoit1302)                        | [서수경](https://github.com/sukyeongs)                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | **![img](https://lh4.googleusercontent.com/fO4iZwIoHdE2Nz9BPVrkDoHo1f7YcpNnnOrUxKnJx8Z3rBPfMhB9AtCSD3qku0U00GirxfRJfUg58T8VIiEl4CXrYnsJL_-Ryoc6MY-q63szPSU8tEme7rMKQ2EpGY-h095BA-Nc)** | **![img](https://lh6.googleusercontent.com/Db8d2da9sy0oj_HWr5g66ACitq1GcJOiKO3m7W9IaOOGj8o_wo6uiMMcIrqVfMyvg2geD3krcRQn11xtdB7WZOyOsGmdhcGPxjT0weJ0uGGhJRy1qXiOLSNVxNtxge-dh51RLdV4)** | **![img](https://lh3.googleusercontent.com/vFtrKwbCwc3ndWdrL_GPC-AeWs33C0RPhDjAMIs7Cf7uZBjUY9TH1-RuD9m5yXOtBAdtkjiTjzJWKAoQWRYNxOVlYzAN31DKk7wavIWJK9wndd2IxLBqRIzhgJYWBFXheCD1XQPZ)** |
-| [날씨] 현재 날씨 추천, 이번 주 날씨, ootd<br />[미세먼지] 요일별 추이, 통합대기환경지수 <br />[코로나] 지역별 확진자 추이<br />[자료조사] 각 페이지별 API 조사 | [날씨] 시간대별 기온, ootd<br />[미세먼지] 현재 미세먼지, 지도<br />[코로나] 어제 확진자 수<br />[위치] 좌표 변환, 위경도 주소 변환<br />[서버] aws의 모든 서비스 활용 및 배포<br />[기타] 팀 리딩, 리팩토링 | [날씨] 시간대별 강수량, 시간대별 api <br />[미세먼지] 시간별 추이 (api 값 문제로 사라짐)<br />[코로나] 전국 확진자 추이<br />[기타] DB ERD 작성, gitbook 관리 |
+| [날씨] 현재 날씨 추천, 이번 주 날씨, ootd<br />[미세먼지] 요일별 추이, 통합대기환경지수 <br />[코로나] 지역별 확진자 추이<br />[자료조사] 각 페이지별 API 조사 | [날씨] 시간대별 기온, ootd<br />[미세먼지] 현재 미세먼지, 지도<br />[코로나] 어제 확진자 수<br />[위치] 좌표 변환, 위경도 주소 변환<br />[서버] aws의 모든 서비스 활용 및 배포<br />[기타] 팀 리딩, 리팩토링 | [날씨] 시간대별 강수량, 시간대별 api <br />[미세먼지] 시간별 추이 (api 문제로 사라짐)<br />[코로나] 전국 확진자 추이<br />[기타] DB ERD 작성, gitbook 관리 |
 
 
 
@@ -44,7 +44,7 @@
 
 ## 기술 스택
 
-[![Spring boot](https://img.shields.io/badge/Springboot-6DB33F?style=round-square&logo=Spring Boot&logoColor=white)](https://spring.io/)</a> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>  <img src="https://img.shields.io/badge/Amazon EC2-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/></a> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/></a> <img src="https://img.shields.io/badge/GitHub -181717?style=flat-square&logo=GitHub&logoColor=white"/></a> 
+[![Spring boot](https://img.shields.io/badge/Springboot-6DB33F?style=round-square&logo=Spring boot&logoColor=white)](https://spring.io/)</a> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>  <img src="https://img.shields.io/badge/Amazon EC2-232F3E?style=flat-square&logo=Amazon%20AWS&logoColor=white"/></a> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/></a> <img src="https://img.shields.io/badge/GitHub -181717?style=flat-square&logo=GitHub&logoColor=white"/></a> 
 
 
 
@@ -176,6 +176,8 @@
                         WeatherControllerTest.java
 </code>
 </pre>
+
+
 
 ## ERD
 
