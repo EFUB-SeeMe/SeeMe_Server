@@ -1,5 +1,6 @@
 package com.seeme.service.api;
 
+import com.seeme.config.ApiConfig;
 import com.seeme.util.JSONParsingUtil;
 import com.seeme.util.LocationUtil;
 import lombok.AllArgsConstructor;

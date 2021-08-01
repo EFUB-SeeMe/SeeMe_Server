@@ -1,5 +1,6 @@
 package com.seeme.service.api;
 
+import com.seeme.config.ApiConfig;
 import com.seeme.domain.covid.CovidDto;
 import com.seeme.domain.covid.CovidRegionalDto;
 import com.seeme.util.CovidUtil;

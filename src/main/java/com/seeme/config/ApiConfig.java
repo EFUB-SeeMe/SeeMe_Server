@@ -1,4 +1,4 @@
-package com.seeme.service.api;
+package com.seeme.config;
 
 import lombok.Getter;
 import lombok.Setter;
