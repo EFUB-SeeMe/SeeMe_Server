@@ -236,7 +236,7 @@ public class WeatherService {
 		item3 = shoesList.get(index).getDescription();
 
 		if (rainFlag) {
-			iconNum4 = 28;
+			iconNum4 = 0;
 			item4 = "우산 챙기세요!";
 		} else {
 			List<Clothes> itemList = clothesRepository.findAllByTempAndAgeAndCategory(temp, age, "item");
