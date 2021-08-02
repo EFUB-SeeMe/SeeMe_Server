@@ -70,12 +70,12 @@ public class MicrodustService {
 			if (!pm10Flag && !microdust.getPm10Value().equals("-")) {
 				pm10Flag = true;
 				pm10 = microdust.getPm10Value();
-				pmGrade = Integer.parseInt(microdust.getPm10Grade());
+				pmGrade = MicrodustUtil.get10GradeByValue(microdust.getPm10Value());
 			}
 			if (!pm25Flag && !microdust.getPm25Value().equals("-")) {
 				pm25Flag = true;
 				pm25 = microdust.getPm25Value();
-				pmGrade = Math.max(pmGrade, Integer.parseInt(microdust.getPm25Grade()));
+				pmGrade = Math.max(pmGrade, MicrodustUtil.get25GradeByValue(microdust.getPm25Value()));
 			}
 		}
 

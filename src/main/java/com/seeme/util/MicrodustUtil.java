@@ -195,4 +195,38 @@ public class MicrodustUtil {
     public static Boolean getBool(String value) {
         return !value.equals("-");
     }
+
+	public static int get10GradeByValue(String pm10Value) {
+        int pm10;
+        try {
+            pm10 = Integer.parseInt(pm10Value);
+        } catch (Exception e) {
+            return -1;
+        }
+        if (0 <= pm10 && pm10 <= 15)
+            return 1;
+        else if (pm10 <= 35)
+            return 2;
+        else if (pm10 <= 75)
+            return 3;
+        else
+            return 4;
+	}
+
+    public static int get25GradeByValue(String pm25Value) {
+        int pm25;
+        try {
+            pm25 = Integer.parseInt(pm25Value);
+        } catch (Exception e) {
+            return -1;
+        }
+        if (0 <= pm25 && pm25 <= 30)
+            return 1;
+        else if (pm25 <= 80)
+            return 2;
+        else if (pm25 <= 150)
+            return 3;
+        else
+            return 4;
+    }
 }
