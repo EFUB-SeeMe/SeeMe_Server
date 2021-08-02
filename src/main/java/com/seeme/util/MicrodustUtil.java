@@ -203,11 +203,11 @@ public class MicrodustUtil {
         } catch (Exception e) {
             return -1;
         }
-        if (0 <= pm10 && pm10 <= 15)
+        if (0 <= pm10 && pm10 <= 30)
             return 1;
-        else if (pm10 <= 35)
+        else if (pm10 <= 80)
             return 2;
-        else if (pm10 <= 75)
+        else if (pm10 <= 150)
             return 3;
         else
             return 4;
@@ -220,11 +220,11 @@ public class MicrodustUtil {
         } catch (Exception e) {
             return -1;
         }
-        if (0 <= pm25 && pm25 <= 30)
+        if (0 <= pm25 && pm25 <= 15)
             return 1;
-        else if (pm25 <= 80)
+        else if (pm25 <= 35)
             return 2;
-        else if (pm25 <= 150)
+        else if (pm25 <= 75)
             return 3;
         else
             return 4;
