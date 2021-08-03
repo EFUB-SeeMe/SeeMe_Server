@@ -105,8 +105,6 @@ public class MicrodustService {
 					.resultCode(200)
 					.errorMessage(ErrorMessageUtil.SUCCESS)
 					.document(MicrodustTotalResDto.builder()
-						.pm10(Double.parseDouble(microdust.getPm10Value())).pm10Flag(true)
-						.pm25(Double.parseDouble(microdust.getPm25Value())).pm25Flag(true)
 						.co(Double.parseDouble(microdust.getCoValue())).coFlag(true)
 						.no2(Double.parseDouble(microdust.getNo2Value())).no2Flag(true)
 						.o3(Double.parseDouble(microdust.getO3Value())).o3Flag(true)
@@ -122,10 +120,6 @@ public class MicrodustService {
 			.resultCode(200)
 			.errorMessage(ErrorMessageUtil.SUCCESS)
 			.document(MicrodustTotalResDto.builder()
-				.pm10(MicrodustUtil.getDouble(microdust.getPm10Value()))
-				.pm10Flag(MicrodustUtil.getBool(microdust.getPm10Value()))
-				.pm25(MicrodustUtil.getDouble(microdust.getPm25Value()))
-				.pm25Flag(MicrodustUtil.getBool(microdust.getPm25Value()))
 				.co(MicrodustUtil.getDouble(microdust.getCoValue()))
 				.coFlag(MicrodustUtil.getBool(microdust.getCoValue()))
 				.no2(MicrodustUtil.getDouble(microdust.getNo2Value()))
@@ -204,6 +198,7 @@ public class MicrodustService {
 		try {
 			return microdustOpenApi.getStationList(lat, lon);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return List.of("신촌로", "한강대로", "중구");
 		}
 	}
