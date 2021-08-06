@@ -6,6 +6,7 @@ import com.seeme.service.api.MicrodustOpenApi;
 import com.seeme.util.ErrorMessageUtil;
 import com.seeme.util.MicrodustUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 import static com.seeme.util.MicrodustUtil.*;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class MicrodustService {
@@ -23,7 +25,7 @@ public class MicrodustService {
 
 	public MicrodustMainResDto getMain(List<String> measuringStationList) {
 		try {
-			System.out.println(measuringStationList);
+			log.info(String.valueOf(measuringStationList));
 			List<Microdust> microdustList = getMainApi(measuringStationList);
 			ResDto mainResDto = getMainResDto(microdustList);
 			return MicrodustMainResDto.builder()

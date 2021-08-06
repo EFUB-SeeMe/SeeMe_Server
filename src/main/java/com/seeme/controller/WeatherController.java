@@ -5,12 +5,14 @@ import com.seeme.service.LocationService;
 import com.seeme.service.WeatherService;
 import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 @RequestMapping("weather")
@@ -27,9 +29,10 @@ public class WeatherController {
 			Address address = locationService.getAddressByCode(code);
 			return ResponseEntity.ok().body(weatherService.getMain(
 				address.getLat(), address.getLon()));
-		} else if (lat != null && lon != null)
+		} else if (lat != null && lon != null) {
+			log.info("?lat=" + lat + "lon" + lon);
 			return ResponseEntity.ok().body(weatherService.getMain(lat, lon));
-		else
+		} else
 			return ResponseEntity.ok().body(weatherService.getMain(
 				WeatherUtil.DEFAULT_LAT, WeatherUtil.DEFAULT_LON));
 	}

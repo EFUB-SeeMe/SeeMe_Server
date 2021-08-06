@@ -193,11 +193,9 @@ public class WeatherService {
 
 		if (time.equals("curr")) {
 			temp = WeatherUtil.getTemp(WeatherUtil.getObjectValue(curr, "feelTemp"));
-			System.out.println("curr" + temp);
 		} else {
 			Object minmax = mixmaxResDto.getDocument();
 			temp = WeatherUtil.getTemp(WeatherUtil.getObjectValue(minmax, "max"));
-			System.out.println("minmax" + temp);
 		}
 
 		WeatherOotdResDto ootd = WeatherOotdResDto.builder()

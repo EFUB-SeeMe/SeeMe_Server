@@ -4,6 +4,7 @@ import com.seeme.config.ApiConfig;
 import com.seeme.domain.weather.*;
 import com.seeme.util.WeatherUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import com.seeme.util.JSONParsingUtil;
 import org.json.simple.JSONArray;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class WeatherOpenApi {
@@ -64,10 +66,12 @@ public class WeatherOpenApi {
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
 			.fromUriString(apiConfig.getWeatherLocationUrl())
 			.queryParam(WeatherUtil.API_KEY, apiConfig.getWeatherKey())
+			.queryParam(WeatherUtil.LANGUAGE, "ko")
 			.queryParam(WeatherUtil.Q, lat + "," + lon);
 
 		StringBuilder sb = JSONParsingUtil.convertJSONToSB(uriComponentsBuilder);
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
+		log.info("날씨 지역: " + jsonObject.get("LocalizedName").toString());
 		return jsonObject.get("Key").toString();
 	}
 
