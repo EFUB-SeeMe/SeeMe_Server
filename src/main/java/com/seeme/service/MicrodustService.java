@@ -25,10 +25,11 @@ public class MicrodustService {
 		try {
 			System.out.println(measuringStationList);
 			List<Microdust> microdustList = getMainApi(measuringStationList);
+			ResDto mainResDto = getMainResDto(microdustList);
 			return MicrodustMainResDto.builder()
-				.mainInfo(getMainResDto(microdustList))
+				.mainInfo(mainResDto)
 				.totalInfo(getTotalResDto(microdustList))
-				.maskInfo(getMaskResDto(microdustList))
+				.maskInfo(getMaskResDto(mainResDto))
 				.build();
 		} catch (ParseException | IOException e) {
 			e.printStackTrace();
@@ -136,48 +137,17 @@ public class MicrodustService {
 
 	}
 
-	private ResDto getMaskResDto(List<Microdust> microdustList) {
-		String pm10 = "-";
-		for (Microdust microdust : microdustList) {
-			if (!microdust.getPm10Value().equals("-")) {
-				pm10 = microdust.getPm10Value();
-				break;
-			}
-		}
-		int pm10Value = (pm10.equals("-")) ? 1 : Integer.parseInt(pm10);
-		String maskIcon = getMaskIcon(pm10Value);
-		String desc = getMaskdesc(maskIcon);
+	private ResDto getMaskResDto(ResDto mainResDto) {
+		MicrodustResDto microdust = (MicrodustResDto) mainResDto.getDocument();
 
 		return ResDto.builder()
 			.resultCode(200)
 			.errorMessage("SUCCESS")
 			.document(MicrodustMaskResDto.builder()
-				.maskIcon(maskIcon)
-				.desc(desc)
+				.maskIcon(MicrodustUtil.getMaskIcon(microdust.getGrade()))
+				.desc(MicrodustUtil.getMaskdesc(microdust.getGrade()))
 				.build())
 			.build();
-	}
-
-	private String getMaskIcon(int pm10) {
-		if (pm10 >= 0 && pm10 <= 15)
-			return MicrodustUtil.MASK_DENTAL;
-		else if (pm10 <= 35)
-			return MicrodustUtil.MASK_KF80;
-		else
-			return MicrodustUtil.MASK_KF94;
-	}
-
-	private String getMaskdesc(String maskIcon) {
-		switch (maskIcon) {
-			case MASK_DENTAL:
-				return "미세먼지 좋아요~ 덴탈마스크 추천!";
-			case MASK_KF80:
-				return "미세먼지가 꽤 있어요 ㅠㅠ kf80 추천!";
-			case MASK_KF94:
-				return "미세먼지 위험해요.. kf94 추천!";
-			default:
-				return "error";
-		}
 	}
 
 	public List<MicrodustDayResDto> getDay(String geo) throws IOException, ParseException {

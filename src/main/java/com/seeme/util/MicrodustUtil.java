@@ -229,4 +229,32 @@ public class MicrodustUtil {
         else
             return 4;
     }
+
+    public static String getMaskIcon(String grade) {
+        switch (grade) {
+            case "좋음":
+                return MASK_DENTAL;
+            case "보통":
+                return MASK_KF80;
+            case "나쁨":
+            case "매우나쁨":
+                return MASK_KF94;
+            default:
+                return MASK_KF80;
+        }
+    }
+
+    public static String getMaskdesc(String grade) {
+        switch (grade) {
+            case "좋음":
+                return "미세먼지 좋아요~ 덴탈마스크 추천!";
+            case "보통":
+                return "미세먼지가 꽤 있어요 ㅠㅠ kf80 추천!";
+            case "나쁨":
+            case "매우나쁨":
+                return "미세먼지 위험해요 kf94 추천!";
+            default:
+                return "현재, 측정소 값의 오류가 있어요!";
+        }
+    }
 }
